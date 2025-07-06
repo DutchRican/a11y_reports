@@ -1,0 +1,140 @@
+[
+  {
+    "specName": "Homepage Accessibility Check",
+    "pageUrl": "https://example.com/home",
+    "timestamp": "2024-03-15T10:30:00Z",
+    "violations": [
+      {
+        "id": "aria-required-children",
+        "impact": "critical",
+        "description": "Certain ARIA roles must contain particular children",
+        "help": "Some ARIA roles must contain specific child roles to perform properly",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/aria-required-children",
+        "nodes": [
+          {
+            "html": "<div role='list'></div>",
+            "target": [".navigation-menu"]
+          }
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must have sufficient color contrast",
+        "help": "Ensure that text has sufficient color contrast against the background",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/color-contrast",
+        "nodes": [
+          {
+            "html": "<p style='color: #999'>Low contrast text</p>",
+            "target": [".footer-text"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "specName": "Homepage Accessibility Check",
+    "pageUrl": "https://example.com/home",
+    "timestamp": "2024-03-14T10:30:00Z",
+    "violations": [
+      {
+        "id": "aria-required-children",
+        "impact": "critical",
+        "description": "Certain ARIA roles must contain particular children",
+        "help": "Some ARIA roles must contain specific child roles to perform properly",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/aria-required-children",
+        "nodes": [
+          {
+            "html": "<div role='list'></div>",
+            "target": [".navigation-menu"]
+          }
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must have sufficient color contrast",
+        "help": "Ensure that text has sufficient color contrast against the background",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/color-contrast",
+        "nodes": [
+          {
+            "html": "<p style='color: #999'>Low contrast text</p>",
+            "target": [".footer-text"]
+          }
+        ]
+      },
+      {
+        "id": "landmark-one-main",
+        "impact": "moderate",
+        "description": "Page must have one main landmark",
+        "help": "Ensure that the page has a main landmark",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/landmark-one-main",
+        "nodes": [
+          {
+            "html": "<div class='content'></div>",
+            "target": [".page-content"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "specName": "Homepage Accessibility Check",
+    "pageUrl": "https://example.com/home",
+    "timestamp": "2024-03-13T10:30:00Z",
+    "violations": [
+      {
+        "id": "aria-required-children",
+        "impact": "critical",
+        "description": "Certain ARIA roles must contain particular children",
+        "help": "Some ARIA roles must contain specific child roles to perform properly",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/aria-required-children",
+        "nodes": [
+          {
+            "html": "<div role='list'></div>",
+            "target": [".navigation-menu"]
+          }
+        ]
+      },
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Elements must have sufficient color contrast",
+        "help": "Ensure that text has sufficient color contrast against the background",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/color-contrast",
+        "nodes": [
+          {
+            "html": "<p style='color: #999'>Low contrast text</p>",
+            "target": [".footer-text"]
+          }
+        ]
+      },
+      {
+        "id": "landmark-one-main",
+        "impact": "moderate",
+        "description": "Page must have one main landmark",
+        "help": "Ensure that the page has a main landmark",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/landmark-one-main",
+        "nodes": [
+          {
+            "html": "<div class='content'></div>",
+            "target": [".page-content"]
+          }
+        ]
+      },
+      {
+        "id": "meta-viewport",
+        "impact": "minor",
+        "description": "Zooming and scaling should not be disabled",
+        "help": "Ensure that users can zoom and scale the text up to 200%",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/meta-viewport",
+        "nodes": [
+          {
+            "html": "<meta name='viewport' content='user-scalable=no'>",
+            "target": ["meta[name='viewport']"]
+          }
+        ]
+      }
+    ]
+  }
+]

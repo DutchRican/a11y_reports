@@ -1,0 +1,37 @@
+{
+  "specName": "Some other spec",
+  "pageUrl": "http://localhost:5173//home",
+  "timestamp": "2025-06-28T10:30:00Z",
+  "violations": [
+    {
+      "id": "aria-required-children",
+      "impact": "critical",
+      "description": "Certain ARIA roles must contain particular children",
+      "help": "Some ARIA roles must contain specific child roles to perform properly",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/aria-required-children",
+      "nodes": [
+        {
+          "html": "<div role='list'></div>",
+          "target": [
+            ".navigation-menu"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "description": "Elements must have sufficient color contrast",
+      "help": "Ensure that text has sufficient color contrast against the background",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/color-contrast",
+      "nodes": [
+        {
+          "html": "<p style='color: #999'>Low contrast text</p>",
+          "target": [
+            ".footer-text"
+          ]
+        }
+      ]
+    }
+  ]
+}
