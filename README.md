@@ -104,3 +104,27 @@ The API expects scan results in the following format:
 - Frontend code is written in TypeScript and React
 - Backend uses Express.js and Mongoose
 - Data visualization uses TailwindCSS and Recharts
+
+## Prep with test data
+! this will wipe out existing data!!!!  
+`npm run seed`
+
+## Curl
+Fetch all reports:  
+```bash
+curl http://localhost:3001/api/scan-results/686ae14be3e44e6712e3f4ec
+```  
+
+Fetch Report by ID:  
+```bash
+curl http://localhost:3001/api/scan-results 
+```  
+Upload a file:
+```bash
+curl http://localhost:3001/api/scan-results/upload -F "file=@/public/sample-data_copy.json"
+```
+
+Upload multiple files:
+```bash
+ curl http://localhost:3001/api/scan-results/upload-multiple -F "files=@/location/test-result.json" -F "files=@sample-data_copy.json"
+```
