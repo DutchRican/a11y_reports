@@ -1,9 +1,9 @@
 
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import js from "@eslint/js";
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import pluginReactRefresh from "eslint-plugin-react-refresh";
-import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
 export default [
   {
@@ -29,7 +29,8 @@ export default [
         { allowConstantExport: true },
       ],
       'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn'
+      'react-hooks/exhaustive-deps': 'warn',
+      'typescript-esling/no-explicit-any': 'warn',
     }
   }
 ];

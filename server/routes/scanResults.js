@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
 const ScanResult = require('../models/ScanResult');
-const { CastError } = require('mongoose');
+const { Error } = require('mongoose');
 
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
@@ -26,8 +26,8 @@ router.get('/:id', async (req, res) => {
     }
     return res.json(scanResult);
   } catch (err) {
-    if (err instanceof CastError) {
-      return res.status(404).json({ message: 'Invalid scan result ID' });
+    if (err instanceof Error.CastError) {
+      return res.status(404).json({ message: 'Invalid ID' });
     }
     return res.status(500).json({ message: err.message });
   }
@@ -56,4 +56,32 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     }
   }
 });
+
+// upload multiple scan results
+router.post('/upload-multiple', upload.array('files'), async (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ message: 'No files uploaded' });
+  }
+  try {
+    const scanResults = [];
+    for (const file of req.files) {
+      console.log(`Processing file: ${file.originalname}`);
+      const fileContent = await fs.readFile(file.path, 'utf8');
+      const scanData = JSON.parse(fileContent); // Assuming the file contains valid JSON
+      const newScanResult = new ScanResult({
+        ...scanData,
+        timestamp: scanData.timestamp || new Date(),
+        violations: scanData.violations || [],
+      });
+      scanResults.push(newScanResult);
+      // Clean up the uploaded file
+      await fs.unlink(file.path);
+    }
+    const savedScanResults = await ScanResult.insertMany(scanResults);
+    res.status(201).json(savedScanResults);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 module.exports = router;
