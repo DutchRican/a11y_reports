@@ -1,11 +1,15 @@
 {
-  "specName": "Some other spec",
-  "pageUrl": "http://localhost:5173//home",
-  "timestamp": "2025-06-28T10:30:00Z",
+  "testName": "Some other spec",
+  "url": "http://localhost:5173//home",
+  "created": "2025-06-28T10:30:00Z",
   "violations": [
     {
       "id": "aria-required-children",
       "impact": "critical",
+      "tags": [
+        "some tag",
+        "some other tag"
+      ],
       "description": "Certain ARIA roles must contain particular children",
       "help": "Some ARIA roles must contain specific child roles to perform properly",
       "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/aria-required-children",
@@ -14,7 +18,11 @@
           "html": "<div role='list'></div>",
           "target": [
             ".navigation-menu"
-          ]
+          ],
+          "any": [],
+          "all": [],
+          "none": [],
+          "failureSummary": "The element with role 'list' must have at least one child"
         }
       ]
     },

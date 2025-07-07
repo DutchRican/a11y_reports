@@ -1,10 +1,21 @@
 const mongoose = require('mongoose');
 
+const subNodeSchema = new mongoose.Schema({
+  id: String,
+  data: mongoose.Schema.Types.Mixed,
+  relatedNodes: [String],
+  impact: String,
+  message: String,
+});
+
 const nodeSchema = new mongoose.Schema({
   html: String,
   target: [String],
   failureSummary: String,
-  impact: String
+  impact: String,
+  any: [subNodeSchema],
+  all: [subNodeSchema],
+  none: [subNodeSchema],
 });
 
 const violationSchema = new mongoose.Schema({
@@ -21,15 +32,15 @@ const violationSchema = new mongoose.Schema({
 });
 
 const scanResultSchema = new mongoose.Schema({
-  specName: {
+  testName: {
     type: String,
     required: true
   },
-  pageUrl: {
+  url: {
     type: String,
     required: true
   },
-  timestamp: {
+  created: {
     type: Date,
     default: Date.now
   },

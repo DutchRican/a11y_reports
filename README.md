@@ -78,9 +78,9 @@ The API expects scan results in the following format:
 
 ```json
 {
-  "specName": "example-spec",
-  "pageUrl": "http://example.com",
-  "timestamp": "2023-08-15T10:30:00Z",
+  "testName": "example-spec",
+  "url": "http://example.com",
+  "created": "2023-08-15T10:30:00Z",
   "violations": [
     {
       "id": "violation-id",

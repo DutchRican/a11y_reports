@@ -20,14 +20,14 @@ const OverviewPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const specNameFilter = searchParams.get('specName') || '';
+  const testNameFilter = searchParams.get('testName') || '';
   const dateFilter = searchParams.get('date') || '';
 
   useEffect(() => {
-    if (specNameFilter || dateFilter) {
+    if (testNameFilter || dateFilter) {
       setFiltersOpen(true);
     }
-  }, [specNameFilter, dateFilter]);
+  }, [testNameFilter, dateFilter]);
 
   const handleFilterChange = (key: string, value: string) => {
     setSearchParams(prev => {
@@ -42,9 +42,9 @@ const OverviewPage: React.FC = () => {
   };
 
   const filteredResults = scanResults.filter((result) => {
-    const specNameMatch = result.specName.toLowerCase().includes(specNameFilter.toLowerCase());
-    const dateMatch = result.timestamp.includes(dateFilter);
-    return specNameMatch && dateMatch;
+    const testNameMatch = result.testName.toLowerCase().includes(testNameFilter.toLowerCase());
+    const dateMatch = result.created.includes(dateFilter);
+    return testNameMatch && dateMatch;
   });
 
   return (
@@ -67,14 +67,14 @@ const OverviewPage: React.FC = () => {
         <div className="mb-4 w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="specNameFilter" className="sr-only">Filter by Spec Name</label>
+              <label htmlFor="testNameFilter" className="sr-only">Filter by Test Name</label>
               <input
-                id="specNameFilter"
+                id="testNameFilter"
                 type="text"
                 placeholder="Filter by Spec Name"
                 className="p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={specNameFilter}
-                onChange={(e) => handleFilterChange('specName', e.target.value)}
+                value={testNameFilter}
+                onChange={(e) => handleFilterChange('testName', e.target.value)}
               />
             </div>
             <div>

@@ -39,17 +39,17 @@ const DashboardPage: React.FC = () => {
       </div>
       <div className="max-w-7/8 mx-auto my-8 p-4">
         <h1 className="text-3xl font-bold mb-2">
-          {result.specName}
+          {result.testName}
         </h1>
 
         <p className="text-gray-600 mb-1">
-          Page URL: <a href={result.pageUrl} target="_blank" rel="noopener" className="text-blue-500 hover:underline">
-            {result.pageUrl}
+          Page URL: <a href={result.url} target="_blank" rel="noopener" className="text-blue-500 hover:underline">
+            {result.url}
           </a>
         </p>
 
         <p className="text-gray-600 mb-4">
-          Scan Date: {new Date(result.timestamp).toLocaleString()}
+          Scan Date: {new Date(result.created).toLocaleString()}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

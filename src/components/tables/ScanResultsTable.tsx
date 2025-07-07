@@ -55,13 +55,13 @@ const ScanResultsTable: React.FC<ScanResultsTableProps> = ({ scanResults, onSele
                 className="hover:bg-gray-100 cursor-pointer"
               >
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {new Date(result.timestamp).toLocaleDateString('en-US')}
+                  {new Date(result.created).toLocaleDateString('en-US')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {result.specName}
+                  {result.testName}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {result.pageUrl}
+                  {result.url}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
                   {counts.critical || 0}

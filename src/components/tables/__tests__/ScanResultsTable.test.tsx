@@ -5,9 +5,9 @@ import ScanResultsTable from '../ScanResultsTable';
 const mockData: ScanResult[] = [
   {
     _id: '1',
-    specName: 'Test Scan',
-    pageUrl: 'https://example.com',
-    timestamp: '2024-01-01T00:00:00.000Z',
+    testName: 'Test Scan',
+    url: 'https://example.com',
+    created: '2024-01-01T00:00:00.000Z',
     violations: []
   }
 ];
