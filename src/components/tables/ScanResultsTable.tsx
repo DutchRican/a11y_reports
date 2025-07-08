@@ -40,13 +40,6 @@ const ScanResultsTable: React.FC<ScanResultsTableProps> = ({ scanResults, onSele
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {scanResults.map((result) => {
-            const counts = result.violations.reduce(
-              (acc, violation) => {
-                acc[violation.impact] = (acc[violation.impact] || 0) + 1;
-                return acc;
-              },
-              {} as Record<string, number>
-            );
 
             return (
               <tr
@@ -64,19 +57,19 @@ const ScanResultsTable: React.FC<ScanResultsTableProps> = ({ scanResults, onSele
                   {result.url}
                 </td> */}
                 <td className="px-6 py-4 whitespace-nowrap text-right">
-                  {counts.critical || 0}
+                  {result.impactCounts.critical}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
-                  {counts.serious || 0}
+                  {result.impactCounts.serious}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
-                  {counts.moderate || 0}
+                  {result.impactCounts.moderate}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
-                  {counts.minor || 0}
+                  {result.impactCounts.minor}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
-                  {result.violations.length}
+                  {result.totalViolations}
                 </td>
               </tr>
             );

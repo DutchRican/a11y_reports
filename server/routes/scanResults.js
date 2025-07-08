@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
-const ScanResult = require('../models/ScanResult');
+const { ScanResult, ScanResultFromJson } = require('../models/ScanResult');
 const { Error } = require('mongoose');
 
 const router = express.Router();
@@ -10,7 +10,7 @@ const upload = multer({ dest: 'uploads/' });
 // Get all scan results
 router.get('/', async (_req, res) => {
   try {
-    const scanResults = await ScanResult.find().sort({ created: 1 });
+    const scanResults = await ScanResult.find().select({ _id: 1, testName: 1, url: 1, created: 1, impactCounts: 1, violations: 1 }).sort({ created: 1 });
     res.json(scanResults);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -39,11 +39,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     const fileContent = await fs.readFile(req.file.path, 'utf8');
     const scanData = JSON.parse(fileContent);
 
-    const newScanResult = new ScanResult({
-      ...scanData,
-      created: scanData.created || new Date(),
-      violations: scanData.violations || [],
-    });
+    const newScanResult = ScanResultFromJson(scanData);
 
     const savedScanResult = await newScanResult.save();
     res.status(201).json(savedScanResult);
@@ -68,11 +64,7 @@ router.post('/upload-multiple', upload.array('files'), async (req, res) => {
       console.log(`Processing file: ${file.originalname}`);
       const fileContent = await fs.readFile(file.path, 'utf8');
       const scanData = JSON.parse(fileContent); // Assuming the file contains valid JSON
-      const newScanResult = new ScanResult({
-        ...scanData,
-        created: scanData.created || new Date(),
-        violations: scanData.violations || [],
-      });
+      const newScanResult = ScanResultFromJson(scanData);
       scanResults.push(newScanResult);
       // Clean up the uploaded file
       await fs.unlink(file.path);

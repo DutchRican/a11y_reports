@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const ScanResult = require('./models/ScanResult');
+const { ScanResult, ScanResultFromJson } = require('./models/ScanResult');
 
 dotenv.config();
 
@@ -21,7 +21,10 @@ async function seedDatabase() {
     console.log('Read sample data');
 
     // Insert new data
-    await ScanResult.insertMany(sampleData);
+    for (const item of sampleData) {
+      const newScanResult = ScanResultFromJson(item);
+      await newScanResult.save();
+    }
     console.log('Sample data inserted successfully');
 
     await mongoose.disconnect();

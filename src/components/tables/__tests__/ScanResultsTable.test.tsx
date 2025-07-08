@@ -8,7 +8,14 @@ const mockData: ScanResult[] = [
     testName: 'Test Scan',
     url: 'https://example.com',
     created: '2024-01-01T00:00:00.000Z',
-    violations: []
+    violations: [],
+    impactCounts: {
+      critical: 1,
+      serious: 2,
+      moderate: 3,
+      minor: 4
+    },
+    totalViolations: 10
   }
 ];
 

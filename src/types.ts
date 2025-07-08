@@ -27,5 +27,12 @@ export interface ScanResult {
   testName: string;
   url: string;
   created: string;
-  violations: A11yViolation[];
+  impactCounts: {
+    critical: number;
+    serious: number;
+    moderate: number;
+    minor: number;
+  };
+  totalViolations: number;
+  violations?: A11yViolation[];
 }

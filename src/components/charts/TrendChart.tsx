@@ -9,22 +9,11 @@ interface TrendChartProps {
 const TrendChart: React.FC<TrendChartProps> = ({ scanResults }) => {
   const trendData = scanResults
     .map(result => {
-      const counts = result.violations.reduce(
-        (acc, violation) => {
-          acc[violation.impact] = (acc[violation.impact] || 0) + 1;
-          return acc;
-        },
-        {} as Record<string, number>
-      );
-
       return {
         timestamp: new Date(result.created).toLocaleDateString(),
         date: new Date(result.created),
-        critical: counts.critical || 0,
-        serious: counts.serious || 0,
-        moderate: counts.moderate || 0,
-        minor: counts.minor || 0,
-        total: result.violations.length,
+        ...result.impactCounts,
+        total: result.totalViolations,
       };
     });
 
