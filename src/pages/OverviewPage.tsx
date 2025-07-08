@@ -71,7 +71,7 @@ const OverviewPage: React.FC = () => {
               <input
                 id="testNameFilter"
                 type="text"
-                placeholder="Filter by Spec Name"
+                placeholder="Filter by test Name"
                 className="p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={testNameFilter}
                 onChange={(e) => handleFilterChange('testName', e.target.value)}

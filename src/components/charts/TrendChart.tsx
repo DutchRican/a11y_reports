@@ -18,8 +18,8 @@ const TrendChart: React.FC<TrendChartProps> = ({ scanResults }) => {
       );
 
       return {
-        timestamp: new Date(result.timestamp).toLocaleDateString(),
-        date: new Date(result.timestamp),
+        timestamp: new Date(result.created).toLocaleDateString(),
+        date: new Date(result.created),
         critical: counts.critical || 0,
         serious: counts.serious || 0,
         moderate: counts.moderate || 0,

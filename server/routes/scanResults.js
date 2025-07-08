@@ -10,7 +10,7 @@ const upload = multer({ dest: 'uploads/' });
 // Get all scan results
 router.get('/', async (_req, res) => {
   try {
-    const scanResults = await ScanResult.find().sort({ timestamp: 1 });
+    const scanResults = await ScanResult.find().sort({ created: 1 });
     res.json(scanResults);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -41,7 +41,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 
     const newScanResult = new ScanResult({
       ...scanData,
-      timestamp: scanData.timestamp || new Date(),
+      created: scanData.created || new Date(),
       violations: scanData.violations || [],
     });
 
@@ -70,7 +70,7 @@ router.post('/upload-multiple', upload.array('files'), async (req, res) => {
       const scanData = JSON.parse(fileContent); // Assuming the file contains valid JSON
       const newScanResult = new ScanResult({
         ...scanData,
-        timestamp: scanData.timestamp || new Date(),
+        created: scanData.created || new Date(),
         violations: scanData.violations || [],
       });
       scanResults.push(newScanResult);

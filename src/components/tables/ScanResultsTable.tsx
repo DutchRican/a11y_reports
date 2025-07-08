@@ -16,11 +16,11 @@ const ScanResultsTable: React.FC<ScanResultsTableProps> = ({ scanResults, onSele
               Date
             </th>
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Spec Name
+              Test Name
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            {/* <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Page URL
-            </th>
+            </th> */}
             <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
               Critical
             </th>
@@ -60,9 +60,9 @@ const ScanResultsTable: React.FC<ScanResultsTableProps> = ({ scanResults, onSele
                 <td className="px-6 py-4 whitespace-nowrap">
                   {result.testName}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                {/* <td className="px-6 py-4 whitespace-nowrap">
                   {result.url}
-                </td>
+                </td> */}
                 <td className="px-6 py-4 whitespace-nowrap text-right">
                   {counts.critical || 0}
                 </td>
