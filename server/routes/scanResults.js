@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
-const { ScanResult, ScanResultFromJson, insertMany } = require('../models/ScanResult');
+const { ScanResult, ScanResultFromJson } = require('../models/ScanResult');
 const { Error } = require('mongoose');
 
 const router = express.Router();
@@ -68,7 +68,7 @@ router.post('/upload-multiple', upload.array('files'), async (req, res) => {
       // Clean up the uploaded file
       await fs.unlink(file.path);
     }
-    const savedScanResults = await insertMany(scanResults);
+    const savedScanResults = await ScanResult.insertMany(scanResults);
     res.status(201).json(savedScanResults);
   } catch (err) {
     res.status(400).json({ message: err.message });
