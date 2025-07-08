@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const subNodeSchema = new mongoose.Schema({
   id: String,
   data: mongoose.Schema.Types.Mixed,
-  relatedNodes: [String],
+  relatedNodes: [mongoose.Schema.Types.Mixed],
   impact: String,
   message: String,
 });
