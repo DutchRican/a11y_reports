@@ -10,7 +10,7 @@ const upload = multer({ dest: 'uploads/' });
 // Get all scan results
 router.get('/', async (_req, res) => {
   try {
-    const scanResults = await ScanResult.find().select({ _id: 1, testName: 1, url: 1, created: 1, impactCounts: 1, violations: 1 }).sort({ created: 1 });
+    const scanResults = await ScanResult.find().select({ _id: 1, testName: 1, url: 1, created: 1, impactCounts: 1, violations: 1, totalViolations: 1 }).sort({ created: 1 });
     res.json(scanResults);
   } catch (err) {
     res.status(500).json({ message: err.message });
