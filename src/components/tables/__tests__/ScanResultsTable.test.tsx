@@ -7,7 +7,7 @@ const mockData: ScanResult[] = [
     _id: '1',
     testName: 'Test Scan',
     url: 'https://example.com',
-    created: '2024-01-01T00:00:00.000Z',
+    created: '2024-01-01T15:00:00.000Z',
     violations: [],
     impactCounts: {
       critical: 1,
@@ -24,6 +24,6 @@ describe('ScanResultsTable', () => {
     render(<ScanResultsTable scanResults={mockData} onSelectResult={jest.fn()} />);
 
     expect(screen.getByText('Test Scan')).toBeDefined();
-    expect(screen.getByText('https://example.com')).toBeDefined();
+    expect(screen.getByText('1/1/2024')).toBeDefined();
   });
 });

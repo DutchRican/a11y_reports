@@ -58,7 +58,6 @@ const ScanResult = mongoose.model('ScanResult', scanResultSchema);
 
 const ScanResultFromJson = (json) => {
   const { critical, serious, moderate, minor } = getViolationsByImpact(json);
-  console.log(json.testName, critical)
   const scanResult = new ScanResult({
     ...json,
     created: json.created || new Date(),

@@ -1,6 +1,6 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
-const ScanResult = require('./models/ScanResult');
+const { ScanResultFromJson, ScanResult } = require('./models/ScanResult');
 const fs = require('fs');
 const path = require('path');
 
@@ -17,9 +17,13 @@ beforeAll(async () => {
   // Read sample data
   const sampleDataPath = path.join(__dirname, 'sample-data.json');
   const sampleData = JSON.parse(fs.readFileSync(sampleDataPath, 'utf8'));
-
+  const scanResults = [];
+  for (const item of sampleData) {
+    const newScanResult = ScanResultFromJson(item);
+    scanResults.push(newScanResult);
+  }
   // Insert new data
-  await ScanResult.insertMany(sampleData);
+  await ScanResult.insertMany(scanResults);
 });
 
 

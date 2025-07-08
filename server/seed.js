@@ -21,10 +21,12 @@ async function seedDatabase() {
     console.log('Read sample data');
 
     // Insert new data
+    const scanResults = [];
     for (const item of sampleData) {
       const newScanResult = ScanResultFromJson(item);
-      await newScanResult.save();
+      scanResults.push(newScanResult);
     }
+    await ScanResult.insertMany(scanResults);
     console.log('Sample data inserted successfully');
 
     await mongoose.disconnect();
