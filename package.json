@@ -1,7 +1,10 @@
 {
   "name": "a11y_reports",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "description": "A web application for managing and viewing accessibility scan reports. Track issues over time and visualize trends.",
+  "author": "Paul van Woensel",
+  "license": "MIT",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
