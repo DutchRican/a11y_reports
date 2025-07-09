@@ -6,7 +6,7 @@ import ImpactChart from '../components/charts/ImpactChart';
 import ViolationDetail from '../components/violations/ViolationDetail';
 import { ScanResult } from '../types';
 
-const DashboardPage: React.FC = () => {
+const DetailViewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -30,7 +30,7 @@ const DashboardPage: React.FC = () => {
 
   return (
     <>
-      <div className="px-2">
+      <div className="px-2 sticky top-35">
         <button onClick={() => navigate(-1)} title="Back to Overview" className="p-2">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -68,4 +68,4 @@ const DashboardPage: React.FC = () => {
   );
 };
 
-export default DashboardPage;
+export default DetailViewPage;

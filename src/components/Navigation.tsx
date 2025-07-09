@@ -6,12 +6,12 @@ interface NavigationProps {
 
 export default function Navigation({ onUploadClick }: NavigationProps) {
   const location = useLocation();
-  
+
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-indigo-900 text-white p-4 flex justify-between items-center">
+    <nav className="bg-indigo-900 text-white p-4 flex justify-between items-center sticky top-0 z-50">
       <div className="flex space-x-4">
         <Link to="/" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/') ? 'bg-indigo-700' : 'hover:bg-indigo-700'}`}>
           Home

@@ -15,7 +15,7 @@ const OverviewPage: React.FC = () => {
   });
 
   const handleSelectResult = (result: ScanResult) => {
-    navigate(`/dashboard/${result._id}`);
+    navigate(`/detailview/${result._id}`);
   };
   const [searchParams, setSearchParams] = useSearchParams();
   const [filtersOpen, setFiltersOpen] = useState(false);

@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import Navigation from './components/Navigation';
 import UploadScanModal from './components/UploadScanModal';
 import ADAInfoPage from './pages/ADAInfoPage';
-import DashboardPage from './pages/DashboardPage';
+import DetailViewPage from './pages/DetailViewPage';
 import OverviewPage from './pages/OverviewPage';
 
 function AppContent() {
@@ -19,7 +19,7 @@ function AppContent() {
           <Route path="/" element={
             <OverviewPage />
           } />
-          <Route path="/dashboard/:id" element={<DashboardPage />} />
+          <Route path="/detailview/:id" element={<DetailViewPage />} />
           <Route path="/ada-info" element={<ADAInfoPage />} />
         </Routes>
       </main>

@@ -5,21 +5,21 @@ A React application for visualizing accessibility scan results from Cypress-axe,
 ## Project Structure
 
 ```
-├── server/           # Backend API
-│   ├── models/       # MongoDB schemas
-│   ├── index.js      # Express server
-│   └── seed.js       # Database seeding script
-└── src/             # Frontend React application
-    ├── components/   # Reusable components
+├── server/            # Backend API
+│   ├── models/        # MongoDB schemas
+│   ├── index.js       # Express server
+│   └── seed.js        # Database clear and seeding script
+└── src/               # Frontend React application
+    ├── components/    # Reusable components
     │   ├── charts/    # Chart components
     │   ├── tables/    # Table components
     │   └── violations/ # Violation display components
-    ├── pages/        # Page components
+    ├── pages/         # Page components
     │   ├── ADAInfoPage.tsx
-    │   ├── DashboardPage.tsx
+    │   ├── DetailViewPage.tsx
     │   └── OverviewPage.tsx
-    ├── types.ts      # Shared type definitions
-    └── App.tsx       # Main application component
+    ├── types.ts       # Shared type definitions
+    └── App.tsx        # Main application component
 ```
 
 ## Prerequisites
