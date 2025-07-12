@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+
+input::-webkit-calendar-picker-indicator {
+	display: none !important;
+}
