@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { fetchScanResults } from '../api/results';
 import TrendChart from '../components/charts/TrendChart';
+import Chip from '../components/chips/chip';
 import ScanResultsTable from '../components/tables/ScanResultsTable';
 import { ScanResult } from '../types';
 
@@ -22,6 +23,8 @@ const OverviewPage: React.FC = () => {
 
   const testNameFilter = searchParams.get('testName') || '';
   const dateFilter = searchParams.get('date') || '';
+
+  const filters = [{ name: 'testName', val: testNameFilter }, { name: 'date', val: dateFilter }].filter(({ val }) => Boolean(val));
 
   useEffect(() => {
     if (testNameFilter || dateFilter) {
@@ -91,7 +94,7 @@ const OverviewPage: React.FC = () => {
           </div>
         </div>
       </div>
-
+      {filters.map((filter) => <Chip label={filter.val} onClick={() => { handleFilterChange(filter.name, ''); }} />)}
       <div className="space-y-8">
         <div>
           <TrendChart scanResults={filteredResults} />
