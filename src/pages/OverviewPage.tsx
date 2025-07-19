@@ -1,14 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { fetchScanResults } from '../api/results';
 import TrendChart from '../components/charts/TrendChart';
 import Chip from '../components/chips/chip';
 import ScanResultsTable from '../components/tables/ScanResultsTable';
+import { useProjectContext } from '../context/projectContext';
 import { ScanResult } from '../types';
 
 const OverviewPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { setProjectID, projectID } = useProjectContext();
 
   const { data: scanResults = [], isLoading } = useQuery<ScanResult[], Error>({
     queryKey: ['scanResults'],
@@ -21,6 +24,11 @@ const OverviewPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [filtersOpen, setFiltersOpen] = useState(false);
 
+  const getIdFromLocation = () => {
+    const match = location.pathname.match(/\/project\/(\w+)/);
+    return match ? match[1] : null;
+  };
+
   const testNameFilter = searchParams.get('testName') || '';
   const dateFilter = searchParams.get('date') || '';
 
@@ -30,6 +38,9 @@ const OverviewPage: React.FC = () => {
   useEffect(() => {
     if (testNameFilter || dateFilter) {
       setFiltersOpen(true);
+    }
+    if (getIdFromLocation() && !projectID) {
+      setProjectID(getIdFromLocation()!);
     }
   }, [testNameFilter, dateFilter]);
 

@@ -39,10 +39,9 @@ function AppContent() {
         open={uploadModalOpen}
         onClose={() => setUploadModalOpen(false)}
       />
-      <ProjectCreationModal
-        open={createProjectModalOpen}
+      {createProjectModalOpen && <ProjectCreationModal
         onClose={() => setCreateProjectModalOpen(false)}
-      />
+      />}
     </ProjectProvider>
   );
 }

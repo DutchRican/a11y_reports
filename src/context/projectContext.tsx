@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { fetchProjects } from '../api/projects';
 import { Project } from '../types';
 
@@ -14,6 +15,14 @@ const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 	const [projectID, setProjectID] = useState<string | null>(null);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (projectID) {
+			localStorage.setItem('selectedProjectID', projectID);
+			navigate(`/project/${projectID}`);
+		}
+	}, [projectID]);
 
 	const { data: availableProjects = [], isLoading: isLoadingProjects } = useQuery<Project[], Error>({
 		queryKey: ['projects'],

@@ -38,7 +38,7 @@ export interface ScanResult {
 }
 
 export interface Project {
-  id: string;
+  _id: string;
   name: string;
   description?: string;
   createdAt: string;

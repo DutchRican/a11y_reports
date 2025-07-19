@@ -15,8 +15,8 @@ export const createProject = async (formData: FormData) => {
 		body: formData,
 	});
 	if (!response.ok) {
-		toast.error("Failed to create project");
-		throw new Error("Failed to create project");
+		const text = await response.json();
+		toast.error(text?.message || "Failed to create project");
 	}
 	return response.json();
 };

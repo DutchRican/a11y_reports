@@ -51,7 +51,12 @@ const scanResultSchema = new mongoose.Schema({
     moderate: { type: Number, default: 0 },
     minor: { type: Number, default: 0 }
   },
-  totalViolations: { type: Number, default: 0 }
+  totalViolations: { type: Number, default: 0 },
+  projectId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Project',
+    required: true
+  }
 });
 
 const ScanResult = mongoose.model('ScanResult', scanResultSchema);

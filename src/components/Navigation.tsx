@@ -16,8 +16,17 @@ export default function Navigation({ onUploadClick, onProjectCreationClick }: Na
     <nav className="bg-indigo-900 text-white p-4 flex justify-between items-center sticky top-0 z-50">
       <div className="flex space-x-4">
         <Link to="/" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/') ? 'bg-indigo-700' : 'hover:bg-indigo-700'}`}>
-          Home
+          Projects
         </Link>
+        {projectID ? (
+          <Link to={`/project/${projectID}`} aria-disabled={!projectID} className={`px-3 py-2 rounded-md text-sm font-medium ${isActive(`/project/${projectID}`) ? 'bg-indigo-700' : 'hover:bg-indigo-700'}`}>
+            Project
+          </Link>
+        ) : (
+          <span className={`px-3 py-2 rounded-md text-sm font-medium text-gray-400`}>
+            Project
+          </span>
+        )}
         <Link to="/ada-info" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/ada-info') ? 'bg-indigo-700' : 'hover:bg-indigo-700'}`}>
           ADA Info
         </Link>
@@ -28,7 +37,7 @@ export default function Navigation({ onUploadClick, onProjectCreationClick }: Na
           className="ml-auto px-4 py-2 rounded-md text-sm font-medium bg-indigo-700 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
         >Create Project</button>
       )}
-      {projectID && (
+      {projectID && !isActive('/') && (
         <button
           onClick={onUploadClick}
           className="ml-auto px-4 py-2 rounded-md text-sm font-medium bg-indigo-700 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"

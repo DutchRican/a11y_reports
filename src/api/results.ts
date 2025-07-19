@@ -2,7 +2,11 @@ import { toast } from "react-toastify";
 import { BASE_URL } from "../constants";
 
 export const fetchScanResults = async () => {
-	const response = await fetch(`${BASE_URL}/scan-results`);
+	const projectID = localStorage.getItem('selectedProjectID');
+	if (!projectID) {
+		throw new Error('No project selected');
+	}
+	const response = await fetch(`${BASE_URL}/scan-results/?projectId=${projectID}`);
 	if (!response.ok) {
 		toast.error('Failed to fetch scan results');
 	}
@@ -10,7 +14,11 @@ export const fetchScanResults = async () => {
 };
 
 export const fetchScanResultById = async (id: string) => {
-	const response = await fetch(`${BASE_URL}/scan-results/${id}`);
+	const projectID = localStorage.getItem('selectedProjectID');
+	if (!projectID) {
+		throw new Error('No project selected');
+	}
+	const response = await fetch(`${BASE_URL}/scan-results/${id}?projectId=${projectID}`);
 	if (!response.ok) {
 		toast.error('Failed to fetch scan result');
 		return null;
@@ -19,7 +27,11 @@ export const fetchScanResultById = async (id: string) => {
 };
 
 export const uploadScanResults = async (formData: FormData) => {
-	const response = await fetch(`${BASE_URL}/scan-results/upload`, {
+	const projectID = localStorage.getItem('selectedProjectID');
+	if (!projectID) {
+		throw new Error('No project selected');
+	}
+	const response = await fetch(`${BASE_URL}/scan-results/upload?projectId=${projectID}`, {
 		method: 'POST',
 		body: formData,
 	});

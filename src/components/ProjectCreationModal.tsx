@@ -4,10 +4,9 @@ import { toast } from "react-toastify";
 import { createProject } from "../api/projects";
 
 interface ProjectCreationModalProps {
-	open: boolean;
 	onClose: () => void;
 }
-export default function ProjectCreationModal({ open, onClose }: ProjectCreationModalProps) {
+export default function ProjectCreationModal({ onClose }: ProjectCreationModalProps) {
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [pageUrl, setPageUrl] = useState("");
@@ -16,10 +15,7 @@ export default function ProjectCreationModal({ open, onClose }: ProjectCreationM
 		mutationFn: createProject,
 		onSuccess: () => {
 			toast.success("Project created successfully");
-		},
-		onError: () => {
-			toast.error("Failed to create project");
-		},
+		}
 	});
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -30,8 +26,6 @@ export default function ProjectCreationModal({ open, onClose }: ProjectCreationM
 		mutateAsync(formData);
 		onClose();
 	};
-
-	if (!open) return null;
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

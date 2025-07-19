@@ -1,6 +1,7 @@
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const { ScanResultFromJson, ScanResult } = require('./models/ScanResult');
+const { Project } = require('./models/Project');
 const fs = require('fs');
 const path = require('path');
 
@@ -18,11 +19,20 @@ beforeAll(async () => {
   const sampleDataPath = path.join(__dirname, 'sample-data.json');
   const sampleData = JSON.parse(fs.readFileSync(sampleDataPath, 'utf8'));
   const scanResults = [];
+  // Insert new data
+  const project = new Project({
+    name: 'Sample Project',
+    description: 'This is a sample project for seeding the database.',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    pageUrl: 'http://example.com'
+  });
+  const pr = await project.save();
   for (const item of sampleData) {
     const newScanResult = ScanResultFromJson(item);
+    newScanResult.projectId = pr._id; // Set the project ID
     scanResults.push(newScanResult);
   }
-  // Insert new data
   await ScanResult.insertMany(scanResults);
 });
 
