@@ -12,11 +12,11 @@ router.get('/', async (_req, res) => {
 	}
 });
 
-/* Create a new project
- * @param {Object} project - The project data to create
+/* Create a new project (expects formData)
+ * @param {Object} formData - The project data to create (multipart/form-data)
  * @returns {Object} - The created project
  * @throws {Error} - If there is an issue creating the project
- * Example: POST /projects
+ * Example: POST /projects (Content-Type: multipart/form-data)
  */
 router.post('/', upload.none(), async (req, res) => {
 	const { name, description, pageUrl } = req.body;
