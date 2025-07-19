@@ -5,21 +5,33 @@ A React application for visualizing accessibility scan results from Cypress-axe,
 ## Project Structure
 
 ```
-├── server/            # Backend API
-│   ├── models/        # MongoDB schemas
-│   ├── index.js       # Express server
-│   └── seed.js        # Database clear and seeding script
-└── src/               # Frontend React application
-    ├── components/    # Reusable components
-    │   ├── charts/    # Chart components
-    │   ├── tables/    # Table components
-    │   └── violations/ # Violation display components
-    ├── pages/         # Page components
-    │   ├── ADAInfoPage.tsx
-    │   ├── DetailViewPage.tsx
-    │   └── OverviewPage.tsx
-    ├── types.ts       # Shared type definitions
-    └── App.tsx        # Main application component
+├── server/                  # Backend API
+│   ├── models/              # Mongoose schemas
+│   ├── routes/              # Express route handlers
+│   ├── controllers/         # API logic
+│   ├── middleware/          # Express middleware
+│   ├── utils/               # Utility functions
+│   ├── seed.js              # Database seeding script
+│   ├── index.js             # Express server entry point
+│   └── .env.example         # Environment variable template
+├── src/                     # Frontend React application
+│   ├── components/          # Reusable UI components
+│   │   ├── charts/          # Chart components (Recharts)
+│   │   ├── tables/          # Table components
+│   │   └── violations/      # Violation display components
+│   ├── pages/               # Page-level components
+│   │   ├── ADAInfoPage.tsx
+│   │   ├── DetailViewPage.tsx
+│   │   └── OverviewPage.tsx
+│   ├── api/                 # API request logic
+│   ├── types/               # Shared type definitions
+│   ├── App.tsx              # Main application component
+│   └── main.tsx             # React entry point
+├── public/                  # Static assets
+│   └── sample-data_copy.json
+├── package.json             # Project metadata and scripts
+├── docker-compose.yml       # Docker configuration
+└── README.md                # Project documentation
 ```
 
 ## Prerequisites
@@ -67,15 +79,44 @@ A React application for visualizing accessibility scan results from Cypress-axe,
 2. The application will be available at: http://localhost:3001
 
 ## Usage
-API Endpoints:
-   - GET `/api/scan-results` - Retrieve all scan results
-   - GET `/api/scan-results/:id` - Retrieve a specific scan result
-   - POST `/api/scan-results` - Create a new scan result
+### Scan-results Endpoints
+
+- **GET** `/api/scan-results`  
+  Retrieve all accessibility scan results.
+
+- **GET** `/api/scan-results/:id`  
+  Retrieve a specific scan result by its ID.
+
+- **POST** `/api/scan-results`  
+  Create a new scan result (expects JSON payload).
+
+- **POST** `/api/scan-results/upload`  
+  Upload a single scan result file (multipart/form-data).
+
+- **POST** `/api/scan-results/upload-multiple`  
+  Upload multiple scan result files (multipart/form-data).
+
+### Project Endpoints
+
+- **GET** `/api/projects`  
+  Retrieve all projects.
+
+- **GET** `/api/projects/:id`  
+  Retrieve a specific project by its ID.
+
+- **POST** `/api/projects`  
+  Create a new project (expects JSON payload).
+
+- **PUT** `/api/projects/:id`  
+  Update an existing project by its ID.
+
+- **DELETE** `/api/projects/:id`  
+  Delete a project by its ID.
 
 ## Data Format
 
 The API expects scan results in the following format:
-
+This may also be an array of items.
 ```json
 {
   "testName": "example-spec",
@@ -110,21 +151,25 @@ The API expects scan results in the following format:
 `npm run seed`
 
 ## Curl
-Fetch all reports:  
-```bash
-curl http://localhost:3001/api/scan-results/686ae14be3e44e6712e3f4ec
-```  
 
-Fetch Report by ID:  
+Fetch all reports for a specific project:  
 ```bash
-curl http://localhost:3001/api/scan-results 
-```  
-Upload a file:
-```bash
-curl http://localhost:3001/api/scan-results/upload -F "file=@/public/sample-data_copy.json"
+curl "http://localhost:3001/api/scan-results?projectId=YOUR_PROJECT_ID"
 ```
 
-Upload multiple files:
+Fetch report by ID for a specific project:  
 ```bash
- curl http://localhost:3001/api/scan-results/upload-multiple -F "files=@/location/test-result.json" -F "files=@sample-data_copy.json"
+curl "http://localhost:3001/api/scan-results/686ae14be3e44e6712e3f4ec?projectId=YOUR_PROJECT_ID"
+```
+
+Upload a file for a specific project:
+```bash
+curl "http://localhost:3001/api/scan-results/upload?projectId=YOUR_PROJECT_ID" -F "file=@/public/sample-data_copy.json"
+```
+
+Upload multiple files for a specific project:
+```bash
+curl "http://localhost:3001/api/scan-results/upload-multiple?projectId=YOUR_PROJECT_ID" \
+  -F "files=@/location/test-result.json" \
+  -F "files=@sample-data_copy.json"
 ```
