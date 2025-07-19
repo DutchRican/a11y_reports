@@ -1,12 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useProjectContext } from '../context/projectContext';
 
 interface NavigationProps {
   onUploadClick: () => void;
+  onProjectCreationClick: () => void;
 }
 
-export default function Navigation({ onUploadClick }: NavigationProps) {
+export default function Navigation({ onUploadClick, onProjectCreationClick }: NavigationProps) {
   const location = useLocation();
-
+  const { projectID } = useProjectContext();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -20,12 +22,19 @@ export default function Navigation({ onUploadClick }: NavigationProps) {
           ADA Info
         </Link>
       </div>
-      <button
-        onClick={onUploadClick}
-        className="ml-auto px-4 py-2 rounded-md text-sm font-medium bg-indigo-700 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
-      >
-        Upload Scan
-      </button>
+      {isActive('/') && (
+        <button
+          onClick={onProjectCreationClick}
+          className="ml-auto px-4 py-2 rounded-md text-sm font-medium bg-indigo-700 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+        >Create Project</button>
+      )}
+      {projectID && (
+        <button
+          onClick={onUploadClick}
+          className="ml-auto px-4 py-2 rounded-md text-sm font-medium bg-indigo-700 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+        >
+          Upload Scan
+        </button>)}
     </nav>
   );
 }

@@ -5,12 +5,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const scanResultsRouter = require('./routes/scanResults');
+const projectsRouter = require('./routes/projects');
 
 dotenv.config();
 
 const app = express();
 
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const port = process.env.PORT || 3001;
@@ -22,6 +24,7 @@ mongoose.connect(mongoUri)
 
 // API routes
 app.use('/api/scan-results', scanResultsRouter);
+app.use('/api/projects', projectsRouter);
 
 // Serve static files from frontend build in production
 if (process.env.NODE_ENV === 'production') {

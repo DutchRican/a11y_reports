@@ -36,3 +36,11 @@ export interface ScanResult {
   totalViolations: number;
   violations?: A11yViolation[];
 }
+
+export interface Project {
+  id: string;
+  name: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+}
