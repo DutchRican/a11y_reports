@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { createProject } from "../api/projects";
@@ -10,11 +10,14 @@ export default function ProjectCreationModal({ onClose }: ProjectCreationModalPr
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [pageUrl, setPageUrl] = useState("");
+	const queryClient = useQueryClient();
 
 	const { isPending, mutateAsync } = useMutation({
 		mutationFn: createProject,
+
 		onSuccess: () => {
 			toast.success("Project created successfully");
+			queryClient.invalidateQueries({ queryKey: ['projects'] });
 		}
 	});
 	const handleSubmit = async (e: React.FormEvent) => {
