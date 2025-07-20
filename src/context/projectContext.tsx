@@ -10,6 +10,7 @@ type ProjectContextType = {
 	availableProjects: Project[];
 	isLoadingProjects: boolean;
 	isRefetchingProjects: boolean;
+	currentProject: Project | undefined;
 };
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -30,8 +31,10 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 		queryFn: fetchProjects,
 	});
 
+	const currentProject = availableProjects.find(project => project._id === projectID);
+
 	return (
-		<ProjectContext.Provider value={{ projectID, setProjectID, availableProjects, isLoadingProjects, isRefetchingProjects }}>
+		<ProjectContext.Provider value={{ projectID, setProjectID, availableProjects, isLoadingProjects, isRefetchingProjects, currentProject }}>
 			{children}
 		</ProjectContext.Provider>
 	);

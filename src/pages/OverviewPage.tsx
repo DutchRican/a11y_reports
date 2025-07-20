@@ -11,9 +11,9 @@ import { ScanResult } from '../types';
 const OverviewPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setProjectID, projectID } = useProjectContext();
+  const { setProjectID, projectID, currentProject } = useProjectContext();
 
-  const { data: scanResults = [], isLoading } = useQuery<ScanResult[], Error>({
+  const { data: scanResults = [], isPending } = useQuery<ScanResult[], Error>({
     queryKey: ['scanResults'],
     queryFn: fetchScanResults
   });
@@ -65,8 +65,13 @@ const OverviewPage: React.FC = () => {
   return (
     <div className="max-w-7/8 mx-auto my-8 p-4">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-3xl font-bold">Accessibility Test Results Overview</h1>
-        {isLoading && <div>Loading...</div>}
+        {isPending ? <div>Getting project details...</div> : <div className="space-y-2">
+          <h1 className="text-3xl font-bold">Accessibility Test Results Overview</h1>
+          <h2 className="text-lg font-semibold">
+            {`Project: ${currentProject?.name}`}
+          </h2>
+        </div>
+        }
         <button
           onClick={() => setFiltersOpen(!filtersOpen)}
           aria-label="toggle filters"
@@ -146,13 +151,14 @@ const OverviewPage: React.FC = () => {
       {filters.map((filter) => <Chip label={filter.val} onClick={() => { handleFilterChange(filter.name, ''); }} />)}
       <div className="space-y-8">
         <div>
-          <TrendChart scanResults={filteredResults} />
+          <TrendChart scanResults={filteredResults} unfilteredCount={scanResults.length} />
         </div>
         <div>
-          <ScanResultsTable
+          {!!filteredResults.length && <ScanResultsTable
             scanResults={filteredResults}
             onSelectResult={handleSelectResult}
-          />
+          />}
+          {!scanResults.length && isPending && <div className="text-center text-gray-500">Loading scan results...</div>}
         </div>
       </div>
     </div>

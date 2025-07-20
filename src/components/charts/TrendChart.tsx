@@ -1,12 +1,14 @@
 import React from 'react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { ScanResult } from '../../types';
+import { colorMap } from './colors';
 
 interface TrendChartProps {
   scanResults: ScanResult[];
+  unfilteredCount: number;
 }
 
-const TrendChart: React.FC<TrendChartProps> = ({ scanResults }) => {
+const TrendChart: React.FC<TrendChartProps> = ({ scanResults, unfilteredCount }) => {
   const trendData = scanResults
     .map(result => {
       return {
@@ -36,19 +38,21 @@ const TrendChart: React.FC<TrendChartProps> = ({ scanResults }) => {
   return (
     <div className="p-4 bg-white shadow-md rounded-lg h-96">
       <h3 className="text-lg font-semibold mb-4">Issues Trend Over Time</h3>
-      <ResponsiveContainer width="100%" height="85%">
+      {!!scanResults.length && <ResponsiveContainer width="100%" height="85%">
         <LineChart data={mapData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="timestamp" />
           <YAxis />
           <Tooltip />
           <Legend wrapperStyle={{ paddingTop: '15px' }} />
-          <Line type="monotone" dataKey="minor" stroke="#4caf50" name="Minor" />
-          <Line type="monotone" dataKey="moderate" stroke="#ffd700" name="Moderate" />
-          <Line type="monotone" dataKey="serious" stroke="#f57c00" name="Serious" />
-          <Line type="monotone" dataKey="critical" stroke="#d32f2f" name="Critical" />
+          <Line type="monotone" dataKey="minor" stroke={colorMap.minor} name="Minor" />
+          <Line type="monotone" dataKey="moderate" stroke={colorMap.moderate} name="Moderate" />
+          <Line type="monotone" dataKey="serious" stroke={colorMap.serious} name="Serious" />
+          <Line type="monotone" dataKey="critical" stroke={colorMap.critical} name="Critical" />
         </LineChart>
-      </ResponsiveContainer>
+      </ResponsiveContainer>}
+      {!scanResults.length && !!unfilteredCount && <div className="text-center text-gray-500">No scan results match the current filters</div>}
+      {!unfilteredCount && <div className="text-center text-gray-500">There are no scan results available, have you uploaded scans yet?</div>}
     </div>
   );
 };

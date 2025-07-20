@@ -1,6 +1,7 @@
 import React from 'react';
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { ScanResult } from '../../types';
+import { colorMap } from './colors';
 
 interface ImpactChartProps {
   scanResults: ScanResult;
@@ -14,10 +15,13 @@ const ImpactChart: React.FC<ImpactChartProps> = ({ scanResults }) => {
   if (!impactData) {
     return null;
   }
+
   const chartData = Object.entries(impactData)?.map(([impact, count]) => ({
     impact,
     count,
+    fill: colorMap[impact] || '#000', // Default color if impact is not in colorMap
   }));
+
 
   return (
     <div className="p-4 bg-white shadow-md rounded-lg h-96">
@@ -29,7 +33,7 @@ const ImpactChart: React.FC<ImpactChartProps> = ({ scanResults }) => {
           <YAxis />
           <Tooltip cursor={{ fill: 'transparent' }} />
           <Legend wrapperStyle={{ paddingTop: '15px', bottom: '25px' }} />
-          <Bar dataKey="count" fill="#8884d8" cursor="pointer" />
+          <Bar dataKey="count" cursor="pointer" />
         </BarChart>
       </ResponsiveContainer>
     </div>
