@@ -9,6 +9,7 @@ type ProjectContextType = {
 	setProjectID: (id: string) => void;
 	availableProjects: Project[];
 	isLoadingProjects: boolean;
+	isRefetchingProjects: boolean;
 };
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -24,13 +25,13 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 		}
 	}, [projectID]);
 
-	const { data: availableProjects = [], isLoading: isLoadingProjects } = useQuery<Project[], Error>({
+	const { data: availableProjects = [], isLoading: isLoadingProjects, isRefetching: isRefetchingProjects } = useQuery<Project[], Error>({
 		queryKey: ['projects'],
 		queryFn: fetchProjects,
 	});
 
 	return (
-		<ProjectContext.Provider value={{ projectID, setProjectID, availableProjects, isLoadingProjects }}>
+		<ProjectContext.Provider value={{ projectID, setProjectID, availableProjects, isLoadingProjects, isRefetchingProjects }}>
 			{children}
 		</ProjectContext.Provider>
 	);

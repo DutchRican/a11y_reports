@@ -1,15 +1,17 @@
 # Stage 1: Build frontend
-FROM node:22 as frontend-builder
+FROM node:22 AS frontend-builder
 WORKDIR /app
 COPY . .
 RUN npm install && \
-	npm run build
+	npm run build && \
+	npm prune production
 
 # Stage 2: Build backend
-FROM node:22 as backend-builder
+FROM node:22 AS backend-builder
 WORKDIR /app/server
+ENV NODE_ENV=production
 COPY server/package*.json ./
-RUN npm install
+RUN npm install --omit=dev
 COPY server .
 
 # Stage 3: Runtime
@@ -18,13 +20,7 @@ WORKDIR /app
 
 # Copy built frontend
 COPY --from=frontend-builder /app/dist ./dist
-COPY --from=frontend-builder /app/node_modules ./node_modules
-COPY --from=frontend-builder /app/package*.json ./
-
-# Copy built backend
-COPY --from=backend-builder /app/server/node_modules ./server/node_modules
-COPY --from=backend-builder /app/server/package*.json ./server/
-COPY --from=backend-builder /app/server .
+COPY --from=backend-builder /app/server ./
 
 # Copy required files
 COPY server/.env.example ./server/.env
