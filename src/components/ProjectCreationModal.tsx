@@ -7,9 +7,11 @@ interface ProjectCreationModalProps {
 	onClose: () => void;
 }
 export default function ProjectCreationModal({ onClose }: ProjectCreationModalProps) {
-	const [name, setName] = useState("");
-	const [description, setDescription] = useState("");
-	const [pageUrl, setPageUrl] = useState("");
+	const [formData, setFormData] = useState({
+		name: "",
+		description: "",
+		pageUrl: ""
+	});
 	const queryClient = useQueryClient();
 
 	const { isPending, mutateAsync } = useMutation({
@@ -22,11 +24,11 @@ export default function ProjectCreationModal({ onClose }: ProjectCreationModalPr
 	});
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		const formData = new FormData();
-		formData.append("name", name);
-		formData.append("description", description);
-		formData.append("pageUrl", pageUrl);
-		mutateAsync(formData);
+		const fd = new FormData();
+		fd.append("name", formData.name);
+		fd.append("description", formData.description);
+		fd.append("pageUrl", formData.pageUrl);
+		mutateAsync(fd);
 		onClose();
 	};
 
@@ -34,7 +36,7 @@ export default function ProjectCreationModal({ onClose }: ProjectCreationModalPr
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
 			<div className="bg-white p-4 rounded shadow-md">
 				<h2 className="text-lg font-semibold mb-4">Create Project</h2>
-				<form onSubmit={handleSubmit} id="project-creation-form">
+				<form onSubmit={handleSubmit} id="project-creation-form" data-testid="project-creation-form">
 					<div className="mb-4">
 						<label htmlFor="project-name" className="block text-sm font-medium text-gray-700">
 							Project Name
@@ -44,8 +46,8 @@ export default function ProjectCreationModal({ onClose }: ProjectCreationModalPr
 							id="project-name"
 							className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
 							required
-							value={name}
-							onChange={(e) => setName(e.target.value)}
+							value={formData.name}
+							onChange={(e) => setFormData({ ...formData, name: e.target.value })}
 						/>
 					</div>
 					<div className="mb-4">
@@ -57,8 +59,8 @@ export default function ProjectCreationModal({ onClose }: ProjectCreationModalPr
 							id="project-page-url"
 							className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
 							required
-							value={pageUrl}
-							onChange={(e) => setPageUrl(e.target.value)}
+							value={formData.pageUrl}
+							onChange={(e) => setFormData({ ...formData, pageUrl: e.target.value })}
 						/>
 					</div>
 					<div className="mb-4">
@@ -69,8 +71,8 @@ export default function ProjectCreationModal({ onClose }: ProjectCreationModalPr
 							id="project-description"
 							className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
 							rows={3}
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
+							value={formData.description}
+							onChange={(e) => setFormData({ ...formData, description: e.target.value })}
 						/>
 					</div>
 					<div className="flex justify-end">

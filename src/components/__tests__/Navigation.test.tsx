@@ -17,8 +17,8 @@ describe('Navigation', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Projects')).toBeDefined();
-    expect(screen.getByText('Project')).toBeDefined();
-    expect(screen.getByText('ADA Info')).toBeDefined();
+    expect(screen.getByText('Projects')).toBeInTheDocument();
+    expect(screen.getByText('Project')).toBeInTheDocument();
+    expect(screen.getByText('ADA Info')).toBeInTheDocument();
   });
 });

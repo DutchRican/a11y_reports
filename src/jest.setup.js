@@ -3,6 +3,7 @@
 require('whatwg-fetch');
 const { TextDecoder, TextEncoder } = require('util');
 const ResizeObserver = require('resize-observer-polyfill');
+require('@testing-library/jest-dom/jest-globals');
 
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
