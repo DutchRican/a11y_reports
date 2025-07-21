@@ -22,6 +22,9 @@ const ViolationDetail: React.FC<ViolationDetailProps> = ({ violation }) => {
       <p className="text-gray-600 text-sm mb-2">
         {violation.help}
       </p>
+      <p className="text-gray-600 text-sm mb-2">
+        {violation.url || 'No URL provided'}
+      </p>
       <div className="mt-1">
         <a href={violation.helpUrl} target="_blank" rel="noopener" className="text-blue-500 hover:underline">
           Learn more

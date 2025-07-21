@@ -22,6 +22,10 @@ const violationSchema = new mongoose.Schema({
   description: String,
   help: String,
   helpUrl: String,
+  url: {
+    type: String,
+    required: false
+  },
   id: String,
   impact: {
     type: String,

@@ -11,6 +11,7 @@ export interface A11yViolation {
   description: string;
   help: string;
   helpUrl: string;
+  url: string;
   nodes: Array<{
     html: string;
     target: string[];

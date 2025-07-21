@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
+const { createReadStream } = require('fs');
 const { ScanResult, ScanResultFromJson } = require('../models/ScanResult');
 const { Error } = require('mongoose');
 const { Project } = require('../models/Project');
@@ -185,47 +186,78 @@ router.post('/upload-json', async (req, res) => {
   }
 });
 
-// /* Upload scan results in tar file format
-//   * @param {Object} req - The request object containing the tar file in the body
-//   * @returns {Object} - The saved scan result object
-//   * @throws {Error} - If the tar file is not provided or if there is an issue saving it
-//   */
-// router.post('/upload-tar', upload.single('file'), async (req, res) => {
-//   if (!req.file) {
-//     return res.status(400).json({ message: 'No file uploaded' });
-//   }
-//   try {
-//     const tarFile = await fs.readFile(req.file.path, 'utf8');
-//     const extract = require('tar-stream').extract();
-//     extract.on('entry', async (header, stream, next) => {
-//       let fileContent = '';
-//       stream.on('data', (chunk) => {
-//         fileContent += chunk.toString();
-//       });
-//       stream.on('end', async () => {
-//         next();
-//       });
-//       stream.resume();
-//     });
-//     extract.on('finish', async () => {
-//     });
-//     tarFile.pipe(extract);
+/* Upload scan results in tar file format
+  * @param {Object} req - The request object containing the tar file in the body
+  * @returns {Object} - The saved scan result object
+  * @throws {Error} - If the tar file is not provided or if there is an issue saving it
+  */
+router.post('/upload-tar', upload.single('file'), async (req, res) => {
+  const projectId = req.query.projectId;
+  if (!projectId) {
+    return res.status(400).json({ message: 'Project ID is required' });
+  }
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
 
+  try {
+    // loading this when needed
+    const ts = require('tar-stream');
+    const { createGunzip } = require('zlib');
+    const scans = [];
 
-//     const scanData = JSON.parse(fileContent);
-//     const newScanResult = ScanResultFromJson(scanData);
-//     const savedScanResult = await newScanResult.save();
-//     res.status(201).json(savedScanResult);
-//   } catch (err) {
-//     res.status(400).json({ message: err.message });
-//   } finally {
-//     // Clean up the uploaded file
-//     if (req.file) {
-//       await fs.unlink(req.file.path);
-//     }
-//   }
-// });
+    // make the extraction a promise
+    await new Promise((resolve, reject) => {
+      const extract = ts.extract();
+      extract.on('entry', function (header, stream, next) {
+        console.log(header.name);
+        if (header.type === 'file') {
+          let fileContent = '';
+          stream.on('data', (chunk) => {
+            fileContent += chunk.toString();
+          });
+          stream.on('end', () => {
+            try {
+              const scanData = JSON.parse(fileContent);
+              scanData.projectId = projectId;
+              const newScanResults = parseResultArray([scanData].flat(), projectId);
+              scans.push(...newScanResults);
+            } catch (err) {
+              console.error('Error parsing JSON from tar file:', err);
+            }
+            next();
+          });
+          stream.resume();
+        } else {
+          next();
+        }
+      });
+      extract.on('finish', () => {
+        resolve();
+      });
+      extract.on('error', (err) => {
+        reject(err);
+      });
+      createReadStream(req.file.path)
+        .pipe(createGunzip())
+        .pipe(extract);
+    });
 
+    if (scans.length > 0) {
+      await ScanResult.insertMany(scans);
+      res.status(201).json({ message: 'Scan results uploaded successfully', count: scans.length });
+    } else {
+      res.status(400).json({ message: 'No valid scan results found in the tar file' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Error processing tar file', error: err.message });
+  } finally {
+    // Clean up the uploaded file
+    if (req.file) {
+      await fs.unlink(req.file.path);
+    }
+  }
+});
 /* * Delete a scan result by ID
  * @param {string} id - The ID of the scan result to delete
  * @returns {Object} - A message indicating the deletion status
@@ -245,5 +277,14 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+const parseResultArray = (resultArray, projectId) => {
+  return resultArray.map(result => {
+    return ScanResultFromJson({
+      ...result,
+      projectId: projectId
+    });
+  });
+};
 
 module.exports = router;
