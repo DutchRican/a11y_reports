@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { fetchScanResults } from '../api/results';
 import TrendChart from '../components/charts/TrendChart';
 import Chip from '../components/chips/chip';
@@ -13,7 +14,7 @@ const OverviewPage: React.FC = () => {
   const location = useLocation();
   const { setProjectID, projectID, currentProject } = useProjectContext();
 
-  const { data: scanResults = [], isPending } = useQuery<ScanResult[], Error>({
+  const { data: scanResults = [], isPending, error } = useQuery<ScanResult[], Error>({
     queryKey: ['scanResults'],
     queryFn: fetchScanResults
   });
@@ -28,12 +29,17 @@ const OverviewPage: React.FC = () => {
     const match = location.pathname.match(/\/project\/(\w+)/);
     return match ? match[1] : null;
   };
+  useEffect(() => {
+    if (error) {
+      toast.error('Error fetching scan results for this project ID');
+    }
+  }, [error]);
 
   const testNameFilter = searchParams.get('testName') || '';
   const dateFilter = searchParams.get('date') || '';
 
   const filters = [{ name: 'testName', val: testNameFilter }, { name: 'date', val: dateFilter }].filter(({ val }) => Boolean(val));
-  const testDates = Array.from(new Set(scanResults.map(result => new Date(result.created).toLocaleDateString()))).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+  const testDates = Array.from(new Set(scanResults?.map(result => new Date(result.created).toLocaleDateString()))).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
 
   useEffect(() => {
     if (testNameFilter || dateFilter) {

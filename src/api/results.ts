@@ -8,7 +8,8 @@ export const fetchScanResults = async () => {
 	}
 	const response = await fetch(`${BASE_URL}/scan-results/?projectId=${projectID}`);
 	if (!response.ok) {
-		toast.error('Failed to fetch scan results');
+		const text = await response.json();
+		throw new Error(text?.message || "Failed to fetch scan results");
 	}
 	return response.json();
 };
