@@ -31,7 +31,7 @@ const OverviewPage: React.FC = () => {
   };
   useEffect(() => {
     if (error) {
-      toast.error('Error fetching scan results for this project ID');
+      toast.error('Not sure this id exists, navigating you home', { onClose: () => navigate('/') });
     }
   }, [error]);
 

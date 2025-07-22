@@ -6,7 +6,7 @@ import { Project } from '../types';
 
 type ProjectContextType = {
 	projectID: string | null;
-	setProjectID: (id: string) => void;
+	setProjectID: (id: string | null) => void;
 	availableProjects: Project[];
 	isLoadingProjects: boolean;
 	isRefetchingProjects: boolean;

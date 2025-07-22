@@ -104,21 +104,12 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 
     const scanResults = [];
     const errors = [];
-    for (const scan of scanData) {
-      try {
-        const newScanResult = ScanResultFromJson(scan);
-        newScanResult.projectId = projectId; // Set the project ID from the query parameter
-        scanResults.push(newScanResult);
-      } catch (err) {
-        errors.push({ testName: scan.testName, error: err.message });
-      }
-    }
+
+    const { results, errors: parseErrors } = parseResultArray(scanData, projectId);
+    scanResults.push(...results);
+    errors.push(...parseErrors);
     await ScanResult.insertMany(scanResults);
-    if (errors.length > 0) {
-      return res.status(400).json({ message: 'Some scan results could not be saved', errors });
-    } else {
-      res.status(201).json({ message: 'Scan results uploaded successfully' });
-    }
+    res.status(201).json({ message: 'Scan results uploaded successfully', errors });
   } catch (err) { // Handle JSON parsing errors or file read errors
     res.status(400).json({ message: err.message });
   } finally {
@@ -169,21 +160,13 @@ router.post('/upload-json', async (req, res) => {
   }
   const errors = [];
   const scanResults = [];
-  for (const scan of scanData) {
-    try {
-      const newScanResult = ScanResultFromJson(scan);
-      newScanResult.projectId = projectId; // Set the project ID from the query parameter
-      scanResults.push(newScanResult);
-    } catch (err) {
-      errors.push({ testName: scan.testName, error: err.message });
-    }
-  }
+
+  const { results, errors: parseErrors } = parseResultArray(scanData, projectId);
+  scanResults.push(...results);
+  errors.push(...parseErrors);
+
   await ScanResult.insertMany(scanResults);
-  if (errors.length > 0) {
-    return res.status(400).json({ message: 'Some scan results could not be saved', errors });
-  } else {
-    res.status(201).json({ message: 'Scan results uploaded successfully' });
-  }
+  res.status(201).json({ message: 'Scan results uploaded successfully', errors });
 });
 
 /* Upload scan results in tar file format
@@ -205,12 +188,11 @@ router.post('/upload-tar', upload.single('file'), async (req, res) => {
     const ts = require('tar-stream');
     const { createGunzip } = require('zlib');
     const scans = [];
-
+    const errors = [];
     // make the extraction a promise
     await new Promise((resolve, reject) => {
       const extract = ts.extract();
       extract.on('entry', function (header, stream, next) {
-        console.log(header.name);
         if (header.type === 'file') {
           let fileContent = '';
           stream.on('data', (chunk) => {
@@ -220,8 +202,9 @@ router.post('/upload-tar', upload.single('file'), async (req, res) => {
             try {
               const scanData = JSON.parse(fileContent);
               scanData.projectId = projectId;
-              const newScanResults = parseResultArray([scanData].flat(), projectId);
+              const { results: newScanResults, errors: parseErrors } = parseResultArray([scanData].flat(), projectId);
               scans.push(...newScanResults);
+              errors.push(...parseErrors);
             } catch (err) {
               console.error('Error parsing JSON from tar file:', err);
             }
@@ -245,7 +228,7 @@ router.post('/upload-tar', upload.single('file'), async (req, res) => {
 
     if (scans.length > 0) {
       await ScanResult.insertMany(scans);
-      res.status(201).json({ message: 'Scan results uploaded successfully', count: scans.length });
+      res.status(201).json({ message: 'Scan results uploaded successfully', count: scans.length, errors });
     } else {
       res.status(400).json({ message: 'No valid scan results found in the tar file' });
     }
@@ -279,12 +262,19 @@ router.delete('/:id', async (req, res) => {
 });
 
 const parseResultArray = (resultArray, projectId) => {
-  return resultArray.map(result => {
-    return ScanResultFromJson({
-      ...result,
-      projectId: projectId
-    });
+  const errors = [];
+  const results = resultArray.map(result => {
+    try {
+      return ScanResultFromJson({
+        ...result,
+        projectId
+      });
+    } catch {
+      errors.push({ testName: result.testName, error: 'Invalid scan result format' });
+      return null; // Return null for invalid entries
+    }
   });
+  return { results, errors };
 };
 
 module.exports = router;
