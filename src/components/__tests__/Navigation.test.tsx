@@ -17,8 +17,8 @@ describe('Navigation', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Projects')).toBeInTheDocument();
-    expect(screen.getByText('Project')).toBeInTheDocument();
+    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(screen.getByText('Overview')).toBeInTheDocument();
     expect(screen.getByText('ADA Info')).toBeInTheDocument();
   });
 });

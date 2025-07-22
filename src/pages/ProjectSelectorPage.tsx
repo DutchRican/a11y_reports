@@ -29,7 +29,8 @@ const ProjectSelectorPage: React.FC = () => {
 					<li
 						key={project._id}
 						onClick={() => handleProjectSelect(project._id)}
-						className="p-3 mb-3 bg-gray-100 rounded cursor-pointer transition-colors hover:bg-indigo-100 flex "
+						className={`p-3 mb-3 rounded cursor-pointer transition-colors flex ${projectID === project._id ? 'bg-indigo-50 hover:bg-indigo-100' : 'bg-gray-100 hover:bg-indigo-100'
+							}`}
 					>
 						<p className="font-semibold flex-1 ml-2">{project.name}</p>
 						<p

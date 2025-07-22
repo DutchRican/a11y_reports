@@ -16,15 +16,15 @@ export default function Navigation({ onUploadClick, onProjectCreationClick }: Na
     <nav className="bg-indigo-900 text-white p-4 flex justify-between items-center sticky top-0 z-50">
       <div className="flex space-x-4">
         <Link to="/" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/') ? 'bg-indigo-700' : 'hover:bg-indigo-700'}`}>
-          Projects
+          Home
         </Link>
         {projectID ? (
           <Link to={`/project/${projectID}`} aria-disabled={!projectID} className={`px-3 py-2 rounded-md text-sm font-medium ${isActive(`/project/${projectID}`) ? 'bg-indigo-700' : 'hover:bg-indigo-700'}`}>
-            Project
+            Overview
           </Link>
         ) : (
           <span className={`px-3 py-2 rounded-md text-sm font-medium text-gray-400`}>
-            Project
+            Overview
           </span>
         )}
         <Link to="/ada-info" className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/ada-info') ? 'bg-indigo-700' : 'hover:bg-indigo-700'}`}>
