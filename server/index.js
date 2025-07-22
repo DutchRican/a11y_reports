@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const compression = require('compression');
 const scanResultsRouter = require('./routes/scanResults');
 const projectsRouter = require('./routes/projects');
 
@@ -11,6 +12,7 @@ dotenv.config();
 
 const app = express();
 
+app.use(compression());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
