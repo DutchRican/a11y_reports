@@ -13,6 +13,10 @@ const OverviewPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { setProjectID, projectID, currentProject } = useProjectContext();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const testNameFilter = searchParams.get('testName') || '';
+  const dateFilter = searchParams.get('date') || '';
+  const [filtersOpen, setFiltersOpen] = useState(!!testNameFilter || !!dateFilter);
 
   const { data: scanResults = [], isPending, error } = useQuery<ScanResult[], Error>({
     queryKey: ['scanResults'],
@@ -22,8 +26,6 @@ const OverviewPage: React.FC = () => {
   const handleSelectResult = (result: ScanResult) => {
     navigate(`/detailview/${result._id}`);
   };
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const getIdFromLocation = () => {
     const match = location.pathname.match(/\/project\/(\w+)/);
@@ -35,20 +37,15 @@ const OverviewPage: React.FC = () => {
     }
   }, [error]);
 
-  const testNameFilter = searchParams.get('testName') || '';
-  const dateFilter = searchParams.get('date') || '';
-
   const filters = [{ name: 'testName', val: testNameFilter }, { name: 'date', val: dateFilter }].filter(({ val }) => Boolean(val));
   const testDates = Array.from(new Set(scanResults?.map(result => new Date(result.created).toLocaleDateString()))).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
 
   useEffect(() => {
-    if (testNameFilter || dateFilter) {
-      setFiltersOpen(true);
+    const urlId = getIdFromLocation();
+    if (urlId && !projectID) {
+      setProjectID(urlId);
     }
-    if (getIdFromLocation() && !projectID) {
-      setProjectID(getIdFromLocation()!);
-    }
-  }, [testNameFilter, dateFilter]);
+  }, []);
 
   const handleFilterChange = (key: string, value: string) => {
     setSearchParams(prev => {
@@ -79,7 +76,7 @@ const OverviewPage: React.FC = () => {
         </div>
         }
         <button
-          onClick={() => setFiltersOpen(!filtersOpen)}
+          onClick={() => setFiltersOpen((prev) => !prev)}
           aria-label="toggle filters"
           className="p-2 rounded-full hover:bg-gray-200"
         >
@@ -154,7 +151,7 @@ const OverviewPage: React.FC = () => {
           </div>
         </div>
       </div>
-      {filters.map((filter) => <Chip label={filter.val} onClick={() => { handleFilterChange(filter.name, ''); }} />)}
+      {filters.map((filter) => <Chip key={filter.name} label={filter.val} onClick={() => { handleFilterChange(filter.name, ''); }} />)}
       <div className="space-y-8">
         <div>
           <TrendChart scanResults={filteredResults} unfilteredCount={scanResults.length} />
