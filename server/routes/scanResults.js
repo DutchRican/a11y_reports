@@ -17,7 +17,6 @@ const upload = multer({ dest: 'uploads/' });
 router.get('/', projectCheck, async (req, res) => {
   try {
     const projectId = req.project_id;
-    console.log('Project ID:', projectId);
     const scanResults = await ScanResult.find({ projectId }).select({ _id: 1, testName: 1, url: 1, created: 1, impactCounts: 1, violations: 1, totalViolations: 1 }).sort({ created: 1 });
     res.json(scanResults);
   } catch (err) {
