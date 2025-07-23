@@ -4,7 +4,6 @@ const fs = require('fs').promises;
 const { createReadStream } = require('fs');
 const { ScanResult, ScanResultFromJson } = require('../models/ScanResult');
 const { Error } = require('mongoose');
-const { Project } = require('../models/Project');
 const { projectCheck } = require('../middlewares/project');
 
 const router = express.Router();
@@ -17,7 +16,8 @@ const upload = multer({ dest: 'uploads/' });
  */
 router.get('/', projectCheck, async (req, res) => {
   try {
-    const projectId = req.projectId;
+    const projectId = req.project_id;
+    console.log('Project ID:', projectId);
     const scanResults = await ScanResult.find({ projectId }).select({ _id: 1, testName: 1, url: 1, created: 1, impactCounts: 1, violations: 1, totalViolations: 1 }).sort({ created: 1 });
     res.json(scanResults);
   } catch (err) {
@@ -166,11 +166,7 @@ router.post('/upload-json', projectCheck, async (req, res) => {
   * @throws {Error} - If the tar file is not provided or if there is an issue saving it
   */
 router.post('/upload-tar', upload.single('file'), projectCheck, async (req, res) => {
-  const projectId = req.query.projectId;
-  const project = await Project.findById(projectId);
-  if (!project) {
-    return res.status(404).json({ message: 'Project not found' });
-  }
+  const projectId = req.project_id;
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
