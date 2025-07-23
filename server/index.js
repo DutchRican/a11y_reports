@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const morgan = require('morgan');
 const compression = require('compression');
 const scanResultsRouter = require('./routes/scanResults');
 const projectsRouter = require('./routes/projects');
@@ -16,6 +17,7 @@ app.use(compression());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(morgan('tiny'));
 
 const port = process.env.PORT || 3001;
 const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/a11y_reports';

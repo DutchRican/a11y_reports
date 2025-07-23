@@ -5,6 +5,7 @@ const { createReadStream } = require('fs');
 const { ScanResult, ScanResultFromJson } = require('../models/ScanResult');
 const { Error } = require('mongoose');
 const { Project } = require('../models/Project');
+const { projectCheck } = require('../middlewares/project');
 
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
@@ -14,13 +15,9 @@ const upload = multer({ dest: 'uploads/' });
  * @throws {Error} - If there is an issue retrieving the scan results
  * Example: GET /scan-results
  */
-router.get('/', async (req, res) => {
+router.get('/', projectCheck, async (req, res) => {
   try {
-    const projectId = req.query.projectId;
-    const id = await Project.findById(projectId);
-    if (!id) {
-      return res.status(400).json({ message: 'Project ID is required' });
-    }
+    const projectId = req.projectId;
     const scanResults = await ScanResult.find({ projectId }).select({ _id: 1, testName: 1, url: 1, created: 1, impactCounts: 1, violations: 1, totalViolations: 1 }).sort({ created: 1 });
     res.json(scanResults);
   } catch (err) {
@@ -35,8 +32,8 @@ router.get('/', async (req, res) => {
   * @throws {Error} - If there is an issue retrieving the scan results
   * Example: GET /scan-results/page/2?limit=20
   */
-router.get('/page/:page', async (req, res) => {
-  const projectId = req.query.projectId;
+router.get('/page/:page', projectCheck, async (req, res) => {
+  const projectId = req.project_id;
   const page = Math.max(parseInt(req.params.page, 10) || 1, 1);
   const limit = Math.max(parseInt(req.query.limit, 10) || 50, 100); // Default limit to 50 if not provided
   try {
@@ -55,9 +52,9 @@ router.get('/page/:page', async (req, res) => {
  * @throws {Error} - If there is an issue retrieving the scan results
  * Example: GET /scan-results/year/2023
  */
-router.get('/year/:year', async (req, res) => {
+router.get('/year/:year', projectCheck, async (req, res) => {
   try {
-    const projectId = req.query.projectId;
+    const projectId = req.project_id;
     const { year } = req.params;
     const scanResults = await ScanResult.find({
       projectId,
@@ -93,11 +90,8 @@ router.get('/:id', async (req, res) => {
  * @returns {Object} - The saved scan result object
  * @throws {Error} - If the file is not provided or if there is an issue saving it
  */
-router.post('/upload', upload.single('file'), async (req, res) => {
-  const projectId = req.query.projectId;
-  if (!projectId) {
-    return res.status(400).json({ message: 'Project ID is required' });
-  }
+router.post('/upload', upload.single('file'), projectCheck, async (req, res) => {
+  const projectId = req.project_id;
   try {
     const fileContent = await fs.readFile(req.file.path, 'utf8');
     const scanData = [JSON.parse(fileContent)].flat();
@@ -121,12 +115,12 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 });
 
 // upload multiple scan result files
-router.post('/upload-multiple', upload.array('files'), async (req, res) => {
+router.post('/upload-multiple', upload.array('files'), projectCheck, async (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ message: 'No files uploaded' });
   }
   try {
-    const projectId = req.query.projectId;
+    const projectId = req.project_id;
     const scanResults = [];
     for (const file of req.files) {
       const fileContent = await fs.readFile(file.path, 'utf8');
@@ -149,15 +143,12 @@ router.post('/upload-multiple', upload.array('files'), async (req, res) => {
   * return 200 if successful
   * @throws {Error} - If the JSON data is invalid or if there is an issue saving it
  */
-router.post('/upload-json', async (req, res) => {
+router.post('/upload-json', projectCheck, async (req, res) => {
   if (!req.body || Object.keys(req.body).length === 0) {
     return res.status(400).json({ message: 'No data provided' });
   }
   const scanData = [req.body].flat(); // Assuming the body contains valid JSON
-  const projectId = req.query.projectId;
-  if (!projectId) {
-    return res.status(400).json({ message: 'Project ID is required' });
-  }
+  const projectId = req.project_id;
   const errors = [];
   const scanResults = [];
 
@@ -174,10 +165,11 @@ router.post('/upload-json', async (req, res) => {
   * @returns {Object} - The saved scan result object
   * @throws {Error} - If the tar file is not provided or if there is an issue saving it
   */
-router.post('/upload-tar', upload.single('file'), async (req, res) => {
+router.post('/upload-tar', upload.single('file'), projectCheck, async (req, res) => {
   const projectId = req.query.projectId;
-  if (!projectId) {
-    return res.status(400).json({ message: 'Project ID is required' });
+  const project = await Project.findById(projectId);
+  if (!project) {
+    return res.status(404).json({ message: 'Project not found' });
   }
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
