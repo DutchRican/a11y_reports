@@ -108,7 +108,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     const { results, errors: parseErrors } = parseResultArray(scanData, projectId);
     scanResults.push(...results);
     errors.push(...parseErrors);
-    await ScanResult.insertMany(scanResults);
+    await upsertScanResults(scanResults);
     res.status(201).json({ message: 'Scan results uploaded successfully', errors });
   } catch (err) { // Handle JSON parsing errors or file read errors
     res.status(400).json({ message: err.message });
@@ -137,8 +137,8 @@ router.post('/upload-multiple', upload.array('files'), async (req, res) => {
       // Clean up the uploaded file
       await fs.unlink(file.path);
     }
-    const savedScanResults = await ScanResult.insertMany(scanResults);
-    res.status(201).json(savedScanResults);
+    await upsertScanResults(scanResults);
+    res.status(201).json({ message: 'Scan results uploaded successfully', count: scanResults.length });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -165,7 +165,7 @@ router.post('/upload-json', async (req, res) => {
   scanResults.push(...results);
   errors.push(...parseErrors);
 
-  await ScanResult.insertMany(scanResults);
+  await upsertScanResults(scanResults);
   res.status(201).json({ message: 'Scan results uploaded successfully', errors });
 });
 
@@ -227,7 +227,7 @@ router.post('/upload-tar', upload.single('file'), async (req, res) => {
     });
 
     if (scans.length > 0) {
-      await ScanResult.insertMany(scans);
+      await upsertScanResults(scans);
       res.status(201).json({ message: 'Scan results uploaded successfully', count: scans.length, errors });
     } else {
       res.status(400).json({ message: 'No valid scan results found in the tar file' });
@@ -275,6 +275,37 @@ const parseResultArray = (resultArray, projectId) => {
     }
   });
   return { results, errors };
+};
+
+/* Take an array of scan results and upsert them into the database using bulkWrite
+  * @param {Array} scanResults - An array of scan results to upsert
+  * @returns {Promise} - A promise that resolves when the upsert is complete
+  */
+const upsertScanResults = async (scanResults) => {
+  const bulkOps = scanResults.map(result => {
+    const createdDate = new Date(result.created);
+    const year = createdDate.getFullYear();
+    const month = createdDate.getMonth();
+    const day = createdDate.getDate();
+
+    return {
+      updateOne: {
+        filter: {
+          testName: result.testName,
+          created: {
+            $gte: new Date(year, month, day),
+            $lt: new Date(year, month, day + 1)
+          }
+        },
+        update: { $set: result },
+        upsert: true
+      }
+    };
+  });
+
+  if (bulkOps.length > 0) {
+    await ScanResult.bulkWrite(bulkOps);
+  }
 };
 
 module.exports = router;

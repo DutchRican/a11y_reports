@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const subNodeSchema = new mongoose.Schema({
-  id: String,
   data: mongoose.Schema.Types.Mixed,
   relatedNodes: [mongoose.Schema.Types.Mixed],
   impact: String,
@@ -26,7 +25,6 @@ const violationSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  id: String,
   impact: {
     type: String,
     enum: ['critical', 'serious', 'moderate', 'minor']
@@ -67,7 +65,7 @@ const ScanResult = mongoose.model('ScanResult', scanResultSchema);
 
 const ScanResultFromJson = (json) => {
   const { critical, serious, moderate, minor } = getViolationsByImpact(json);
-  const scanResult = new ScanResult({
+  const scanResult = {
     ...json,
     created: json.created || new Date(),
     violations: json.violations || [],
@@ -78,7 +76,7 @@ const ScanResultFromJson = (json) => {
       minor: minor || 0
     },
     totalViolations: critical + serious + moderate + minor,
-  });
+  };
   return scanResult;
 };
 
