@@ -1,27 +1,38 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { fetchScanResults } from '../api/results';
 import TrendChart from '../components/charts/TrendChart';
 import Chip from '../components/chips/chip';
 import ScanResultsTable from '../components/tables/ScanResultsTable';
 import { useProjectContext } from '../context/projectContext';
+import { useScanResultFilters } from '../hooks/useScanResultFilters';
 import { ScanResult } from '../types';
 
 const OverviewPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { setProjectID, projectID, currentProject } = useProjectContext();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const testNameFilter = searchParams.get('testName') || '';
-  const dateFilter = searchParams.get('date') || '';
-  const [filtersOpen, setFiltersOpen] = useState(!!testNameFilter || !!dateFilter);
-
-  const { data: scanResults = [], isPending, error } = useQuery<ScanResult[], Error>({
+  const {
+    data: scanResults = [],
+    isPending,
+    error
+  } = useQuery<ScanResult[], Error>({
     queryKey: ['scanResults'],
     queryFn: fetchScanResults
   });
+
+  const {
+    testNameFilter,
+    dateFilter,
+    filtersOpen,
+    setFiltersOpen,
+    handleFilterChange,
+    filters,
+    testDates,
+    filteredResults,
+  } = useScanResultFilters(scanResults);
 
   const handleSelectResult = (result: ScanResult) => {
     navigate(`/detailview/${result._id}`);
@@ -37,8 +48,6 @@ const OverviewPage: React.FC = () => {
     }
   }, [error]);
 
-  const filters = [{ name: 'testName', val: testNameFilter }, { name: 'date', val: dateFilter }].filter(({ val }) => Boolean(val));
-  const testDates = Array.from(new Set(scanResults?.map(result => new Date(result.created).toLocaleDateString()))).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
 
   useEffect(() => {
     const urlId = getIdFromLocation();
@@ -47,23 +56,7 @@ const OverviewPage: React.FC = () => {
     }
   }, []);
 
-  const handleFilterChange = (key: string, value: string) => {
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      if (value) {
-        newParams.set(key, value);
-      } else {
-        newParams.delete(key);
-      }
-      return newParams;
-    });
-  };
-
-  const filteredResults = scanResults.filter((result) => {
-    const testNameMatch = result.testName.toLowerCase().includes(testNameFilter.toLowerCase());
-    const dateMatch = () => new Date(result.created).toLocaleDateString().includes(dateFilter);
-    return testNameMatch && dateMatch();
-  });
+  // ...existing code...
 
   return (
     <div className="max-w-7/8 mx-auto my-8 p-4">
