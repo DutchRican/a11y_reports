@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { fetchScanResults } from '../api/results';
 import TrendChart from '../components/charts/TrendChart';
 import Chip from '../components/chips/chip';
+import ScanResultFilters from '../components/ScanResultFilters';
 import ScanResultsTable from '../components/tables/ScanResultsTable';
 import { useProjectContext } from '../context/projectContext';
 import { useScanResultFilters } from '../hooks/useScanResultFilters';
@@ -56,99 +57,39 @@ const OverviewPage: React.FC = () => {
     }
   }, []);
 
-  // ...existing code...
-
   return (
     <div className="max-w-7/8 mx-auto my-8 p-4">
-      <div className="flex justify-between items-center mb-4">
-        {isPending ? <div>Getting project details...</div> : <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Accessibility Test Results Overview</h1>
-          <h2 className="text-lg font-semibold">
-            {`Project: ${currentProject?.name}`}
-          </h2>
-        </div>
-        }
-        <button
-          onClick={() => setFiltersOpen((prev) => !prev)}
-          aria-label="toggle filters"
-          className="p-2 rounded-full hover:bg-gray-200"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.707 7.293A1 1 0 013 6.586V4z" />
-          </svg>
-        </button>
+      {isPending ? <div>Getting project details...</div> : <div className="space-y-2">
+        <h1 className="text-3xl font-bold">Accessibility Test Results Overview</h1>
+        <h2 className="text-lg font-semibold">
+          {`Project: ${currentProject?.name}`}
+        </h2>
       </div>
+      }
 
-      <div className={`transition-all duration-300 ease-in-out overflow-hidden ${filtersOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="mb-4 w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="relative">
-              <label htmlFor="testNameFilter" className="sr-only">Filter by Test Name</label>
-              <input
-                id="testNameFilter"
-                type="text"
-                placeholder="Filter by test Name"
-                className="p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={testNameFilter}
-                onChange={(e) => handleFilterChange('testName', e.target.value)}
-              />
-              {testNameFilter && (
-                <button
-                  type="button"
-                  aria-label="Clear test name filter"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  onClick={() => handleFilterChange('testName', '')}
-                  tabIndex={0}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
-            </div>
-            <div className="relative">
-              <label htmlFor="dateFilter" className="sr-only">Filter by Date</label>
-              <input
-                id="dateFilter"
-                type="text"
-                placeholder="Filter by date"
-                className="p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 pr-8"
-                value={dateFilter}
-                onChange={(e) => handleFilterChange('date', e.target.value)}
-                list="dateFilter-options"
-                autoComplete="off"
-              />
-              {dateFilter && (
-                <button
-                  type="button"
-                  aria-label="Clear date filter"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  onClick={() => handleFilterChange('date', '')}
-                  tabIndex={0}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
-              <datalist id="dateFilter-options">
-                {testDates
-                  .filter(date => date.includes(dateFilter))
-                  .map(date => (
-                    <option key={date} value={date}>
-                      {date}
-                    </option>
-                  ))}
-              </datalist>
-            </div>
-          </div>
-        </div>
-      </div>
-      {filters.map((filter) => <Chip key={filter.name} label={filter.val} onClick={() => { handleFilterChange(filter.name, ''); }} />)}
       <div className="space-y-8">
         <div>
           <TrendChart scanResults={filteredResults} unfilteredCount={scanResults.length} />
         </div>
+        <div className="flex justify-between items-center mb-4">
+          <ScanResultFilters
+            testNameFilter={testNameFilter}
+            dateFilter={dateFilter}
+            handleFilterChange={handleFilterChange}
+            testDates={testDates}
+            filtersOpen={filtersOpen}
+          />
+          <button
+            onClick={() => setFiltersOpen((prev) => !prev)}
+            aria-label="toggle filters"
+            className="p-2 rounded-full hover:bg-gray-200"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.707 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+          </button>
+        </div>
+        {filters.map((filter) => <Chip key={filter.name} label={filter.val} onClick={() => { handleFilterChange(filter.name, ''); }} />)}
         <div>
           {!!filteredResults.length && <ScanResultsTable
             scanResults={filteredResults}
