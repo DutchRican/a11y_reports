@@ -9,9 +9,9 @@ const ProjectSelectorPage: React.FC = () => {
 	const handleProjectSelect = (projectId: string) => {
 		if (!projectID || projectID !== projectId) {
 			setProjectID(projectId);
-		} else {
-			navigate(`/project/${projectId}`);
 		}
+		navigate(`/project/${projectId}`);
+
 	};
 	return (
 		<div className="max-w-7/8 mx-auto mt-10 p-6 bg-white rounded-lg shadow">
