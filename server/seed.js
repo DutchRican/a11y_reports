@@ -7,7 +7,7 @@ const { Project } = require('./models/Project');
 
 dotenv.config();
 
-async function seedDatabase() {
+async function seedDatabase(clearOnly = false) {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to MongoDB');
@@ -17,28 +17,32 @@ async function seedDatabase() {
     await ScanResult.deleteMany({});
     console.log('Cleared existing data');
 
-    // // Read sample data
-    // const sampleDataPath = path.join(__dirname, 'sample-data.json');
-    // const sampleData = JSON.parse(fs.readFileSync(sampleDataPath, 'utf8'));
-    // console.log('Read sample data');
+    if (clearOnly) {
+      console.log('Clear only mode - skipping data insertion');
+    } else {
+      // Read sample data
+      const sampleDataPath = path.join(__dirname, 'sample-data.json');
+      const sampleData = JSON.parse(fs.readFileSync(sampleDataPath, 'utf8'));
+      console.log('Read sample data');
 
-    // // Insert new data
-    // const project = new Project({
-    //   name: 'Sample Project',
-    //   description: 'This is a sample project for seeding the database.',
-    //   createdAt: new Date(),
-    //   updatedAt: new Date(),
-    //   pageUrl: 'http://example.com'
-    // });
-    // const pr = await project.save();
-    // const scanResults = [];
-    // for (const item of sampleData) {
-    //   const newScanResult = ScanResultFromJson(item);
-    //   newScanResult.projectId = pr._id; // Set the project ID
-    //   scanResults.push(newScanResult);
-    // }
-    // await ScanResult.insertMany(scanResults);
-    // console.log('Sample data inserted successfully');
+      // Insert new data
+      const project = new Project({
+        name: 'Sample Project',
+        description: 'This is a sample project for seeding the database.',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        pageUrl: 'http://example.com'
+      });
+      const pr = await project.save();
+      const scanResults = [];
+      for (const item of sampleData) {
+        const newScanResult = ScanResultFromJson(item);
+        newScanResult.projectId = pr._id; // Set the project ID
+        scanResults.push(newScanResult);
+      }
+      await ScanResult.insertMany(scanResults);
+      console.log('Sample data inserted successfully');
+    }
 
     await mongoose.disconnect();
     console.log('Database connection closed');
@@ -48,4 +52,6 @@ async function seedDatabase() {
   }
 }
 
-seedDatabase();
+// You can now call it with true to only clear the database
+const clearOnly = process.argv.includes('--clear-only');
+seedDatabase(clearOnly);
