@@ -1,16 +1,27 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { beginningOfDay, dateToLocalDateString, endOfDay } from '../helpers/date';
 import { ScanResult } from '../types';
 
 export function useScanResultFilters(scanResults: ScanResult[]) {
 	const [searchParams, setSearchParams] = useSearchParams();
-	const testNameFilter = searchParams.get('testName') || '';
+	const resultNameFilter = searchParams.get('testName') || '';
 	const dateFilter = searchParams.get('date') || '';
-	const [filtersOpen, setFiltersOpen] = useState(!!testNameFilter || !!dateFilter);
+	const [filtersOpen, setFiltersOpen] = useState(!!resultNameFilter || !!dateFilter);
 
-	const handleFilterChange = (key: string, value: string) => {
+	const handleFilterChange = useCallback((key: string, value: string) => {
+		console.log(`Filter changed: ${key} = ${value}`);
 		setSearchParams(prev => {
 			const newParams = new URLSearchParams(prev);
+			if (key === 'date') {
+				// Ensure date is in the format 'start,end'
+				const [start, end] = value.split(' - ');
+				if (start && end) {
+					if (start === end) {
+						value = start; // If both are the same, just use one date
+					}
+				}
+			}
 			if (value) {
 				newParams.set(key, value);
 			} else {
@@ -18,31 +29,56 @@ export function useScanResultFilters(scanResults: ScanResult[]) {
 			}
 			return newParams;
 		});
-	};
+	}, [setSearchParams]);
 
 	const filters = useMemo(() => [
-		{ name: 'testName', val: testNameFilter },
+		{ name: 'testName', val: resultNameFilter },
 		{ name: 'date', val: dateFilter }
-	].filter(({ val }) => Boolean(val)), [testNameFilter, dateFilter]);
+	].filter(({ val }) => Boolean(val)), [resultNameFilter, dateFilter]);
 
-	const testDates = useMemo(() => Array.from(
-		new Set(scanResults?.map(result => new Date(result.created).toLocaleDateString()))
-	).sort((a, b) => new Date(b).getTime() - new Date(a).getTime()), [scanResults]);
+	const resultDates = useMemo(() => {
+		if (!scanResults || scanResults.length === 0) return [];
+		const uniqueDates = new Set<string>();
+		for (const result of scanResults) {
+			uniqueDates.add(dateToLocalDateString(result.created));
+		}
+		return Array.from(uniqueDates).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+	}, [scanResults]);
 
-	const filteredResults = useMemo(() => scanResults.filter((result) => {
-		const testNameMatch = result.testName.toLowerCase().includes(testNameFilter.toLowerCase());
-		const dateMatch = () => new Date(result.created).toLocaleDateString().includes(dateFilter);
-		return testNameMatch && dateMatch();
-	}), [scanResults, testNameFilter, dateFilter]);
+	const filteredResults = useMemo(() => {
+		if (!scanResults) return [];
+		return scanResults.filter((result) => {
+			const resultNameMatch = result.testName.toLowerCase().includes(resultNameFilter.toLowerCase());
+			let dateMatch = true;
+			if (dateFilter) {
+				// Support 'start,end' or single date
+				const [start, end] = dateFilter.split(' - ');
+				const createdDate = dateToLocalDateString(result.created);
+				console.log(createdDate, start, end);
+				if (start && end) {
+					// Range filter
+					const created = new Date(result.created).getTime();
+					const startTime = beginningOfDay(start);
+					// Set endTime to end of day
+					const endTime = endOfDay(end);
+					dateMatch = created >= startTime && created <= endTime;
+				} else {
+					// Single date
+					dateMatch = createdDate === start;
+				}
+			}
+			return resultNameMatch && dateMatch;
+		});
+	}, [scanResults, resultNameFilter, dateFilter]);
 
 	return {
-		testNameFilter,
+		resultNameFilter,
 		dateFilter,
 		filtersOpen,
 		setFiltersOpen,
 		handleFilterChange,
 		filters,
-		testDates,
+		resultDates,
 		filteredResults,
 	};
 }

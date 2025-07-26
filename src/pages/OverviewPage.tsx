@@ -25,13 +25,13 @@ const OverviewPage: React.FC = () => {
   });
 
   const {
-    testNameFilter,
+    resultNameFilter,
     dateFilter,
     filtersOpen,
     setFiltersOpen,
     handleFilterChange,
     filters,
-    testDates,
+    resultDates,
     filteredResults,
   } = useScanResultFilters(scanResults);
 
@@ -73,10 +73,10 @@ const OverviewPage: React.FC = () => {
         </div>
         <div className="flex justify-between items-center mb-4">
           <ScanResultFilters
-            testNameFilter={testNameFilter}
+            resultNameFilter={resultNameFilter}
             dateFilter={dateFilter}
             handleFilterChange={handleFilterChange}
-            testDates={testDates}
+            resultDates={resultDates}
             filtersOpen={filtersOpen}
           />
           <button

@@ -9,15 +9,30 @@ const { projectCheck } = require('../middlewares/project');
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
-/* Get all scan results
+/* Get all scan results with optional date range filtering
+ * @query {string} from - Start date in ISO format (e.g., 2023-01-01)
+ * @query {string} to - End date in ISO format (e.g., 2023-12-31)
  * @returns {Array} - An array of all scan results
  * @throws {Error} - If there is an issue retrieving the scan results
- * Example: GET /scan-results
+ * Example: GET /scan-results?from=2023-01-01&to=2023-12-31
  */
 router.get('/', projectCheck, async (req, res) => {
   try {
     const projectId = req.project_id;
-    const scanResults = await ScanResult.find({ projectId }).select({ _id: 1, testName: 1, url: 1, created: 1, impactCounts: 1, totalViolations: 1 }).sort({ created: 1 });
+    const { from, to } = req.query;
+
+    let query = { projectId };
+
+    if (from || to) {
+      query.created = {};
+      if (from) query.created.$gte = new Date(from);
+      if (to) query.created.$lte = new Date(to);
+    }
+
+    const scanResults = await ScanResult.find(query)
+      .select({ _id: 1, testName: 1, url: 1, created: 1, impactCounts: 1, totalViolations: 1 })
+      .sort({ created: 1 });
+
     res.json(scanResults);
   } catch (err) {
     res.status(500).json({ message: err.message });
