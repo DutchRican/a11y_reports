@@ -20,8 +20,8 @@ const OverviewPage: React.FC = () => {
     isPending,
     error
   } = useQuery<ScanResult[], Error>({
-    queryKey: ['scanResults'],
-    queryFn: fetchScanResults
+    queryKey: ['scanResults', projectID],
+    queryFn: () => fetchScanResults(projectID)
   });
 
   const {

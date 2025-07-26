@@ -17,28 +17,28 @@ async function seedDatabase() {
     await ScanResult.deleteMany({});
     console.log('Cleared existing data');
 
-    // Read sample data
-    const sampleDataPath = path.join(__dirname, 'sample-data.json');
-    const sampleData = JSON.parse(fs.readFileSync(sampleDataPath, 'utf8'));
-    console.log('Read sample data');
+    // // Read sample data
+    // const sampleDataPath = path.join(__dirname, 'sample-data.json');
+    // const sampleData = JSON.parse(fs.readFileSync(sampleDataPath, 'utf8'));
+    // console.log('Read sample data');
 
-    // Insert new data
-    const project = new Project({
-      name: 'Sample Project',
-      description: 'This is a sample project for seeding the database.',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      pageUrl: 'http://example.com'
-    });
-    const pr = await project.save();
-    const scanResults = [];
-    for (const item of sampleData) {
-      const newScanResult = ScanResultFromJson(item);
-      newScanResult.projectId = pr._id; // Set the project ID
-      scanResults.push(newScanResult);
-    }
-    await ScanResult.insertMany(scanResults);
-    console.log('Sample data inserted successfully');
+    // // Insert new data
+    // const project = new Project({
+    //   name: 'Sample Project',
+    //   description: 'This is a sample project for seeding the database.',
+    //   createdAt: new Date(),
+    //   updatedAt: new Date(),
+    //   pageUrl: 'http://example.com'
+    // });
+    // const pr = await project.save();
+    // const scanResults = [];
+    // for (const item of sampleData) {
+    //   const newScanResult = ScanResultFromJson(item);
+    //   newScanResult.projectId = pr._id; // Set the project ID
+    //   scanResults.push(newScanResult);
+    // }
+    // await ScanResult.insertMany(scanResults);
+    // console.log('Sample data inserted successfully');
 
     await mongoose.disconnect();
     console.log('Database connection closed');

@@ -4,15 +4,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchScanResultById } from '../api/results';
 import ImpactChart from '../components/charts/ImpactChart';
 import ViolationDetail from '../components/violations/ViolationDetail';
+import { useProjectContext } from '../context/projectContext';
 import { ScanResult } from '../types';
 
 const DetailViewPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
+  const { projectID } = useProjectContext();
   const { data: result, isLoading: isLoadingResult, error: errorResult } = useQuery<ScanResult, Error>({
     queryKey: ['scanResult', id],
-    queryFn: () => fetchScanResultById(id!),
+    queryFn: () => fetchScanResultById(id!, projectID),
     enabled: !!id,
   });
 

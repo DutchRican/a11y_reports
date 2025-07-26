@@ -80,6 +80,9 @@ const ScanResultFromJson = (json) => {
   return scanResult;
 };
 
+// Add compound index for common queries
+scanResultSchema.index({ projectId: 1, created: -1 });
+
 const getViolationsByImpact = (scanResult) => {
   const { critical, serious, moderate, minor } = scanResult.violations.reduce(
     (acc, violation) => {

@@ -43,39 +43,20 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 					)}
 				</div>
 				<div className="relative">
-					<label htmlFor="dateFilter" className="sr-only">Filter by Date</label>
-					<input
+					<label htmlFor="dateFilter" className="sr-only">Filter by Time Period</label>
+					<select
 						id="dateFilter"
-						type="text"
-						placeholder="Filter by date"
-						className="p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 pr-8"
+						className="p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
 						value={dateFilter}
 						onChange={(e) => handleFilterChange('date', e.target.value)}
-						list="dateFilter-options"
-						autoComplete="off"
-					/>
-					{dateFilter && (
-						<button
-							type="button"
-							aria-label="Clear date filter"
-							className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-							onClick={() => handleFilterChange('date', '')}
-							tabIndex={0}
-						>
-							<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-							</svg>
-						</button>
-					)}
-					<datalist id="dateFilter-options">
-						{testDates
-							.filter(date => date.includes(dateFilter))
-							.map(date => (
-								<option key={date} value={date}>
-									{date}
-								</option>
-							))}
-					</datalist>
+					>
+						<option value="">All Time</option>
+						<option value="1week">Last Week</option>
+						<option value="1month">Last Month</option>
+						<option value="3months">Last 3 Months</option>
+						<option value="6months">Last 6 Months</option>
+						<option value="1year">Last Year</option>
+					</select>
 				</div>
 			</div>
 		</div>

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { uploadScanResults } from '../api/results';
+import { useProjectContext } from '../context/projectContext';
 
 interface UploadScanModalProps {
   open: boolean;
@@ -11,9 +12,10 @@ interface UploadScanModalProps {
 export default function UploadScanModal({ open, onClose }: UploadScanModalProps) {
   const [file, setFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
+  const { projectID } = useProjectContext();
 
-  const { isPending, mutateAsync } = useMutation({
-    mutationFn: uploadScanResults,
+  const { isPending, mutateAsync } = useMutation<void, Error, FormData>({
+    mutationFn: (formData) => uploadScanResults(formData, projectID),
     onSuccess: () => {
       toast.success('Scan results uploaded successfully', { autoClose: 1500 });
       queryClient.invalidateQueries({ queryKey: ['scanResults'] });

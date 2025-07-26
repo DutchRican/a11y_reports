@@ -4,8 +4,8 @@ import { fetchProjects } from '../api/projects';
 import { Project } from '../types';
 
 type ProjectContextType = {
-	projectID: string | null;
-	setProjectID: (id: string | null) => void;
+	projectID: string | undefined;
+	setProjectID: (id: string | undefined) => void;
 	availableProjects: Project[];
 	isLoadingProjects: boolean;
 	isRefetchingProjects: boolean;
@@ -16,7 +16,7 @@ type ProjectContextType = {
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 export const ProjectProvider = ({ children }: { children: ReactNode }) => {
-	const [projectID, setProjectID] = useState<string | null>(null);
+	const [projectID, setProjectID] = useState<string | undefined>(undefined);
 
 	const { data: availableProjects = [], isLoading: isLoadingProjects, isRefetching: isRefetchingProjects, error: projectsError } = useQuery<Project[], Error>({
 		queryKey: ['projects'],

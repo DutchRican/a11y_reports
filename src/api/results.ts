@@ -1,8 +1,7 @@
 import { toast } from "react-toastify";
 import { BASE_URL } from "../constants";
 
-export const fetchScanResults = async () => {
-	const projectID = localStorage.getItem('selectedProjectID');
+export const fetchScanResults = async (projectID?: string) => {
 	if (!projectID) {
 		throw new Error('No project selected');
 	}
@@ -14,8 +13,7 @@ export const fetchScanResults = async () => {
 	return response.json();
 };
 
-export const fetchScanResultById = async (id: string) => {
-	const projectID = localStorage.getItem('selectedProjectID');
+export const fetchScanResultById = async (id: string, projectID?: string) => {
 	if (!projectID) {
 		throw new Error('No project selected');
 	}
@@ -27,8 +25,7 @@ export const fetchScanResultById = async (id: string) => {
 	return response.json();
 };
 
-export const uploadScanResults = async (formData: FormData) => {
-	const projectID = localStorage.getItem('selectedProjectID');
+export const uploadScanResults = async (formData: FormData, projectID?: string) => {
 	if (!projectID) {
 		throw new Error('No project selected');
 	}

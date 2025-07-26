@@ -11,6 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
+uploads
+
+massUpload.sh
 
 # Editor directories and files
 .vscode/*
