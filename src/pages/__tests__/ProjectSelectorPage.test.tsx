@@ -75,7 +75,7 @@ describe('ProjectSelectorPage', () => {
 		render(<ProjectSelectorPage />);
 		fireEvent.click(screen.getByText('Project One'));
 		expect(mockSetProjectID).toHaveBeenCalledWith('1');
-		expect(mockNavigate).not.toHaveBeenCalled();
+		expect(mockNavigate).toHaveBeenCalledWith('/project/1');
 	});
 
 	it('navigates when selecting the same project', () => {

@@ -27,8 +27,13 @@ describe('/api/scan-results', () => {
     expect(res.body).toHaveProperty('violations');
   });
 
-  it('should return 400 if the project ID is not found', async () => {
+  it('should return 404 if the project ID is not found', async () => {
     const res = await request(app).get('/?projectId=687becca089a324aa2be8053');
+    expect(res.statusCode).toEqual(404);
+  });
+
+  it('should return 400 when missing the projectId', async () => {
+    const res = await request(app).get('/');
     expect(res.statusCode).toEqual(400);
   });
 

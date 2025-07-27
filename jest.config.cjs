@@ -23,6 +23,7 @@ module.exports = {
   testMatch: ['**/src/**/*.test.(ts|tsx|js|jsx)'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|less|scss|sass)$': '<rootDir>/src/__mocks__/styleMock.js'
   },
   setupFilesAfterEnv: ['<rootDir>/src/jest.setup.js'],
 };
