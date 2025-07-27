@@ -10,7 +10,6 @@ export function useScanResultFilters(scanResults: ScanResult[]) {
 	const [filtersOpen, setFiltersOpen] = useState(!!resultNameFilter || !!dateFilter);
 
 	const handleFilterChange = useCallback((key: string, value: string) => {
-		console.log(`Filter changed: ${key} = ${value}`);
 		setSearchParams(prev => {
 			const newParams = new URLSearchParams(prev);
 			if (key === 'date') {
