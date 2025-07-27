@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { dateToLocalDateString } from '../helpers/date';
+import { CalTrigger } from './CalTrigger';
 
 interface ScanResultFiltersProps {
 	resultNameFilter: string;
 	dateFilter: string;
 	handleFilterChange: (key: string, value: string) => void;
-	resultDates: string[];
 	filtersOpen: boolean;
 }
 
@@ -16,7 +16,6 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 	resultNameFilter,
 	dateFilter,
 	handleFilterChange,
-	resultDates,
 	filtersOpen,
 }) => {
 
@@ -50,6 +49,7 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 							className="p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
 							value={resultNameFilter}
 							onChange={(e) => handleFilterChange('testName', e.target.value)}
+							autoComplete="off"
 						/>
 						{resultNameFilter && (
 							<button
@@ -65,8 +65,8 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 							</button>
 						)}
 					</div>
-					<div className="relative z-30">
-						<label htmlFor="dateRangeFilter" className="sr-only">Filter by Date Range</label>
+					<div className="relative z-30 flex items-center">
+						{/* Custom calendar icon button for DatePicker */}
 						<DatePicker
 							id="dateRangeFilter"
 							selectsRange
@@ -81,12 +81,21 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 								}
 							}}
 							isClearable
-							className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
 							dateFormat="MM/dd/yyyy"
-							placeholderText="Select date range"
 							popperClassName="z-[9999] !z-[9999]"
 							popperPlacement="bottom-start"
 							portalId="datepicker-portal"
+							autoComplete="off"
+							customInput={<CalTrigger onClick={() => handleFilterChange('date', '')} />}
+						/>
+						{/* Visually hidden input for accessibility, so screen readers announce the selected range */}
+						<input
+							type="text"
+							tabIndex={-1}
+							aria-hidden="true"
+							style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
+							value={dateRange[0] && dateRange[1] ? `${dateToLocalDateString(dateRange[0].toLocaleDateString())} - ${dateToLocalDateString(dateRange[1].toLocaleDateString())}` : ''}
+							readOnly
 						/>
 					</div>
 				</div>

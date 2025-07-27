@@ -36,15 +36,6 @@ export function useScanResultFilters(scanResults: ScanResult[]) {
 		{ name: 'date', val: dateFilter }
 	].filter(({ val }) => Boolean(val)), [resultNameFilter, dateFilter]);
 
-	const resultDates = useMemo(() => {
-		if (!scanResults || scanResults.length === 0) return [];
-		const uniqueDates = new Set<string>();
-		for (const result of scanResults) {
-			uniqueDates.add(dateToLocalDateString(result.created));
-		}
-		return Array.from(uniqueDates).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
-	}, [scanResults]);
-
 	const filteredResults = useMemo(() => {
 		if (!scanResults) return [];
 		return scanResults.filter((result) => {
@@ -78,7 +69,6 @@ export function useScanResultFilters(scanResults: ScanResult[]) {
 		setFiltersOpen,
 		handleFilterChange,
 		filters,
-		resultDates,
 		filteredResults,
 	};
 }

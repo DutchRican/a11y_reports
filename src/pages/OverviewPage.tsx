@@ -31,7 +31,6 @@ const OverviewPage: React.FC = () => {
     setFiltersOpen,
     handleFilterChange,
     filters,
-    resultDates,
     filteredResults,
   } = useScanResultFilters(scanResults);
 
@@ -76,7 +75,6 @@ const OverviewPage: React.FC = () => {
             resultNameFilter={resultNameFilter}
             dateFilter={dateFilter}
             handleFilterChange={handleFilterChange}
-            resultDates={resultDates}
             filtersOpen={filtersOpen}
           />
           <button
