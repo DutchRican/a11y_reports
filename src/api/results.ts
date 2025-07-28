@@ -1,11 +1,19 @@
 import { toast } from "react-toastify";
 import { BASE_URL } from "../constants";
 
-export const fetchScanResults = async (projectID?: string) => {
+export const fetchScanResults = async (projectID?: string, from?: string, to?: string) => {
 	if (!projectID) {
 		throw new Error('No project selected');
 	}
-	const response = await fetch(`${BASE_URL}/scan-results/?projectId=${projectID}`);
+	// build the search parameters
+	const params = new URLSearchParams({ projectId: projectID });
+	if (from) {
+		params.append('from', from);
+	}
+	if (to) {
+		params.append('to', to);
+	}
+	const response = await fetch(`${BASE_URL}/scan-results/?${params.toString()}`);
 	if (!response.ok) {
 		const text = await response.json();
 		throw new Error(text?.message || "Failed to fetch scan results");

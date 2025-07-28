@@ -18,10 +18,27 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 	handleFilterChange,
 	filtersOpen,
 }) => {
-
 	// Parse dateFilter to Date objects
 	let [start, end] = dateFilter.split(',');
 	const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+
+	// Debounced testName filter state
+	const [debouncedTestName, setDebouncedTestName] = useState(resultNameFilter);
+
+	// Debounce effect for testName filter
+	useEffect(() => {
+		setDebouncedTestName(resultNameFilter);
+	}, [resultNameFilter]);
+
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			if (debouncedTestName !== resultNameFilter) {
+				handleFilterChange('testName', debouncedTestName);
+			}
+		}, 300);
+		return () => clearTimeout(handler);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [debouncedTestName]);
 
 	// Sync dateFilter string to dateRange state
 	useEffect(() => {
@@ -47,16 +64,16 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 							type="text"
 							placeholder="Filter by test Name"
 							className="p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-							value={resultNameFilter}
-							onChange={(e) => handleFilterChange('testName', e.target.value)}
+							value={debouncedTestName}
+							onChange={(e) => setDebouncedTestName(e.target.value)}
 							autoComplete="off"
 						/>
-						{resultNameFilter && (
+						{debouncedTestName && (
 							<button
 								type="button"
 								aria-label="Clear test name filter"
 								className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-								onClick={() => handleFilterChange('testName', '')}
+								onClick={() => setDebouncedTestName('')}
 								tabIndex={0}
 							>
 								<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -75,7 +92,7 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 							onChange={(update: [Date | null, Date | null]) => {
 								setDateRange(update);
 								if (update[0] && update[1]) {
-									handleFilterChange('date', `${dateToLocalDateString(update[0].toLocaleDateString())} - ${dateToLocalDateString(update[1].toLocaleDateString())}`);
+									handleFilterChange('date', `${dateToLocalDateString(update[0])} - ${dateToLocalDateString(update[1])}`);
 								} else if (!update[0] && !update[1]) {
 									handleFilterChange('date', '');
 								}
@@ -94,7 +111,7 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 							tabIndex={-1}
 							aria-hidden="true"
 							style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
-							value={dateRange[0] && dateRange[1] ? `${dateToLocalDateString(dateRange[0].toLocaleDateString())} - ${dateToLocalDateString(dateRange[1].toLocaleDateString())}` : ''}
+							value={dateRange[0] && dateRange[1] ? `${dateToLocalDateString(dateRange[0])} - ${dateToLocalDateString(dateRange[1])}` : ''}
 							readOnly
 						/>
 					</div>
