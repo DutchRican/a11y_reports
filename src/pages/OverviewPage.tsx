@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { fetchScanResults } from '../api/results';
@@ -16,35 +16,55 @@ const OverviewPage: React.FC = () => {
   const location = useLocation();
   const { setProjectID, projectID, currentProject } = useProjectContext();
   const {
-    data: scanResults = [],
-    isPending,
-    error
-  } = useQuery<ScanResult[], Error>({
-    queryKey: ['scanResults', projectID],
-    queryFn: () => fetchScanResults(projectID)
-  });
-
-  const {
     resultNameFilter,
     dateFilter,
     filtersOpen,
     setFiltersOpen,
     handleFilterChange,
     filters,
-    filteredResults,
-  } = useScanResultFilters(scanResults);
+  } = useScanResultFilters();
+
+  const submittableFilter = useCallback((dateFilter: string): { from?: string, to?: string } => {
+    if (!dateFilter) return {};
+    const [start, end] = dateFilter.split(' - ');
+    if (start && end) {
+      return { from: start, to: end };
+    } else if (start) {
+      return { from: start };
+    }
+    return {};
+  }, [dateFilter]);
+
+  const {
+    data: scanResults = [],
+    isPending,
+    error
+  } = useQuery<ScanResult[], Error>({
+    queryKey: ['scanResults', projectID, dateFilter],
+    queryFn: () => fetchScanResults(projectID, submittableFilter(dateFilter)?.from, submittableFilter(dateFilter)?.to),
+  });
+
+  const filteredResults = useMemo(() => {
+    if (!scanResults) return [];
+    if (!resultNameFilter) return scanResults;
+    return scanResults.filter((result) =>
+      result.testName.toLowerCase().includes(resultNameFilter.toLowerCase())
+    )
+  }, [scanResults, resultNameFilter]);
 
   const handleSelectResult = (result: ScanResult) => {
     navigate(`/detailview/${result._id}`);
   };
 
   const getIdFromLocation = () => {
-    const match = location.pathname.match(/\/project\/(\w+)/);
+    const regex = /\/project\/(\w+)/;
+    const match = regex.exec(location.pathname);
     return match ? match[1] : null;
   };
+
   useEffect(() => {
     if (error) {
-      toast.error('Not sure this id exists, navigating you home', { onClose: () => navigate('/') });
+      toast.error('Not sure this id exists, navigating you home', { onClose: () => { navigate('/'); } });
     }
   }, [error]);
 

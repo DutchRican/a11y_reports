@@ -1,9 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { beginningOfDay, dateToLocalDateString, endOfDay } from '../helpers/date';
-import { ScanResult } from '../types';
 
-export function useScanResultFilters(scanResults: ScanResult[]) {
+export function useScanResultFilters() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const resultNameFilter = searchParams.get('testName') || '';
 	const dateFilter = searchParams.get('date') || '';
@@ -35,32 +33,6 @@ export function useScanResultFilters(scanResults: ScanResult[]) {
 		{ name: 'date', val: dateFilter }
 	].filter(({ val }) => Boolean(val)), [resultNameFilter, dateFilter]);
 
-	const filteredResults = useMemo(() => {
-		if (!scanResults) return [];
-		return scanResults.filter((result) => {
-			const resultNameMatch = result.testName.toLowerCase().includes(resultNameFilter.toLowerCase());
-			let dateMatch = true;
-			if (dateFilter) {
-				// Support 'start,end' or single date
-				const [start, end] = dateFilter.split(' - ');
-				const createdDate = dateToLocalDateString(result.created);
-				console.log(createdDate, start, end);
-				if (start && end) {
-					// Range filter
-					const created = new Date(result.created).getTime();
-					const startTime = beginningOfDay(start);
-					// Set endTime to end of day
-					const endTime = endOfDay(end);
-					dateMatch = created >= startTime && created <= endTime;
-				} else {
-					// Single date
-					dateMatch = createdDate === start;
-				}
-			}
-			return resultNameMatch && dateMatch;
-		});
-	}, [scanResults, resultNameFilter, dateFilter]);
-
 	return {
 		resultNameFilter,
 		dateFilter,
@@ -68,6 +40,5 @@ export function useScanResultFilters(scanResults: ScanResult[]) {
 		setFiltersOpen,
 		handleFilterChange,
 		filters,
-		filteredResults,
 	};
 }
