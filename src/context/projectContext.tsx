@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 import { fetchProjects } from '../api/projects';
 import { Project } from '../types';
 
@@ -25,8 +25,18 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 
 	const currentProject = availableProjects.find(project => project._id === projectID);
 
+	const contextValue: ProjectContextType = useMemo(() => ({
+		projectID,
+		setProjectID,
+		availableProjects,
+		isLoadingProjects,
+		isRefetchingProjects,
+		currentProject,
+		projectsError,
+	}), [projectID, availableProjects, isLoadingProjects, isRefetchingProjects, currentProject, projectsError]);
+
 	return (
-		<ProjectContext.Provider value={{ projectID, setProjectID, availableProjects, isLoadingProjects, isRefetchingProjects, currentProject, projectsError }}>
+		<ProjectContext.Provider value={contextValue}>
 			{children}
 		</ProjectContext.Provider>
 	);
