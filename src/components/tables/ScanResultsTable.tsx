@@ -1,4 +1,5 @@
 import React from 'react';
+import { dateToLocalDateString } from '../../helpers/date';
 import { ScanResult } from '../../types';
 
 interface ScanResultsTableProps {
@@ -18,9 +19,6 @@ const ScanResultsTable: React.FC<ScanResultsTableProps> = ({ scanResults, onSele
             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Test Name
             </th>
-            {/* <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Page URL
-            </th> */}
             <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
               Critical
             </th>
@@ -48,7 +46,7 @@ const ScanResultsTable: React.FC<ScanResultsTableProps> = ({ scanResults, onSele
                 className="hover:bg-gray-100 cursor-pointer"
               >
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {new Date(result.created).toLocaleDateString('en-US')}
+                  {dateToLocalDateString(result.created)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {result.testName}

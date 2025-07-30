@@ -1,3 +1,4 @@
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -9,6 +10,9 @@ import ADAInfoPage from './pages/ADAInfoPage';
 import DetailViewPage from './pages/DetailViewPage';
 import OverviewPage from './pages/OverviewPage';
 import ProjectSelectorPage from './pages/ProjectSelectorPage';
+
+// Register all Community features
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 function AppContent() {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);

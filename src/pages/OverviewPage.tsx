@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { AgGridReact } from 'ag-grid-react';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -6,8 +7,8 @@ import { fetchScanResults } from '../api/results';
 import TrendChart from '../components/charts/TrendChart';
 import Chip from '../components/chips/chip';
 import ScanResultFilters from '../components/ScanResultFilters';
-import ScanResultsTable from '../components/tables/ScanResultsTable';
 import { useProjectContext } from '../context/projectContext';
+import { dateToLocalDateString } from '../helpers/date';
 import { useScanResultFilters } from '../hooks/useScanResultFilters';
 import { ScanResult } from '../types';
 
@@ -108,11 +109,25 @@ const OverviewPage: React.FC = () => {
           </button>
         </div>
         {filters.map((filter) => <Chip key={filter.name} label={filter.val} onClick={() => { handleFilterChange(filter.name, ''); }} />)}
-        <div>
-          {!!filteredResults.length && <ScanResultsTable
-            scanResults={filteredResults}
-            onSelectResult={handleSelectResult}
-          />}
+        <div className='h-96'>
+          <AgGridReact
+            rowData={filteredResults}
+            columnDefs={[
+              { headerName: 'Date', field: 'created', valueFormatter: ({ value }) => dateToLocalDateString(value) },
+              { headerName: 'Test Name', field: 'testName' },
+              { headerName: 'Critical', field: 'impactCounts.critical', cellClass: 'text-right' },
+              { headerName: 'Serious', field: 'impactCounts.serious', cellClass: 'text-right' },
+              { headerName: 'Moderate', field: 'impactCounts.moderate', cellClass: 'text-right' },
+              { headerName: 'Minor', field: 'impactCounts.minor', cellClass: 'text-right' },
+              { headerName: 'Total', field: 'totalViolations', cellClass: 'text-right' }
+            ]}
+            onRowClicked={(event) => handleSelectResult(event.data!)}
+            pagination={true}
+            paginationPageSize={100}
+            defaultColDef={{
+              flex: 1,
+            }}
+          />
           {!scanResults.length && isPending && <div className="text-center text-gray-500">Loading scan results...</div>}
         </div>
       </div>
