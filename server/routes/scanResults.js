@@ -5,6 +5,7 @@ const { createReadStream } = require('fs');
 const { ScanResult, ScanResultFromJson } = require('../models/ScanResult');
 const { Error } = require('mongoose');
 const { projectCheck } = require('../middlewares/project');
+const { secureRoute } = require('../middlewares/secure');
 
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
@@ -256,7 +257,7 @@ router.post('/upload-tar', upload.single('file'), projectCheck, async (req, res)
  * @returns {Object} - A message indicating the deletion status
  * @throws {Error} - If the scan result is not found or if there is an issue deleting it
  */
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', secureRoute, async (req, res) => {
   try {
     const scanResult = await ScanResult.findByIdAndDelete(req.params.id);
     if (!scanResult) {

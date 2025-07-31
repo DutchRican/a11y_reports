@@ -67,6 +67,7 @@ const OverviewPage: React.FC = () => {
     if (error) {
       toast.error('Not sure this id exists, navigating you home', { onClose: () => { navigate('/'); } });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
 

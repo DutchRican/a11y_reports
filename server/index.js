@@ -8,6 +8,7 @@ const morgan = require('morgan');
 const compression = require('compression');
 const scanResultsRouter = require('./routes/scanResults');
 const projectsRouter = require('./routes/projects');
+const { handleError } = require('./middlewares/errorHandler');
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, 'dist/index.html'));
   });
 }
+app.use(handleError);
 
 const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

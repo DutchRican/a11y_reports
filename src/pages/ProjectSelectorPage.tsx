@@ -28,18 +28,36 @@ const ProjectSelectorPage: React.FC = () => {
 				{!isBusy && availableProjects.map((project) => (
 					<li
 						key={project._id}
-						onClick={() => handleProjectSelect(project._id)}
-						className={`p-3 mb-3 rounded cursor-pointer transition-colors flex ${projectID === project._id ? 'bg-indigo-50 hover:bg-indigo-100' : 'bg-gray-100 hover:bg-indigo-100'
+						className={`p-3 mb-3 rounded cursor-pointer transition-colors flex items-center justify-between ${projectID === project._id ? 'bg-indigo-50 hover:bg-indigo-100' : 'bg-gray-100 hover:bg-indigo-100'
 							}`}
 					>
-						<p className="font-semibold flex-1 ml-2">{project.name}</p>
-						<p
-							className="text-gray-500 ml-6 overflow-hidden truncate flex-3"
-							title={project.description ? project.description : undefined}
-						>
-							{project.description || "No description available"}
-						</p>
-
+						<div className="flex-1 flex items-center" onClick={() => handleProjectSelect(project._id)}>
+							<p className="font-semibold ml-2">{project.name}</p>
+							<p
+								className="text-gray-500 ml-6 overflow-hidden truncate"
+								title={project.description ? project.description : undefined}
+							>
+								{project.description || "No description available"}
+							</p>
+						</div>
+						<div className="relative group" data-test-id={`hover-menu-${project._id}`}>
+							<button
+								className="p-2 rounded-full hover:bg-gray-200 focus:outline-none"
+								aria-label="Project actions"
+								aria-haspopup="true"
+							>
+								<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+									<path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+								</svg>
+							</button>
+							<div
+								className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 invisible opacity-0 group-focus-within:visible group-focus-within:opacity-100 transition-opacity duration-200"
+								data-test-id={`hover-menu-options-${project._id}`}
+							>
+								<a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Update</a>
+								<a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Delete</a>
+							</div>
+						</div>
 					</li>
 				))}
 			</ul>

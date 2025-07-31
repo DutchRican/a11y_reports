@@ -1,5 +1,6 @@
 const express = require('express');
 const { Project } = require('../models/Project');
+const { secureRoute } = require('../middlewares/secure');
 const router = express.Router();
 const upload = require('multer')();
 
@@ -74,23 +75,35 @@ router.put('/:id', upload.none(), async (req, res) => {
  * @throws {Error} - If there is an issue deleting the project
  * Example: DELETE /projects/:id
  */
-router.delete('/:id', async (req, res) => {
-	try {
-		const project = await Project.findById(req.params.id);
-		if (!project) {
-			return res.status(404).json({ message: 'Project not found' });
-		}
-		project.isActive = false;
-		project.deletedAt = new Date();
-		const updatedProject = await project.save();
-		res.json(updatedProject);
-	} catch (err) {
-		if (err instanceof Error.CastError) {
-			return res.status(404).json({ message: 'Invalid ID' });
-		}
-		res.status(500).json({ message: err.message });
+router.delete('/:id', secureRoute, async (req, res) => {
+	const project = await Project.findById(req.params.id).where({ isActive: true });
+	if (!project) {
+		return res.status(404).json({ message: 'Project not found' });
 	}
+	project.isActive = false;
+	project.deletedAt = new Date();
+	const updatedProject = await project.save();
+	res.json(updatedProject);
+
 });
+
+/* Restore a soft deleted project
+ * @param {string} id - The ID of the project to restore
+ * @returns {Object} - The restored project
+ * @throws {Error} If there is an issue restoring the project
+ * Example: POST /projects/:id/restore
+ */
+router.post('/:id/restore', secureRoute, async (req, res) => {
+	const project = await Project.findById(req.params.id).where({ isActive: false });
+	if (!project) {
+		return res.status(404).json({ message: 'Project not found' });
+	}
+	project.isActive = true;
+	project.deletedAt = null;
+	const updatedProject = await project.save();
+	res.json(updatedProject);
+});
+
 
 /* Admin hard delete a project
  * @param {string} id - The ID of the project to hard delete
@@ -98,7 +111,7 @@ router.delete('/:id', async (req, res) => {
  * @throws {Error} - If there is an issue hard deleting the project
  * Example: DELETE /projects/:id/hard-delete
  */
-router.delete('/:id/hard-delete', async (req, res) => {
+router.delete('/:id/hard-delete', secureRoute, async (req, res) => {
 	try {
 		const project = await Project.findByIdAndDelete(req.params.id);
 		if (!project) {
