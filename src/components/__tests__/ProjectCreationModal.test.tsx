@@ -6,7 +6,7 @@ import ProjectCreationModal from "../ProjectCreationModal";
 
 const createProject = jest.fn().mockResolvedValue({});
 jest.mock("../../api/projects", () => ({
-	createProject: (data: any) => createProject(data),
+	createProject: (data: FormData) => createProject(data),
 	fetchProjects: jest.fn().mockResolvedValue([]), // Mock fetchProjects to return an empty array
 }));
 

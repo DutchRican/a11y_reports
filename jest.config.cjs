@@ -3,7 +3,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   transform: {
-    '^.+\.tsx?$': [
+    '^.+.tsx?$': [
       'ts-jest',
       {
         diagnostics: {

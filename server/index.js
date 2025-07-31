@@ -24,7 +24,11 @@ const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/a11y_repo
 
 mongoose.connect(mongoUri)
   .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .catch(err => {
+    console.error('MongoDB connection error:', err.message);
+    process.exit(1);
+
+  });
 
 // API routes
 app.use('/api/scan-results', scanResultsRouter);

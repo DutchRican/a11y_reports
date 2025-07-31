@@ -1,9 +1,9 @@
 export interface subNode {
-  id: String,
+  id: string,
   data: { [key: string]: any }[],
-  relatedNodes: [String],
-  impact: String,
-  message: String,
+  relatedNodes: [string],
+  impact: string,
+  message: string,
 }
 export interface A11yViolation {
   id: string;

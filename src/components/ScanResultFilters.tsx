@@ -19,7 +19,7 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 	filtersOpen,
 }) => {
 	// Parse dateFilter to Date objects
-	let [start, end] = dateFilter.split(',');
+	const [start, end] = dateFilter.split(',');
 	const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
 
 	// Debounced testName filter state
@@ -51,7 +51,7 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 		} else {
 			setDateRange([null, null]);
 		}
-	}, [dateFilter]);
+	}, [dateFilter, start, end]);
 
 	return (
 		<div className={`transition-all duration-300 ease-in-out overflow-hidden ${filtersOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
