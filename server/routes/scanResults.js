@@ -12,7 +12,7 @@ const upload = multer({ dest: 'uploads/' });
 /* Get all scan results with optional date range filtering
  * @query {string} from - Start date in ISO format (e.g., 2023-01-01)
  * @query {string} to - End date in ISO format (e.g., 2023-12-31)
- * @returns {Array} - An array of all scan results
+ * @returns {Array} - An array of scan results
  * @throws {Error} - If there is an issue retrieving the scan results
  * Example: GET /scan-results?from=2023-01-01&to=2023-12-31
  */
@@ -25,8 +25,16 @@ router.get('/', projectCheck, async (req, res) => {
 
     if (from || to) {
       query.created = {};
-      if (from) query.created.$gte = new Date(from);
-      if (to) query.created.$lte = new Date(to);
+      if (from) {
+        const d = new Date(from);
+        d.setHours(0, 0, 0, 0);
+        query.created.$gte = d;
+      }
+      if (to) {
+        const d = new Date(to);
+        d.setHours(23, 59, 59, 999);
+        query.created.$lte = d;
+      }
     }
 
     const scanResults = await ScanResult.find(query)

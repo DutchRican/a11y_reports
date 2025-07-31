@@ -34,7 +34,7 @@ const OverviewPage: React.FC = () => {
       return { from: start };
     }
     return {};
-  }, [dateFilter]);
+  }, []);
 
   const {
     data: scanResults = [],
@@ -57,11 +57,11 @@ const OverviewPage: React.FC = () => {
     navigate(`/detailview/${result._id}`);
   };
 
-  const getIdFromLocation = () => {
+  const getIdFromLocation = useCallback(() => {
     const regex = /\/project\/(\w+)/;
     const match = regex.exec(location.pathname);
     return match ? match[1] : null;
-  };
+  }, [location.pathname]);
 
   useEffect(() => {
     if (error) {
@@ -75,7 +75,7 @@ const OverviewPage: React.FC = () => {
     if (urlId && !projectID) {
       setProjectID(urlId);
     }
-  }, []);
+  }, [getIdFromLocation, projectID, setProjectID]);
 
   return (
     <div className="max-w-7/8 mx-auto my-8 p-4">

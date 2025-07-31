@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { ScanResult } from '../../types';
 import { colorMap } from './colors';
 
@@ -32,7 +32,6 @@ const ImpactChart: React.FC<ImpactChartProps> = ({ scanResults }) => {
           <XAxis dataKey="impact" />
           <YAxis />
           <Tooltip cursor={{ fill: 'transparent' }} />
-          <Legend wrapperStyle={{ paddingTop: '15px', bottom: '25px' }} />
           <Bar dataKey="count" cursor="pointer" />
         </BarChart>
       </ResponsiveContainer>

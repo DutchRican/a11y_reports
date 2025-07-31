@@ -3,6 +3,7 @@ export const CalTrigger = ({ onClick }: { onClick?: () => void }) => (
 	<button
 		type="button"
 		onClick={onClick}
+		title="Setting a range of dates, a single date will get all from that day forward."
 		aria-label="Select date range"
 		className="p-2 rounded-full border border-gray-300 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
 	>
