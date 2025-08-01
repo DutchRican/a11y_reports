@@ -5,7 +5,11 @@ import router from '../projects';
 
 describe('/api/projects', () => {
 	let app;
+	const originalEnv = process.env;
+
 	beforeEach(() => {
+		jest.resetModules();
+		process.env = { ...originalEnv };
 		app = express();
 		app.use(express.json());
 		app.use(router);
@@ -57,26 +61,50 @@ describe('/api/projects', () => {
 	});
 
 	it('can delete a project', async () => {
+		process.env.ADMIN_KEY = 'test-key';
 		const project = await Project.create({
 			name: 'Test Project',
 			description: 'Test Description',
 			pageUrl: 'http://example.com',
 		});
 
-		const res = await request(app).delete(`/${project._id}`);
+		const res = await request(app).delete(`/${project._id}`).set("authorization", "test-key");
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.isActive).toEqual(false);
 	});
 
+	it('throws an error without the admin key', async () => {
+
+		const res = await request(app).delete('/asdfasdfasfd')
+		expect(res.statusCode).toEqual(401);
+	});
+
+	it('throws an error for the wrong admin key', async () => {
+
+		const res = await request(app).delete('/asdfasdfasdf').set("authorization", "test-key");
+		expect(res.statusCode).toEqual(403);
+	});
+
 	it('can hard delete a project', async () => {
+		process.env.ADMIN_KEY = 'test-key';
 		const project = await Project.create({
 			name: 'Test Project',
 			description: 'Test Description',
 			pageUrl: 'http://example.com',
 		});
 
-		const res = await request(app).delete(`/${project._id}/hard-delete`);
+		const res = await request(app).delete(`/${project._id}/hard-delete`).set("authorization", "test-key");
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.message).toEqual('Project deleted successfully');
+	});
+
+	it('throws an error without the admin key for hard delete', async () => {
+		const res = await request(app).delete(`/asdfadsf/hard-delete`);
+		expect(res.statusCode).toEqual(401);
+	});
+
+	it('throws an error for the wrong admin key for hard delete', async () => {
+		const res = await request(app).delete('/asdfasdfasdf/hard-delete').set("authorization", "test-key");
+		expect(res.statusCode).toEqual(403);
 	});
 });

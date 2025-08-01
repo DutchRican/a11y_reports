@@ -1,12 +1,18 @@
 import express from 'express';
 import request from 'supertest';
 import { Project } from '../../models/Project';
+import { ScanResult } from '../../models/ScanResult';
 import router from '../scanResults';
 
 describe('/api/scan-results', () => {
   let app;
   let projectId;
+  let originalEnv = process.env;
+
+
   beforeEach(async () => {
+    jest.resetModules();
+    process.env = { ...originalEnv };
     app = express();
     app.use(router);
     const project = await Project.findOne();
@@ -40,6 +46,31 @@ describe('/api/scan-results', () => {
   it('should return 404 for non-existent scan result', async () => {
     const res = await request(app).get('/non-existent-id');
     expect(res.statusCode).toEqual(404);
+  });
+
+  it('can delete a scan result', async () => {
+    process.env.ADMIN_KEY = 'test-key';
+    const scan = await ScanResult.create({
+      projectId: '6884fea2f5a23601459d2290',
+      testName: 'Test Scan',
+      url: 'http://example.com',
+      created: new Date(),
+      violations: []
+    });
+
+    const res = await request(app).delete(`/${scan._id}`).set("authorization", "test-key");
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.message).toEqual('Scan result deleted successfully');
+  });
+
+  it('throws an error without the admin key for delete', async () => {
+    const res = await request(app).delete('/asdfadsf');
+    expect(res.statusCode).toEqual(401);
+  });
+
+  it('throws an error for the wrong admin key for delete', async () => {
+    const res = await request(app).delete('/asdfasdfasdf').set("authorization", "test-key");
+    expect(res.statusCode).toEqual(403);
   });
 });
 
