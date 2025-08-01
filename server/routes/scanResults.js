@@ -28,16 +28,14 @@ router.get('/', projectCheck, async (req, res) => {
       query.created = {};
       if (from) {
         const d = new Date(from);
-        d.setHours(0, 0, 0, 0);
         query.created.$gte = d;
       }
       if (to) {
         const d = new Date(to);
-        d.setHours(23, 59, 59, 999);
-        query.created.$lte = d;
+        d.setDate(d.getDate() + 1);
+        query.created.$lt = d;
       }
     }
-
     const scanResults = await ScanResult.find(query)
       .select({ _id: 1, testName: 1, url: 1, created: 1, impactCounts: 1, totalViolations: 1 })
       .sort({ created: 1 });
