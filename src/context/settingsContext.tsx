@@ -23,6 +23,14 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 	const [password, setPassword] = useState<string>("");
 
 	useEffect(() => {
+		const root = window.document.documentElement;
+		const isDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+		root.classList.toggle("dark", isDark);
+	}, [theme]);
+
+
+
+	useEffect(() => {
 		return () => {
 			if (adminTimeout) {
 				clearTimeout(adminTimeout);
