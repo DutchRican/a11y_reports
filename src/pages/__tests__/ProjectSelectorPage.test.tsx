@@ -1,5 +1,6 @@
 // import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { SettingsProvider } from '../../context/settingsContext';
 import ProjectSelectorPage from '../ProjectSelectorPage';
 
 // Mock useNavigate
@@ -13,8 +14,14 @@ const mockSetProjectID = jest.fn();
 let mockContextValue: any = {};
 jest.mock('../../context/projectContext', () => ({
 	useProjectContext: () => mockContextValue,
+	useSettings: () => { },
 }));
 
+const Wrapper = () => (
+	<SettingsProvider>
+		<ProjectSelectorPage />
+	</SettingsProvider>
+);
 
 describe('ProjectSelectorPage', () => {
 	beforeEach(() => {
@@ -30,7 +37,7 @@ describe('ProjectSelectorPage', () => {
 			setProjectID: mockSetProjectID,
 			projectID: null,
 		};
-		render(<ProjectSelectorPage />);
+		render(<Wrapper />);
 		expect(screen.getByText(/Loading projects/i)).toBeInTheDocument();
 	});
 
@@ -42,7 +49,7 @@ describe('ProjectSelectorPage', () => {
 			setProjectID: mockSetProjectID,
 			projectID: null,
 		};
-		render(<ProjectSelectorPage />);
+		render(<Wrapper />);
 		expect(screen.getByText(/No projects available/i)).toBeInTheDocument();
 	});
 
@@ -57,7 +64,7 @@ describe('ProjectSelectorPage', () => {
 			setProjectID: mockSetProjectID,
 			projectID: null,
 		};
-		render(<ProjectSelectorPage />);
+		render(<Wrapper />);
 		expect(screen.getByText('Project One')).toBeInTheDocument();
 		expect(screen.getByText('Project Two')).toBeInTheDocument();
 		expect(screen.getByText('Desc One')).toBeInTheDocument();
@@ -72,7 +79,7 @@ describe('ProjectSelectorPage', () => {
 			setProjectID: mockSetProjectID,
 			projectID: null,
 		};
-		render(<ProjectSelectorPage />);
+		render(<Wrapper />);
 		fireEvent.click(screen.getByText('Project One'));
 		expect(mockSetProjectID).toHaveBeenCalledWith('1');
 		expect(mockNavigate).toHaveBeenCalledWith('/project/1');
@@ -86,7 +93,7 @@ describe('ProjectSelectorPage', () => {
 			setProjectID: mockSetProjectID,
 			projectID: '1',
 		};
-		render(<ProjectSelectorPage />);
+		render(<Wrapper />);
 		fireEvent.click(screen.getByText('Project One'));
 		expect(mockSetProjectID).not.toHaveBeenCalled();
 		expect(mockNavigate).toHaveBeenCalledWith('/project/1');
@@ -100,7 +107,7 @@ describe('ProjectSelectorPage', () => {
 			setProjectID: mockSetProjectID,
 			projectID: null,
 		};
-		render(<ProjectSelectorPage />);
+		render(<Wrapper />);
 		expect(screen.getByText('Select a Project')).toBeInTheDocument();
 	});
 
@@ -115,7 +122,7 @@ describe('ProjectSelectorPage', () => {
 			setProjectID: mockSetProjectID,
 			projectID: null,
 		};
-		render(<ProjectSelectorPage />);
+		render(<Wrapper />);
 		fireEvent.click(screen.getByText('Project One'));
 		expect(mockSetProjectID).toHaveBeenCalledWith('1');
 		fireEvent.click(screen.getByText('Project Two'));
@@ -132,7 +139,7 @@ describe('ProjectSelectorPage', () => {
 			setProjectID: mockSetProjectID,
 			projectID: null,
 		};
-		render(<ProjectSelectorPage />);
+		render(<Wrapper />);
 		expect(screen.getByText('No description available')).toBeInTheDocument();
 	});
 
@@ -147,7 +154,7 @@ describe('ProjectSelectorPage', () => {
 			setProjectID: mockSetProjectID,
 			projectID: null,
 		};
-		const { container } = render(<ProjectSelectorPage />);
+		const { container } = render(<Wrapper />);
 		expect(container).toMatchSnapshot();
 	});
 });

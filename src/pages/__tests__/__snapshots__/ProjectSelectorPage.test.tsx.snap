@@ -32,7 +32,7 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
           </p>
         </div>
         <div
-          class="relative group"
+          class="relative"
           data-test-id="hover-menu-1"
         >
           <button
@@ -51,23 +51,6 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
               />
             </svg>
           </button>
-          <div
-            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 invisible opacity-0 group-focus-within:visible group-focus-within:opacity-100 transition-opacity duration-200"
-            data-test-id="hover-menu-options-1"
-          >
-            <a
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              href="#"
-            >
-              Update
-            </a>
-            <a
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              href="#"
-            >
-              Delete
-            </a>
-          </div>
         </div>
       </li>
       <li
@@ -88,7 +71,7 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
           </p>
         </div>
         <div
-          class="relative group"
+          class="relative"
           data-test-id="hover-menu-2"
         >
           <button
@@ -107,23 +90,6 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
               />
             </svg>
           </button>
-          <div
-            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 invisible opacity-0 group-focus-within:visible group-focus-within:opacity-100 transition-opacity duration-200"
-            data-test-id="hover-menu-options-2"
-          >
-            <a
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              href="#"
-            >
-              Update
-            </a>
-            <a
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              href="#"
-            >
-              Delete
-            </a>
-          </div>
         </div>
       </li>
     </ul>
