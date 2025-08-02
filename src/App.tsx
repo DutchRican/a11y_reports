@@ -6,6 +6,7 @@ import Navigation from './components/Navigation';
 import ProjectCreationModal from './components/ProjectCreationModal';
 import UploadScanModal from './components/UploadScanModal';
 import { ProjectProvider } from './context/projectContext';
+import { SettingsProvider } from './context/settingsContext';
 import ADAInfoPage from './pages/ADAInfoPage';
 import DetailViewPage from './pages/DetailViewPage';
 import OverviewPage from './pages/OverviewPage';
@@ -19,34 +20,36 @@ function AppContent() {
   const [createProjectModalOpen, setCreateProjectModalOpen] = useState(false);
 
   return (
-    <ProjectProvider>
-      <ToastContainer />
-      <Navigation
-        onUploadClick={
-          () => setUploadModalOpen(true)
-        }
-        onProjectCreationClick={
-          () => setCreateProjectModalOpen(true)
-        } />
-      <div className="h-16" />
-      <main className="container mx-auto mt-2" role="main">
-        <Routes>
-          <Route path="/" element={<ProjectSelectorPage />} />
-          <Route path="/project/:id" element={
-            <OverviewPage />
+    <SettingsProvider>
+      <ProjectProvider>
+        <ToastContainer />
+        <Navigation
+          onUploadClick={
+            () => setUploadModalOpen(true)
+          }
+          onProjectCreationClick={
+            () => setCreateProjectModalOpen(true)
           } />
-          <Route path="/detailview/:id" element={<DetailViewPage />} />
-          <Route path="/ada-info" element={<ADAInfoPage />} />
-        </Routes>
-      </main>
-      <UploadScanModal
-        open={uploadModalOpen}
-        onClose={() => setUploadModalOpen(false)}
-      />
-      {createProjectModalOpen && <ProjectCreationModal
-        onClose={() => setCreateProjectModalOpen(false)}
-      />}
-    </ProjectProvider>
+        <div className="h-16" />
+        <main className="container mx-auto mt-2" role="main">
+          <Routes>
+            <Route path="/" element={<ProjectSelectorPage />} />
+            <Route path="/project/:id" element={
+              <OverviewPage />
+            } />
+            <Route path="/detailview/:id" element={<DetailViewPage />} />
+            <Route path="/ada-info" element={<ADAInfoPage />} />
+          </Routes>
+        </main>
+        <UploadScanModal
+          open={uploadModalOpen}
+          onClose={() => setUploadModalOpen(false)}
+        />
+        {createProjectModalOpen && <ProjectCreationModal
+          onClose={() => setCreateProjectModalOpen(false)}
+        />}
+      </ProjectProvider>
+    </SettingsProvider>
   );
 }
 

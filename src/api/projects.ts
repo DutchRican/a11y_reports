@@ -20,3 +20,18 @@ export const createProject = async (formData: FormData) => {
 	}
 	return response.json();
 };
+
+export const deleteProject = async (projectId: string) => {
+	const adminKey = "asdfasdf2222";
+	const response = await fetch(`${BASE_URL}/projects/${projectId}`, {
+		method: "DELETE",
+		headers: {
+			"Authorization": adminKey
+		}
+	});
+	if (!response.ok) {
+		const text = await response.json();
+		throw new Error(text?.message || "Failed to delete project");
+	}
+	return response.json();
+}

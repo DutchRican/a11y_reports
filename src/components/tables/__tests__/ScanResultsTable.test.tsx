@@ -24,6 +24,6 @@ describe('ScanResultsTable', () => {
     render(<ScanResultsTable scanResults={mockData} onSelectResult={jest.fn()} />);
 
     expect(screen.getByText('Test Scan')).toBeDefined();
-    expect(screen.getByText('1/1/2024')).toBeDefined();
+    expect(screen.getByText('01/01/2024')).toBeDefined();
   });
 });

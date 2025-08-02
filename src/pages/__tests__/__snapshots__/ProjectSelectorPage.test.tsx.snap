@@ -14,33 +14,117 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
       class="list-none p-0"
     >
       <li
-        class="p-3 mb-3 rounded cursor-pointer transition-colors flex bg-gray-100 hover:bg-indigo-100"
+        class="p-3 mb-3 rounded cursor-pointer transition-colors flex items-center justify-between bg-gray-100 hover:bg-indigo-100"
       >
-        <p
-          class="font-semibold flex-1 ml-2"
+        <div
+          class="flex-1 flex items-center"
         >
-          Project One
-        </p>
-        <p
-          class="text-gray-500 ml-6 overflow-hidden truncate flex-3"
-          title="Desc One"
+          <p
+            class="font-semibold ml-2"
+          >
+            Project One
+          </p>
+          <p
+            class="text-gray-500 ml-6 overflow-hidden truncate"
+            title="Desc One"
+          >
+            Desc One
+          </p>
+        </div>
+        <div
+          class="relative group"
+          data-test-id="hover-menu-1"
         >
-          Desc One
-        </p>
+          <button
+            aria-haspopup="true"
+            aria-label="Project actions"
+            class="p-2 rounded-full hover:bg-gray-200 focus:outline-none"
+          >
+            <svg
+              class="h-5 w-5 text-gray-600"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+              />
+            </svg>
+          </button>
+          <div
+            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 invisible opacity-0 group-focus-within:visible group-focus-within:opacity-100 transition-opacity duration-200"
+            data-test-id="hover-menu-options-1"
+          >
+            <a
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              href="#"
+            >
+              Update
+            </a>
+            <a
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              href="#"
+            >
+              Delete
+            </a>
+          </div>
+        </div>
       </li>
       <li
-        class="p-3 mb-3 rounded cursor-pointer transition-colors flex bg-gray-100 hover:bg-indigo-100"
+        class="p-3 mb-3 rounded cursor-pointer transition-colors flex items-center justify-between bg-gray-100 hover:bg-indigo-100"
       >
-        <p
-          class="font-semibold flex-1 ml-2"
+        <div
+          class="flex-1 flex items-center"
         >
-          Project Two
-        </p>
-        <p
-          class="text-gray-500 ml-6 overflow-hidden truncate flex-3"
+          <p
+            class="font-semibold ml-2"
+          >
+            Project Two
+          </p>
+          <p
+            class="text-gray-500 ml-6 overflow-hidden truncate"
+          >
+            No description available
+          </p>
+        </div>
+        <div
+          class="relative group"
+          data-test-id="hover-menu-2"
         >
-          No description available
-        </p>
+          <button
+            aria-haspopup="true"
+            aria-label="Project actions"
+            class="p-2 rounded-full hover:bg-gray-200 focus:outline-none"
+          >
+            <svg
+              class="h-5 w-5 text-gray-600"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+              />
+            </svg>
+          </button>
+          <div
+            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 invisible opacity-0 group-focus-within:visible group-focus-within:opacity-100 transition-opacity duration-200"
+            data-test-id="hover-menu-options-2"
+          >
+            <a
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              href="#"
+            >
+              Update
+            </a>
+            <a
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              href="#"
+            >
+              Delete
+            </a>
+          </div>
+        </div>
       </li>
     </ul>
   </div>
