@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Navigation from './components/Navigation';
 import ProjectCreationModal from './components/ProjectCreationModal';
+import SettingsTrigger from './components/SettingsTrigger';
 import UploadScanModal from './components/UploadScanModal';
 import { ProjectProvider } from './context/projectContext';
 import { SettingsProvider } from './context/settingsContext';
@@ -48,6 +49,7 @@ function AppContent() {
         {createProjectModalOpen && <ProjectCreationModal
           onClose={() => setCreateProjectModalOpen(false)}
         />}
+        <SettingsTrigger />
       </ProjectProvider>
     </SettingsProvider>
   );

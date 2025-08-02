@@ -12,7 +12,7 @@ type ProjectContextType = {
 	isRefetchingProjects: boolean;
 	currentProject: Project | undefined;
 	projectsError: Error | null;
-	removeProject: (projectId: string) => void;
+	removeProject: ({ projectId, password }: { projectId: string; password: string }) => void;
 };
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -27,19 +27,16 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 	});
 
 	const { mutate: removeProject } = useMutation({
-		mutationFn: deleteProject,
+		mutationFn: ({ projectId, password }: { projectId: string, password: string }) => deleteProject(projectId, password),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['projects'] });
 			toast.success('Project deleted successfully');
-		},
-		// Assuming deleteProject is defined in your API module
-		onMutate: async (projectId: string) => {
-			deleteProject(projectId);
 		},
 		onError: (error: any) => {
 			toast.error(`Failed to delete project: ${error.message}`);
 		},
 	});
+
 
 	const currentProject = availableProjects.find(project => project._id === projectID);
 

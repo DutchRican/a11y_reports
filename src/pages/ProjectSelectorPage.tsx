@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProjectContext } from "../context/projectContext";
+import { useSettings } from "../context/settingsContext";
 import { useClickOutside } from "../hooks/useClickOutside";
 
 const ProjectSelectorPage: React.FC = () => {
@@ -8,6 +9,7 @@ const ProjectSelectorPage: React.FC = () => {
 	const navigate = useNavigate();
 	const isBusy = isLoadingProjects || isRefetchingProjects;
 	const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+	const { password, isAdminMode } = useSettings();
 
 	const handleProjectSelect = (projectId: string) => {
 		if (!projectID || projectID !== projectId) {
@@ -21,7 +23,7 @@ const ProjectSelectorPage: React.FC = () => {
 	};
 
 	const handleDeleteProject = (projectId: string) => {
-		removeProject(projectId);
+		removeProject({ projectId, password });
 		handleMenuToggle(projectId);
 	};
 
@@ -29,6 +31,7 @@ const ProjectSelectorPage: React.FC = () => {
 
 	return (
 		<div className="max-w-7/8 mx-auto mt-10 p-6 bg-white rounded-lg shadow">
+			{isAdminMode && <p className="text-red-500">Admin Mode</p>}
 			<h1 className="text-center text-2xl font-semibold mb-6">Select a Project</h1>
 			<ul className="list-none p-0">
 				{isBusy && (
@@ -71,7 +74,7 @@ const ProjectSelectorPage: React.FC = () => {
 									data-test-id={`hover-menu-options-${project._id}`}
 								>
 									<button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Update</button>
-									<button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => handleDeleteProject(project._id)}>Delete</button>
+									{isAdminMode && <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => handleDeleteProject(project._id)}>Delete</button>}
 								</div>
 							)}
 						</div>

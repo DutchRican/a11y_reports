@@ -21,12 +21,11 @@ export const createProject = async (formData: FormData) => {
 	return response.json();
 };
 
-export const deleteProject = async (projectId: string) => {
-	const adminKey = "asdfasdf2222";
+export const deleteProject = async (projectId: string, password: string) => {
 	const response = await fetch(`${BASE_URL}/projects/${projectId}`, {
 		method: "DELETE",
 		headers: {
-			"Authorization": adminKey
+			"Authorization": password
 		}
 	});
 	if (!response.ok) {
