@@ -38,7 +38,7 @@ function AppContent() {
             <Route path="/project/:id" element={
               <OverviewPage />
             } />
-            <Route path="/detailview/:id" element={<DetailViewPage />} />
+            <Route path="/detailview/:projectID/:id" element={<DetailViewPage />} />
             <Route path="/ada-info" element={<ADAInfoPage />} />
           </Routes>
         </main>

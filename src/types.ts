@@ -1,12 +1,12 @@
 export interface subNode {
-  id: string,
+  _id: string,
   data: { [key: string]: any }[],
   relatedNodes: [string],
   impact: string,
   message: string,
 }
 export interface A11yViolation {
-  id: string;
+  _id: string;
   impact: 'critical' | 'serious' | 'moderate' | 'minor';
   description: string;
   help: string;

@@ -54,7 +54,7 @@ const OverviewPage: React.FC = () => {
   }, [scanResults, resultNameFilter]);
 
   const handleSelectResult = (result: ScanResult) => {
-    navigate(`/detailview/${result._id}`);
+    navigate(`/detailview/${projectID}/${result._id}`);
   };
 
   const getIdFromLocation = useCallback(() => {

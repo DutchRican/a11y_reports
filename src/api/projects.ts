@@ -22,7 +22,7 @@ export const createProject = async (formData: FormData) => {
 };
 
 export const deleteProject = async (projectId: string, password: string) => {
-	const response = await fetch(`${BASE_URL}/projects/${projectId}`, {
+	const response = await fetch(`${BASE_URL}/projects/${projectId}/hard-delete`, {
 		method: "DELETE",
 		headers: {
 			"Authorization": password

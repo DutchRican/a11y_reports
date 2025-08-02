@@ -1,5 +1,6 @@
 const express = require('express');
 const { Project } = require('../models/Project');
+const { ScanResult } = require('../models/ScanResult');
 const { secureRoute } = require('../middlewares/secure');
 const router = express.Router();
 const upload = require('multer')();
@@ -117,6 +118,7 @@ router.delete('/:id/hard-delete', secureRoute, async (req, res) => {
 		if (!project) {
 			return res.status(404).json({ message: 'Project not found' });
 		}
+		await ScanResult.deleteMany({ projectId: project._id });
 		res.json({ message: 'Project deleted successfully', project });
 	} catch (err) {
 		if (err instanceof Error.CastError) {

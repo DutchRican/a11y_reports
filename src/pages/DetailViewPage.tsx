@@ -8,12 +8,13 @@ import { useProjectContext } from '../context/projectContext';
 import { ScanResult } from '../types';
 
 const DetailViewPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id, projectID: projectIDParam } = useParams<{ id: string, projectID: string }>();
   const navigate = useNavigate();
   const { projectID } = useProjectContext();
+  const projectIDToUse = projectIDParam || projectID;
   const { data: result, isLoading: isLoadingResult, error: errorResult } = useQuery<ScanResult, Error>({
     queryKey: ['scanResult', id],
-    queryFn: () => fetchScanResultById(id!, projectID),
+    queryFn: () => fetchScanResultById(id!, projectIDToUse),
     enabled: !!id,
   });
 
@@ -60,7 +61,7 @@ const DetailViewPage: React.FC = () => {
 
           <div className="col-span-full">
             {result.violations?.map((violation) => (
-              <ViolationDetail key={violation.id} violation={violation} />
+              <ViolationDetail key={violation._id} violation={violation} />
             ))}
           </div>
         </div>
