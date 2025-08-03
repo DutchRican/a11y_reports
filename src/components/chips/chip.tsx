@@ -9,17 +9,17 @@ export default function Chip({
 }) {
 	return (
 		<span
-			className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800 cursor-pointer transition-colors ${className}`}
+			className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 cursor-pointer transition-colors ${className}`}
 		>
 			{label}
 			<button
 				type="button"
-				className="ml-2 p-0.5 rounded-full hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+				className="ml-2 p-0.5 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
 				onClick={onClick}
 				aria-label="Remove"
 			>
 				<svg
-					className="w-3 h-3 text-gray-500 hover:text-red-500"
+					className="w-3 h-3 text-gray-500 dark:text-gray-400 hover:text-red-500"
 					fill="none"
 					stroke="currentColor"
 					strokeWidth={2}

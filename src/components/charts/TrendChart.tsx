@@ -36,23 +36,23 @@ const TrendChart: React.FC<TrendChartProps> = ({ scanResults, unfilteredCount })
     ...value,
   }));
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg h-96">
-      <h3 className="text-lg font-semibold mb-4">Issues Trend Over Time</h3>
+    <div className="p-4 bg-white dark:bg-gray-800 shadow-md rounded-lg h-96">
+      <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Issues Trend Over Time</h3>
       {!!scanResults.length && <ResponsiveContainer width="100%" height="85%">
         <LineChart data={mapData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" />
-          <YAxis />
-          <Tooltip />
-          <Legend wrapperStyle={{ paddingTop: '15px' }} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#4A5568" />
+          <XAxis dataKey="timestamp" stroke="#A0AEC0" />
+          <YAxis stroke="#A0AEC0" />
+          <Tooltip contentStyle={{ backgroundColor: '#2D3748', color: '#E2E8F0' }} />
+          <Legend wrapperStyle={{ paddingTop: '15px', color: '#A0AEC0' }} />
           <Line type="monotone" dataKey="minor" stroke={colorMap.minor} name="Minor" />
           <Line type="monotone" dataKey="moderate" stroke={colorMap.moderate} name="Moderate" />
           <Line type="monotone" dataKey="serious" stroke={colorMap.serious} name="Serious" />
           <Line type="monotone" dataKey="critical" stroke={colorMap.critical} name="Critical" />
         </LineChart>
       </ResponsiveContainer>}
-      {!scanResults.length && !!unfilteredCount && <div className="text-center text-gray-500">No scan results match the current filters</div>}
-      {!unfilteredCount && <div className="text-center text-gray-500">There are no scan results available, have you uploaded scans yet?</div>}
+      {!scanResults.length && !!unfilteredCount && <div className="text-center text-gray-500 dark:text-gray-400">No scan results match the current filters</div>}
+      {!unfilteredCount && <div className="text-center text-gray-500 dark:text-gray-400">There are no scan results available, have you uploaded scans yet?</div>}
     </div>
   );
 };

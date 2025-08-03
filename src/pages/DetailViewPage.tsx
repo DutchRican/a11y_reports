@@ -19,15 +19,15 @@ const DetailViewPage: React.FC = () => {
   });
 
   if (isLoadingResult) {
-    return <div className="text-center text-gray-600">Loading...</div>;
+    return <div className="text-center text-gray-600 dark:text-gray-300">Loading...</div>;
   }
 
   if (errorResult) {
-    return <div className="text-center text-red-600">Error loading scan result.</div>;
+    return <div className="text-center text-red-600 dark:text-red-400">Error loading scan result.</div>;
   }
 
   if (!result) {
-    return <div className="text-center text-gray-600">No result found.</div>;
+    return <div className="text-center text-gray-600 dark:text-gray-300">No result found.</div>;
   }
 
   return (
@@ -44,13 +44,13 @@ const DetailViewPage: React.FC = () => {
           {result.testName}
         </h1>
 
-        <p className="text-gray-600 mb-1">
+        <p className="text-gray-600 mb-1 dark:text-gray-300">
           Page URL: <a href={result.url} target="_blank" rel="noopener" className="text-blue-500 hover:underline">
             {result.url}
           </a>
         </p>
 
-        <p className="text-gray-600 mb-4">
+        <p className="text-gray-600 mb-4 dark:text-gray-300">
           Scan Date: {new Date(result.created).toLocaleString()}
         </p>
 

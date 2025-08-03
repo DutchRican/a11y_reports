@@ -63,7 +63,7 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 							id="testNameFilter"
 							type="text"
 							placeholder="Filter by test Name"
-							className="p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className="p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
 							value={debouncedTestName}
 							onChange={(e) => setDebouncedTestName(e.target.value)}
 							autoComplete="off"
@@ -72,7 +72,7 @@ const ScanResultFilters: React.FC<ScanResultFiltersProps> = ({
 							<button
 								type="button"
 								aria-label="Clear test name filter"
-								className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+								className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
 								onClick={() => setDebouncedTestName('')}
 								tabIndex={0}
 							>

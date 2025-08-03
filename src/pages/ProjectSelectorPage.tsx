@@ -30,27 +30,27 @@ const ProjectSelectorPage: React.FC = () => {
 	const menuRef = useClickOutside(() => setOpenMenuId(null));
 
 	return (
-		<div className="max-w-7/8 mx-auto mt-10 p-6 bg-white rounded-lg shadow">
+		<div className="max-w-7/8 mx-auto mt-10 p-6 bg-white dark:bg-gray-800 dark:text-white rounded-lg shadow">
 			{isAdminMode && <p className="text-red-500">Admin Mode</p>}
 			<h1 className="text-center text-2xl font-semibold mb-6">Select a Project</h1>
 			<ul className="list-none p-0">
 				{isBusy && (
-					<li className="p-3 mb-3 bg-gray-100 rounded">Loading projects...</li>
+					<li className="p-3 mb-3 bg-gray-100 dark:bg-gray-700 rounded">Loading projects...</li>
 				)}
 				{availableProjects.length === 0 && !isBusy && (
-					<li className="p-3 mb-3 bg-gray-100 rounded">
+					<li className="p-3 mb-3 bg-gray-100 dark:bg-gray-700 rounded">
 						No projects available. Please create a project first.
 					</li>
 				)}
 				{!isBusy && availableProjects.map((project) => (
 					<li
 						key={project._id}
-						className={`p-3 mb-3 rounded cursor-pointer transition-colors flex items-center justify-between ${projectID === project._id ? 'bg-indigo-50 hover:bg-indigo-100' : 'bg-gray-100 hover:bg-indigo-100'}`}
+						className={`p-3 mb-3 rounded cursor-pointer transition-colors dark:bg-gray-700 dark:text-white flex items-center justify-between ${projectID === project._id ? 'bg-indigo-50 hover:bg-indigo-100 dark:hover:bg-indigo-900' : 'bg-gray-100 hover:bg-indigo-100 dark:hover:bg-gray-600'}`}
 					>
 						<div className="flex-1 flex items-center" onClick={() => handleProjectSelect(project._id)}>
 							<p className="font-semibold ml-2">{project.name}</p>
 							<p
-								className="text-gray-500 ml-6 overflow-hidden truncate"
+								className="text-gray-500 ml-6 overflow-hidden truncate dark:text-gray-300"
 								title={project.description ? project.description : undefined}
 							>
 								{project.description || "No description available"}

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #fff;
   --text-color: #000;
@@ -16,7 +18,7 @@ body {
 }
 
 input::-webkit-calendar-picker-indicator {
-	display: none !important;
+  display: none !important;
 }
 
 /* Disable browser autofill/autocomplete globally for all input fields */
@@ -24,14 +26,14 @@ input::-webkit-calendar-picker-indicator {
 input,
 textarea,
 select {
-	box-shadow: 0 0 0px 1000px var(--background) inset !important;
+  box-shadow: 0 0 0px 1000px var(--background) inset !important;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:active {
-	-webkit-box-shadow: 0 0 0 1000px var(--background) inset !important;
-	box-shadow: 0 0 0 1000px var(--background) inset !important;
-	-webkit-text-fill-color: var(--text-color) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--background) inset !important;
+  box-shadow: 0 0 0 1000px var(--background) inset !important;
+  -webkit-text-fill-color: var(--text-color) !important;
 }

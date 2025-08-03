@@ -8,7 +8,7 @@ const SettingsTrigger = () => {
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed top-24 right-4 bg-blue-500 text-white p-2 rounded-full shadow-lg"
+        className="fixed top-24 right-4 bg-blue-500 dark:bg-gray-700 text-white p-2 rounded-full shadow-lg"
         aria-label="Open settings"
       >
         <svg

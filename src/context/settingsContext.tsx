@@ -3,6 +3,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 type SettingsContextType = {
 	theme: string;
 	setTheme: (theme: string) => void;
+	isDarkMode: boolean;
 	isAdminMode: boolean;
 	enableAdminMode: (password: string) => void;
 	disableAdminMode: () => void;
@@ -21,12 +22,17 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 	);
 	const [adminTimeout, setAdminTimeout] = useState<number | undefined>(undefined);
 	const [password, setPassword] = useState<string>("");
+	const isDarkMode = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
 
 	useEffect(() => {
 		const root = window.document.documentElement;
-		const isDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-		root.classList.toggle("dark", isDark);
-	}, [theme]);
+		if (isDarkMode) {
+			root.classList.add("dark");
+		}
+		else {
+			root.classList.remove("dark");
+		}
+	}, [isDarkMode, theme]);
 
 
 
@@ -61,6 +67,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 	const contextValue: SettingsContextType = {
 		theme,
 		setTheme,
+		isDarkMode,
 		earliestFetchDate,
 		setEarliestFetchDate,
 		isAdminMode,

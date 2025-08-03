@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { colorSchemeDarkBlue, themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -8,6 +9,7 @@ import TrendChart from '../components/charts/TrendChart';
 import Chip from '../components/chips/chip';
 import ScanResultFilters from '../components/ScanResultFilters';
 import { useProjectContext } from '../context/projectContext';
+import { useSettings } from '../context/settingsContext';
 import { dateToLocalDateString } from '../helpers/date';
 import { useScanResultFilters } from '../hooks/useScanResultFilters';
 import { ScanResult } from '../types';
@@ -24,6 +26,7 @@ const OverviewPage: React.FC = () => {
     handleFilterChange,
     filters,
   } = useScanResultFilters();
+  const { isDarkMode } = useSettings();
 
   const submittableFilter = useCallback((dateFilter: string): { from?: string, to?: string } => {
     if (!dateFilter) return {};
@@ -112,6 +115,7 @@ const OverviewPage: React.FC = () => {
         {filters.map((filter) => <Chip key={filter.name} label={filter.val} onClick={() => { handleFilterChange(filter.name, ''); }} />)}
         <div className='h-96'>
           <AgGridReact
+            theme={isDarkMode ? themeQuartz.withPart(colorSchemeDarkBlue) : themeQuartz}
             rowData={filteredResults}
             columnDefs={[
               { headerName: 'Date', field: 'created', valueFormatter: ({ value }) => dateToLocalDateString(value) },

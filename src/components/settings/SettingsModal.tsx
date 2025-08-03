@@ -35,33 +35,33 @@ export default function SettingsModal({ onClose, isOpen }: SettingsModalProps) {
 	};
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 opacity-90">
-			<div className="bg-white p-4 rounded shadow-md">
-				<h2 className="text-lg font-semibold mb-4">Settings</h2>
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50">
+			<div className="bg-white dark:bg-gray-800 p-4 rounded shadow-md w-full max-w-md">
+				<h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Settings</h2>
 				<div className="mb-4">
-					<label htmlFor="theme-selector" className="block mb-2">Theme</label>
-					<select id="theme-selector" value={theme} onChange={(e) => setTheme(e.target.value)} className="w-full p-2 border rounded">
+					<label htmlFor="theme-selector" className="block mb-2 text-gray-700 dark:text-gray-300">Theme</label>
+					<select id="theme-selector" value={theme} onChange={(e) => setTheme(e.target.value)} className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600">
 						<option value="light">Light</option>
 						<option value="dark">Dark</option>
 						<option value="system">System</option>
 					</select>
 				</div>
 				<div className="mb-4">
-					<label htmlFor="fetch-date-selector" className="block mb-2">Earliest Fetch Date (days ago)</label>
-					<input id="fetch-date-selector" type="number" value={earliestFetchDate} onChange={(e) => setEarliestFetchDate(parseInt(e.target.value, 10))} className="w-full p-2 border rounded" />
+					<label htmlFor="fetch-date-selector" className="block mb-2 text-gray-700 dark:text-gray-300">Earliest Fetch Date (days ago)</label>
+					<input id="fetch-date-selector" type="number" value={earliestFetchDate} onChange={(e) => setEarliestFetchDate(parseInt(e.target.value, 10))} className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600" />
 				</div>
 				<div className="mb-4">
 					<label htmlFor="admin-mode-toggle" className="flex items-center cursor-pointer" title="Toggle Admin Mode, setting a wrong password will still enable it, but transactions will fail">
 						<div className="relative" >
 							<input id="admin-mode-toggle" type="checkbox" className="sr-only" checked={isAdminMode} onChange={handleAdminToggle} />
-							<div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
-							<div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+							<div className="block bg-gray-300 dark:bg-gray-700 w-14 h-8 rounded-full"></div>
+							<div className="dot absolute left-1 top-1 bg-white dark:bg-gray-300 w-6 h-6 rounded-full transition"></div>
 						</div>
-						<div className="ml-3 text-gray-700 font-medium">Admin Mode</div>
+						<div className="ml-3 text-gray-700 dark:text-gray-300 font-medium">Admin Mode</div>
 					</label>
 					{showPasswordField && (
 						<div className="mt-2">
-							<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-2 border rounded" placeholder="Enter admin key" />
+							<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600" placeholder="Enter admin key" />
 							<button onClick={handlePasswordSubmit} className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md">Submit</button>
 						</div>
 					)}
@@ -69,7 +69,7 @@ export default function SettingsModal({ onClose, isOpen }: SettingsModalProps) {
 				<div className="flex justify-end">
 					<button
 						type="button"
-						className="mr-2 px-4 py-2 bg-gray-300 rounded-md"
+						className="mr-2 px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-300 rounded-md"
 						onClick={onClose}
 					>
 						Cancel
