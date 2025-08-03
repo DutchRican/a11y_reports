@@ -3,7 +3,7 @@
 exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
 <div>
   <div
-    class="max-w-7/8 mx-auto mt-10 p-6 bg-white rounded-lg shadow"
+    class="max-w-7/8 mx-auto mt-10 p-6 bg-white dark:bg-gray-800 dark:text-white rounded-lg shadow"
   >
     <h1
       class="text-center text-2xl font-semibold mb-6"
@@ -14,7 +14,7 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
       class="list-none p-0"
     >
       <li
-        class="p-3 mb-3 rounded cursor-pointer transition-colors flex items-center justify-between bg-gray-100 hover:bg-indigo-100"
+        class="p-3 mb-3 rounded cursor-pointer transition-colors dark:bg-gray-700 dark:text-white flex items-center justify-between bg-gray-100 hover:bg-indigo-100 dark:hover:bg-gray-600"
       >
         <div
           class="flex-1 flex items-center"
@@ -25,7 +25,7 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
             Project One
           </p>
           <p
-            class="text-gray-500 ml-6 overflow-hidden truncate"
+            class="text-gray-500 ml-6 overflow-hidden truncate dark:text-gray-300"
             title="Desc One"
           >
             Desc One
@@ -54,7 +54,7 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
         </div>
       </li>
       <li
-        class="p-3 mb-3 rounded cursor-pointer transition-colors flex items-center justify-between bg-gray-100 hover:bg-indigo-100"
+        class="p-3 mb-3 rounded cursor-pointer transition-colors dark:bg-gray-700 dark:text-white flex items-center justify-between bg-gray-100 hover:bg-indigo-100 dark:hover:bg-gray-600"
       >
         <div
           class="flex-1 flex items-center"
@@ -65,7 +65,7 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
             Project Two
           </p>
           <p
-            class="text-gray-500 ml-6 overflow-hidden truncate"
+            class="text-gray-500 ml-6 overflow-hidden truncate dark:text-gray-300"
           >
             No description available
           </p>

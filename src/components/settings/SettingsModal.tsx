@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSettings } from "../../context/settingsContext";
 
 interface SettingsModalProps {
@@ -10,30 +10,35 @@ export default function SettingsModal({ onClose, isOpen }: SettingsModalProps) {
 	const [password, setPassword] = useState("");
 	const [showPasswordField, setShowPasswordField] = useState(false);
 
+	useEffect(() => {
+		setShowPasswordField(isAdminMode);
+	}, [isAdminMode]);
+
 	if (!isOpen) return null;
-
+	console.log({ showPasswordField, isAdminMode });
 	const handleAdminToggle = () => {
-		if (isAdminMode) {
-			disableAdminMode();
-			setShowPasswordField(false);
-		} else {
-			setShowPasswordField(true);
-		}
-	};
-
-	const handlePasswordSubmit = () => {
-		enableAdminMode(password);
-		setPassword("");
-		setShowPasswordField(false);
-		onClose();
+		setShowPasswordField((prev) => {
+			if (isAdminMode && prev) {
+				disableAdminMode();
+			}
+			return !prev
+		});
 	};
 
 	const onSave = () => {
 		localStorage.setItem("earliestFetchDate", earliestFetchDate.toString());
 		localStorage.setItem("theme", theme);
-		onClose();
+		if (showPasswordField && password) {
+			enableAdminMode(password);
+		}
+		onCloseModal();
 	};
 
+	const onCloseModal = () => {
+		setPassword("");
+		setShowPasswordField(false);
+		onClose();
+	};
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50">
 			<div className="bg-white dark:bg-gray-800 p-4 rounded shadow-md w-full max-w-md">
@@ -52,17 +57,25 @@ export default function SettingsModal({ onClose, isOpen }: SettingsModalProps) {
 				</div>
 				<div className="mb-4">
 					<label htmlFor="admin-mode-toggle" className="flex items-center cursor-pointer" title="Toggle Admin Mode, setting a wrong password will still enable it, but transactions will fail">
-						<div className="relative" >
-							<input id="admin-mode-toggle" type="checkbox" className="sr-only" checked={isAdminMode} onChange={handleAdminToggle} />
-							<div className="block bg-gray-300 dark:bg-gray-700 w-14 h-8 rounded-full"></div>
-							<div className="dot absolute left-1 top-1 bg-white dark:bg-gray-300 w-6 h-6 rounded-full transition"></div>
+						<div className="relative">
+							<input
+								id="admin-mode-toggle"
+								type="checkbox"
+								className="sr-only"
+								checked={showPasswordField}
+								onChange={handleAdminToggle}
+							/>
+							<div className={`block ${showPasswordField ? "bg-blue-300 dark:bg-blue-700" : "bg-gray-300 dark:bg-gray-700"}  w-14 h-8 rounded-full`}></div>
+							<div
+								className={`dot absolute left-1 top-1 bg-white dark:bg-gray-300 w-6 h-6 rounded-full transition transform ${showPasswordField ? "translate-x-6" : ""
+									}`}
+							></div>
 						</div>
 						<div className="ml-3 text-gray-700 dark:text-gray-300 font-medium">Admin Mode</div>
 					</label>
 					{showPasswordField && (
 						<div className="mt-2">
-							<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600" placeholder="Enter admin key" />
-							<button onClick={handlePasswordSubmit} className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md">Submit</button>
+							<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600" placeholder={`${isAdminMode ? "*********" : "Enter admin key"} `} />
 						</div>
 					)}
 				</div>
