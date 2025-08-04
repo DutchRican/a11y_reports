@@ -17,19 +17,55 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
         class="p-3 mb-3 rounded cursor-pointer transition-colors dark:bg-gray-700 dark:text-white flex items-center justify-between bg-gray-100 hover:bg-indigo-100 dark:hover:bg-gray-600"
       >
         <div
-          class="flex-1 flex items-center"
+          class="flex-1 flex flex-col"
         >
-          <p
-            class="font-semibold ml-2"
+          <div
+            class="flex"
           >
-            Project One
-          </p>
-          <p
-            class="text-gray-500 ml-6 overflow-hidden truncate dark:text-gray-300"
-            title="Desc One"
+            <p
+              class="project-info-value flex-2"
+            >
+              <span
+                class="project-info-title"
+              >
+                Project:
+              </span>
+              Project One
+            </p>
+            <p
+              class="project-info-value overflow-hidden truncate flex-3"
+              title="Desc One"
+            >
+              <span
+                class="project-info-title"
+              >
+                Description:
+              </span>
+              Desc One
+            </p>
+          </div>
+          <div
+            class="flex items-center mt-1"
           >
-            Desc One
-          </p>
+            <p
+              class="project-info-value flex-2"
+            >
+              <span
+                class="project-info-title"
+              >
+                URL:
+              </span>
+            </p>
+            <p
+              class="project-info-value flex-3"
+            >
+              <span
+                class="project-info-title"
+              >
+                Created Date:
+              </span>
+            </p>
+          </div>
         </div>
         <div
           class="relative"
@@ -57,18 +93,54 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
         class="p-3 mb-3 rounded cursor-pointer transition-colors dark:bg-gray-700 dark:text-white flex items-center justify-between bg-gray-100 hover:bg-indigo-100 dark:hover:bg-gray-600"
       >
         <div
-          class="flex-1 flex items-center"
+          class="flex-1 flex flex-col"
         >
-          <p
-            class="font-semibold ml-2"
+          <div
+            class="flex"
           >
-            Project Two
-          </p>
-          <p
-            class="text-gray-500 ml-6 overflow-hidden truncate dark:text-gray-300"
+            <p
+              class="project-info-value flex-2"
+            >
+              <span
+                class="project-info-title"
+              >
+                Project:
+              </span>
+              Project Two
+            </p>
+            <p
+              class="project-info-value overflow-hidden truncate flex-3"
+            >
+              <span
+                class="project-info-title"
+              >
+                Description:
+              </span>
+              No description available
+            </p>
+          </div>
+          <div
+            class="flex items-center mt-1"
           >
-            No description available
-          </p>
+            <p
+              class="project-info-value flex-2"
+            >
+              <span
+                class="project-info-title"
+              >
+                URL:
+              </span>
+            </p>
+            <p
+              class="project-info-value flex-3"
+            >
+              <span
+                class="project-info-title"
+              >
+                Created Date:
+              </span>
+            </p>
+          </div>
         </div>
         <div
           class="relative"
