@@ -70,13 +70,13 @@ router.put('/:id', upload.none(), async (req, res) => {
 	}
 });
 
-/* Soft delete a project
+/* Soft delete a project (Archive)
  * @param {string} id - The ID of the project to delete
  * @returns {Object} - The updated project with deletedAt timestamp
  * @throws {Error} - If there is an issue deleting the project
  * Example: DELETE /projects/:id
  */
-router.delete('/:id', secureRoute, async (req, res) => {
+router.delete('/:id', async (req, res) => {
 	const project = await Project.findById(req.params.id).where({ isActive: true });
 	if (!project) {
 		return res.status(404).json({ message: 'Project not found' });

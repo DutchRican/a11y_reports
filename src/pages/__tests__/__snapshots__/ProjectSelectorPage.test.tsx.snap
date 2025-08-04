@@ -45,7 +45,7 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
             </p>
           </div>
           <div
-            class="flex items-center mt-1"
+            class="flex  mt-1"
           >
             <p
               class="project-info-value flex-2"
@@ -57,13 +57,14 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
               </span>
             </p>
             <p
-              class="project-info-value flex-3"
+              class="project-info-value flex-3 overflow-hidden truncate"
             >
               <span
                 class="project-info-title"
               >
                 Created Date:
               </span>
+              Invalid Date
             </p>
           </div>
         </div>
@@ -120,7 +121,7 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
             </p>
           </div>
           <div
-            class="flex items-center mt-1"
+            class="flex  mt-1"
           >
             <p
               class="project-info-value flex-2"
@@ -132,13 +133,14 @@ exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
               </span>
             </p>
             <p
-              class="project-info-value flex-3"
+              class="project-info-value flex-3 overflow-hidden truncate"
             >
               <span
                 class="project-info-title"
               >
                 Created Date:
               </span>
+              Invalid Date
             </p>
           </div>
         </div>

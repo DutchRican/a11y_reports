@@ -68,22 +68,11 @@ describe('/api/projects', () => {
 			pageUrl: 'http://example.com',
 		});
 
-		const res = await request(app).delete(`/${project._id}`).set("authorization", "test-key");
+		const res = await request(app).delete(`/${project._id}`);
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.isActive).toEqual(false);
 	});
 
-	it('throws an error without the admin key', async () => {
-
-		const res = await request(app).delete('/asdfasdfasfd')
-		expect(res.statusCode).toEqual(401);
-	});
-
-	it('throws an error for the wrong admin key', async () => {
-
-		const res = await request(app).delete('/asdfasdfasdf').set("authorization", "test-key");
-		expect(res.statusCode).toEqual(403);
-	});
 
 	it('can hard delete a project', async () => {
 		process.env.ADMIN_KEY = 'test-key';

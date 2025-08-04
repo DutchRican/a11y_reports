@@ -46,3 +46,14 @@ export const deleteProject = async (projectId: string, password: string) => {
 	}
 	return response.json();
 }
+
+export const archiveProject = async (projectId: string) => {
+	const response = await fetch(`${BASE_URL}/projects/${projectId}`, {
+		method: "DELETE"
+	});
+	if (!response.ok) {
+		const text = await response.json();
+		throw new Error(text?.message || "Failed to archive project");
+	}
+	return response.json();
+}

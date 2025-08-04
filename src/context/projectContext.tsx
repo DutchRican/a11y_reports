@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-import { deleteProject, fetchProjects } from '../api/projects';
+import { archiveProject, deleteProject, fetchProjects } from '../api/projects';
 import { Project } from '../types';
 
 type ProjectContextType = {
@@ -13,6 +13,7 @@ type ProjectContextType = {
 	currentProject: Project | undefined;
 	projectsError: Error | null;
 	removeProject: ({ projectId, password }: { projectId: string; password: string }) => void;
+	softDeleteProject: ({ projectId }: { projectId: string }) => void;
 };
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -37,6 +38,17 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 		},
 	});
 
+	const { mutate: softDeleteProject } = useMutation({
+		mutationFn: ({ projectId }: { projectId: string }) => archiveProject(projectId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['projects'] });
+			toast.success('Project archived succesfully');
+		},
+		onError: (error: any) => {
+			toast.error(`Failed to archive project: ${error.message}`);
+		}
+	});
+
 
 	const currentProject = availableProjects.find(project => project._id === projectID);
 
@@ -49,7 +61,8 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 		currentProject,
 		projectsError,
 		removeProject,
-	}), [projectID, availableProjects, isLoadingProjects, isRefetchingProjects, currentProject, projectsError, removeProject]);
+		softDeleteProject
+	}), [projectID, availableProjects, isLoadingProjects, isRefetchingProjects, currentProject, projectsError, removeProject, softDeleteProject]);
 
 	return (
 		<ProjectContext.Provider value={contextValue}>

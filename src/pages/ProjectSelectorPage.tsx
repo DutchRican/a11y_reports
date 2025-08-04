@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import ProjectCreationModal from "../components/ProjectCreationModal";
 import { useProjectContext } from "../context/projectContext";
 import { useSettings } from "../context/settingsContext";
+import { dateToLocalDateString } from "../helpers/date";
 import { useClickOutside } from "../hooks/useClickOutside";
 
 const ProjectSelectorPage: React.FC = () => {
-	const { availableProjects, isLoadingProjects, setProjectID, projectID, isRefetchingProjects, removeProject } = useProjectContext();
+	const { availableProjects, isLoadingProjects, setProjectID, projectID, isRefetchingProjects, removeProject, softDeleteProject } = useProjectContext();
 	const navigate = useNavigate();
 	const isBusy = isLoadingProjects || isRefetchingProjects;
 	const [openMenuId, setOpenMenuId] = useState<string | null>(null);
@@ -25,8 +26,9 @@ const ProjectSelectorPage: React.FC = () => {
 		setOpenMenuId((prev) => (prev === projectId ? null : projectId));
 	};
 
-	const handleDeleteProject = (projectId: string) => {
-		removeProject({ projectId, password });
+	const handleDeleteProject = (projectId: string, isArchive: boolean = false) => {
+		if (isArchive) softDeleteProject({ projectId })
+		else removeProject({ projectId, password });
 		handleMenuToggle(projectId);
 	};
 
@@ -66,9 +68,9 @@ const ProjectSelectorPage: React.FC = () => {
 									{project.description || "No description available"}
 								</p>
 							</div>
-							<div className="flex items-center mt-1">
+							<div className="flex  mt-1">
 								<p className="project-info-value flex-2"><span className="project-info-title">URL:</span>{project.pageUrl}</p>
-								<p className="project-info-value flex-3"><span className="project-info-title">Created Date:</span>{project.createdAt}</p>
+								<p className="project-info-value flex-3 overflow-hidden truncate"><span className="project-info-title">Created Date:</span>{dateToLocalDateString(project.createdAt)}</p>
 							</div>
 						</div>
 						<div className="relative" data-test-id={`hover-menu-${project._id}`}>
@@ -89,6 +91,7 @@ const ProjectSelectorPage: React.FC = () => {
 									data-test-id={`hover-menu-options-${project._id}`}
 								>
 									<button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => handleUpdateProject(project._id)}>Update</button>
+									<button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => handleDeleteProject(project._id, true)}>Archive</button>
 									{isAdminMode && <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => handleDeleteProject(project._id)}>Delete</button>}
 								</div>
 							)}
