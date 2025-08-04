@@ -37,3 +37,11 @@ input:-webkit-autofill:active {
   box-shadow: 0 0 0 1000px var(--background) inset !important;
   -webkit-text-fill-color: var(--text-color) !important;
 }
+
+.project-info-title {
+  @apply text-gray-500 dark:text-gray-400 mr-2 overflow-hidden truncate;
+}
+
+.project-info-value {
+  @apply text-gray-600 dark:text-gray-300 mr-2 overflow-hidden truncate;
+}

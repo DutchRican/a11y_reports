@@ -21,6 +21,18 @@ export const createProject = async (formData: FormData) => {
 	return response.json();
 };
 
+export const updateProject = async (formData: FormData, projectId: string) => {
+	const response = await fetch(`${BASE_URL}/projects/${projectId}`, {
+		method: "PUT",
+		body: formData,
+	});
+	if (!response.ok) {
+		const text = await response.json();
+		throw new Error(text?.message || "Failed to update project");
+	}
+	return response.json();
+};
+
 export const deleteProject = async (projectId: string, password: string) => {
 	const response = await fetch(`${BASE_URL}/projects/${projectId}/hard-delete`, {
 		method: "DELETE",

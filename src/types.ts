@@ -41,6 +41,7 @@ export interface ScanResult {
 export interface Project {
   _id: string;
   name: string;
+  pageUrl: string;
   description?: string;
   createdAt: string;
   updatedAt: string;

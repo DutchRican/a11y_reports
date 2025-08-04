@@ -1,12 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { createProject } from "../api/projects";
+import { createProject, updateProject } from "../api/projects";
+import { Project } from "../types";
 
 interface ProjectCreationModalProps {
 	onClose: () => void;
+	projectToUpdate?: Project | undefined | null;
 }
-export default function ProjectCreationModal({ onClose }: ProjectCreationModalProps) {
+
+export default function ProjectCreationModal({ onClose, projectToUpdate }: ProjectCreationModalProps) {
 	const [formData, setFormData] = useState({
 		name: "",
 		description: "",
@@ -14,11 +17,21 @@ export default function ProjectCreationModal({ onClose }: ProjectCreationModalPr
 	});
 	const queryClient = useQueryClient();
 
+	useEffect(() => {
+		if (projectToUpdate) {
+			setFormData({
+				name: projectToUpdate.name,
+				description: projectToUpdate.description || "",
+				pageUrl: projectToUpdate.pageUrl
+			});
+		}
+	}, [projectToUpdate]);
+
 	const { isPending, mutateAsync } = useMutation({
-		mutationFn: createProject,
+		mutationFn: projectToUpdate ? (fd: FormData) => updateProject(fd, projectToUpdate._id) : createProject,
 
 		onSuccess: () => {
-			toast.success("Project created successfully");
+			toast.success(`Project ${projectToUpdate ? "updated" : "created"} successfully`);
 			queryClient.invalidateQueries({ queryKey: ['projects'] });
 		}
 	});
@@ -35,7 +48,7 @@ export default function ProjectCreationModal({ onClose }: ProjectCreationModalPr
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50">
 			<div className="bg-white dark:bg-gray-800 p-4 rounded shadow-md w-full max-w-md">
-				<h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Create Project</h2>
+				<h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{projectToUpdate ? "Update Project" : "Create Project"}</h2>
 				<form onSubmit={handleSubmit} id="project-creation-form" data-testid="project-creation-form">
 					<div className="mb-4">
 						<label htmlFor="project-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -85,7 +98,7 @@ export default function ProjectCreationModal({ onClose }: ProjectCreationModalPr
 							Cancel
 						</button>
 						<button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md" disabled={isPending}>
-							Create
+							{projectToUpdate ? "Update" : "Create"}
 						</button>
 					</div>
 				</form>

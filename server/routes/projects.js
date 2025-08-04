@@ -7,7 +7,7 @@ const upload = require('multer')();
 
 router.get('/', async (_req, res) => {
 	try {
-		const projects = await Project.find().select({ _id: 1, name: 1, description: 1, createdAt: 1 }).where({ isActive: true }).sort({ createdAt: -1 });
+		const projects = await Project.find().select({ _id: 1, name: 1, description: 1, createdAt: 1, pageUrl: 1 }).where({ isActive: true }).sort({ createdAt: -1 });
 		res.json(projects);
 	} catch (err) {
 		res.status(500).json({ message: err.message });
