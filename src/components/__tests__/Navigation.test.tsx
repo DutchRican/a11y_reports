@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { ProjectProvider } from '../../context/projectContext';
+import { SettingsProvider } from '../../context/settingsContext';
 import Navigation from '../Navigation';
 
 describe('Navigation', () => {
@@ -10,9 +11,11 @@ describe('Navigation', () => {
     render(
       <MemoryRouter>
         <QueryClientProvider client={queryClient}>
-          <ProjectProvider>
-            <Navigation onUploadClick={jest.fn()} onProjectCreationClick={jest.fn()} />
-          </ProjectProvider>
+          <SettingsProvider>
+            <ProjectProvider>
+              <Navigation onUploadClick={jest.fn()} onProjectCreationClick={jest.fn()} />
+            </ProjectProvider>
+          </SettingsProvider>
         </QueryClientProvider>
       </MemoryRouter>
     );

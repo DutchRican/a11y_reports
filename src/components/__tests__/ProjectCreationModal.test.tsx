@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { ProjectProvider } from "../../context/projectContext";
+import { SettingsProvider } from "../../context/settingsContext";
 import ProjectCreationModal from "../ProjectCreationModal";
 
 const createProject = jest.fn().mockResolvedValue({});
@@ -20,9 +21,11 @@ describe("ProjectCreationModal", () => {
 	const makeRender = () => render(
 		<MemoryRouter>
 			<QueryClientProvider client={queryClient}>
-				<ProjectProvider>
-					<ProjectCreationModal onClose={onClose} />
-				</ProjectProvider>
+				<SettingsProvider>
+					<ProjectProvider>
+						<ProjectCreationModal onClose={onClose} />
+					</ProjectProvider>
+				</SettingsProvider>
 			</QueryClientProvider>
 		</MemoryRouter>
 	);
