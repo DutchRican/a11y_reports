@@ -15,7 +15,6 @@ export default function SettingsModal({ onClose, isOpen }: SettingsModalProps) {
 	}, [isAdminMode]);
 
 	if (!isOpen) return null;
-	console.log({ showPasswordField, isAdminMode });
 	const handleAdminToggle = () => {
 		setShowPasswordField((prev) => {
 			if (isAdminMode && prev) {

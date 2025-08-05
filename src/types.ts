@@ -43,6 +43,8 @@ export interface Project {
   name: string;
   pageUrl: string;
   description?: string;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  deletedAt?: string;
 }

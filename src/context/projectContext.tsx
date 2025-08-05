@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-import { archiveProject, deleteProject, fetchProjects } from '../api/projects';
+import { archiveProject, deleteProject, fetchProjects, restoreProject as unarchiveProject } from '../api/projects';
 import { Project } from '../types';
+import { useSettings } from './settingsContext';
 
 type ProjectContextType = {
 	projectID: string | undefined;
@@ -14,6 +15,7 @@ type ProjectContextType = {
 	projectsError: Error | null;
 	removeProject: ({ projectId, password }: { projectId: string; password: string }) => void;
 	softDeleteProject: ({ projectId }: { projectId: string }) => void;
+	restoreProject: ({ projectId, password }: { projectId: string, password: string }) => void;
 };
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -21,10 +23,11 @@ const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 	const [projectID, setProjectID] = useState<string | undefined>(undefined);
 	const queryClient = useQueryClient();
+	const { isAdminMode } = useSettings();
 
 	const { data: availableProjects = [], isLoading: isLoadingProjects, isRefetching: isRefetchingProjects, error: projectsError } = useQuery<Project[], Error>({
-		queryKey: ['projects'],
-		queryFn: fetchProjects,
+		queryKey: ['projects', isAdminMode],
+		queryFn: () => fetchProjects(isAdminMode),
 	});
 
 	const { mutate: removeProject } = useMutation({
@@ -42,12 +45,23 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 		mutationFn: ({ projectId }: { projectId: string }) => archiveProject(projectId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['projects'] });
-			toast.success('Project archived succesfully');
+			toast.success(`Project archived succesfully`);
 		},
 		onError: (error: any) => {
 			toast.error(`Failed to archive project: ${error.message}`);
 		}
 	});
+
+	const { mutate: restoreProject } = useMutation({
+		mutationFn: ({ projectId, password }: { projectId: string, password: string }) => unarchiveProject(projectId, password),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['projects'] });
+			toast.success(`Project restored succesfully`);
+		},
+		onError: (error: any) => {
+			toast.error(`Failed to restore project: ${error.message}`);
+		}
+	})
 
 
 	const currentProject = availableProjects.find(project => project._id === projectID);
@@ -61,8 +75,9 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 		currentProject,
 		projectsError,
 		removeProject,
-		softDeleteProject
-	}), [projectID, availableProjects, isLoadingProjects, isRefetchingProjects, currentProject, projectsError, removeProject, softDeleteProject]);
+		softDeleteProject,
+		restoreProject
+	}), [projectID, availableProjects, isLoadingProjects, isRefetchingProjects, currentProject, projectsError, removeProject, softDeleteProject, restoreProject]);
 
 	return (
 		<ProjectContext.Provider value={contextValue}>

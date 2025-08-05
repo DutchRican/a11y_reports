@@ -1,8 +1,10 @@
 import { toast } from "react-toastify";
 import { BASE_URL } from "../constants";
 
-export const fetchProjects = async () => {
-	const response = await fetch(`${BASE_URL}/projects`);
+export const fetchProjects = async (isAdminMode: boolean) => {
+	const url = new URL(`${BASE_URL}/projects`);
+	url.searchParams.append('includeArchived', isAdminMode.toString())
+	const response = await fetch(url);
 	if (!response.ok) {
 		toast.error("Failed to fetch projects");
 	}
@@ -54,6 +56,20 @@ export const archiveProject = async (projectId: string) => {
 	if (!response.ok) {
 		const text = await response.json();
 		throw new Error(text?.message || "Failed to archive project");
+	}
+	return response.json();
+}
+
+export const restoreProject = async (projectId: string, password: string) => {
+	const response = await fetch(`${BASE_URL}/projects/${projectId}/restore`, {
+		headers: {
+			"Authorization": password
+		}
+	}
+	);
+	if (!response.ok) {
+		const text = await response.json();
+		throw new Error(text?.message || "Failed to restore the project");
 	}
 	return response.json();
 }

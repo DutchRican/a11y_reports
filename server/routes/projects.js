@@ -5,9 +5,16 @@ const { secureRoute } = require('../middlewares/secure');
 const router = express.Router();
 const upload = require('multer')();
 
-router.get('/', async (_req, res) => {
+router.get('/', async (req, res) => {
+	const includeArchived = req.query.includeArchived === 'true';
 	try {
-		const projects = await Project.find().select({ _id: 1, name: 1, description: 1, createdAt: 1, pageUrl: 1 }).where({ isActive: true }).sort({ createdAt: -1 });
+		const clause = { isActive: true };
+		const select = { _id: 1, name: 1, description: 1, createdAt: 1, pageUrl: 1, isActive: 1 };
+		if (includeArchived) {
+			select.deletedAt = 1;
+			delete clause.isActive;
+		}
+		const projects = await Project.find().select(select).where(clause).sort({ createdAt: -1 });
 		res.json(projects);
 	} catch (err) {
 		res.status(500).json({ message: err.message });
@@ -92,9 +99,10 @@ router.delete('/:id', async (req, res) => {
  * @param {string} id - The ID of the project to restore
  * @returns {Object} - The restored project
  * @throws {Error} If there is an issue restoring the project
- * Example: POST /projects/:id/restore
+ * Example: GET /projects/:id/restore
  */
-router.post('/:id/restore', secureRoute, async (req, res) => {
+router.get('/:id/restore', secureRoute, async (req, res) => {
+	console.log('here!!!', req.params.id)
 	const project = await Project.findById(req.params.id).where({ isActive: false });
 	if (!project) {
 		return res.status(404).json({ message: 'Project not found' });

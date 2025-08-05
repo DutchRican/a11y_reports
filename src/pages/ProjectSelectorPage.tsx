@@ -7,7 +7,7 @@ import { dateToLocalDateString } from "../helpers/date";
 import { useClickOutside } from "../hooks/useClickOutside";
 
 const ProjectSelectorPage: React.FC = () => {
-	const { availableProjects, isLoadingProjects, setProjectID, projectID, isRefetchingProjects, removeProject, softDeleteProject } = useProjectContext();
+	const { availableProjects, isLoadingProjects, setProjectID, projectID, isRefetchingProjects, removeProject, softDeleteProject, restoreProject } = useProjectContext();
 	const navigate = useNavigate();
 	const isBusy = isLoadingProjects || isRefetchingProjects;
 	const [openMenuId, setOpenMenuId] = useState<string | null>(null);
@@ -27,10 +27,17 @@ const ProjectSelectorPage: React.FC = () => {
 	};
 
 	const handleDeleteProject = (projectId: string, isArchive: boolean = false) => {
+		// not admin mode, we archive only
 		if (isArchive) softDeleteProject({ projectId })
+		// admin hard delete 
 		else removeProject({ projectId, password });
 		handleMenuToggle(projectId);
 	};
+
+	const handleRestoreProject = (projectId: string) => {
+		restoreProject({ projectId, password });
+		handleMenuToggle(projectId);
+	}
 
 	const handleUpdateProject = (projectId: string) => {
 		setSelectedProject(projectId);
@@ -72,6 +79,7 @@ const ProjectSelectorPage: React.FC = () => {
 								<p className="project-info-value flex-2"><span className="project-info-title">URL:</span>{project.pageUrl}</p>
 								<p className="project-info-value flex-3 overflow-hidden truncate"><span className="project-info-title">Created Date:</span>{dateToLocalDateString(project.createdAt)}</p>
 							</div>
+							{!project.isActive && isAdminMode && <p>{`project was archived on ${dateToLocalDateString(project.deletedAt!)} `}</p>}
 						</div>
 						<div className="relative" data-test-id={`hover-menu-${project._id}`}>
 							<button
@@ -91,7 +99,7 @@ const ProjectSelectorPage: React.FC = () => {
 									data-test-id={`hover-menu-options-${project._id}`}
 								>
 									<button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => handleUpdateProject(project._id)}>Update</button>
-									<button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => handleDeleteProject(project._id, true)}>Archive</button>
+									<button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => project.isActive ? handleDeleteProject(project._id, true) : handleRestoreProject(project._id)}>{project.isActive ? 'Archive' : 'Restore'}</button>
 									{isAdminMode && <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => handleDeleteProject(project._id)}>Delete</button>}
 								</div>
 							)}
