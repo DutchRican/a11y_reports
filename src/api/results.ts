@@ -1,9 +1,20 @@
 import { toast } from "react-toastify";
 import { BASE_URL } from "../constants";
+import { dateToLocalDateString } from "../helpers/date";
 
 export const fetchScanResults = async (projectID?: string, from?: string, to?: string) => {
 	if (!projectID) {
 		throw new Error('No project selected');
+	}
+
+	const dayOffsetFetch = localStorage.getItem('earliestFetchDate');
+	if (!from && dayOffsetFetch) {
+		const days = parseInt(dayOffsetFetch, 10);
+		if (!isNaN(days)) {
+			const date = new Date();
+			date.setDate(date.getDate() - days);
+			from = dateToLocalDateString(date);
+		}
 	}
 	// build the search parameters
 	const params = new URLSearchParams({ projectId: projectID });

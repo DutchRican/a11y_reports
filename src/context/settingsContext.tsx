@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { getEarliestScanDate } from "../components/settings";
 
 type SettingsContextType = {
 	theme: string;
@@ -17,9 +18,7 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 	const [theme, setTheme] = useState<string>(localStorage.getItem("theme") || "light");
 	const [isAdminMode, setIsAdminMode] = useState<boolean>(false);
-	const [earliestFetchDate, setEarliestFetchDate] = useState<number>(
-		localStorage.getItem("earliestFetchDate") ? parseInt(localStorage.getItem("earliestFetchDate")!, 10) : 21
-	);
+	const [earliestFetchDate, setEarliestFetchDate] = useState<number>(0);
 	const [adminTimeout, setAdminTimeout] = useState<number | undefined>(undefined);
 	const [password, setPassword] = useState<string>("");
 	const isDarkMode = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
@@ -34,7 +33,9 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 		}
 	}, [isDarkMode, theme]);
 
-
+	useEffect(() => {
+		setEarliestFetchDate(getEarliestScanDate());
+	}, []);
 
 	useEffect(() => {
 		return () => {

@@ -1,17 +1,13 @@
-import { dateToLocalDateString } from "../../helpers/date";
+const defaultDays = 21;
 
 export const getEarliestScanDate = () => {
-	const earliestDate = localStorage.getItem('earliestScanDate');
-	if (earliestDate) {
-		return earliestDate;
+	const dayCount = localStorage.getItem('earliestFetchDate');
+	const parsedCount = parseInt(dayCount!, 10);
+	if (!isNaN(parsedCount)) {
+		return parsedCount;
 	}
-	// default to 21 days ago if no date is set
-	const defaultDate = new Date();
-	defaultDate.setDate(defaultDate.getDate() - 21);
-	setEarliestScanDate(defaultDate);
-	return dateToLocalDateString(defaultDate);
+	localStorage.setItem('earliestFetchDate', defaultDays.toString());
+	return defaultDays;
 }
 
-export const setEarliestScanDate = (date: Date) => {
-	localStorage.setItem('earliestScanDate', dateToLocalDateString(date));
-}
+

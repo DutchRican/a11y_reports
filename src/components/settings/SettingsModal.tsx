@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useSettings } from "../../context/settingsContext";
 
@@ -9,6 +10,7 @@ export default function SettingsModal({ onClose, isOpen }: SettingsModalProps) {
 	const { theme, setTheme, earliestFetchDate, setEarliestFetchDate, isAdminMode, enableAdminMode, disableAdminMode } = useSettings();
 	const [password, setPassword] = useState("");
 	const [showPasswordField, setShowPasswordField] = useState(false);
+	const queryClient = useQueryClient();
 
 	useEffect(() => {
 		setShowPasswordField(isAdminMode);
@@ -30,6 +32,7 @@ export default function SettingsModal({ onClose, isOpen }: SettingsModalProps) {
 		if (showPasswordField && password) {
 			enableAdminMode(password);
 		}
+		queryClient.invalidateQueries();
 		onCloseModal();
 	};
 
