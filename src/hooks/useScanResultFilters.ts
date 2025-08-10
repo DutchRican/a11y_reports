@@ -1,26 +1,28 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { DateFilter } from '../pages/OverviewPage/types';
 
 export function useScanResultFilters() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const resultNameFilter = searchParams.get('testName') || '';
-	const dateFilter = searchParams.get('date') || '';
-	const [filtersOpen, setFiltersOpen] = useState(!!resultNameFilter || !!dateFilter);
+	const dateFilter = useMemo<DateFilter>(() => {
+		const dateParam = searchParams.get('date');
+		if (!dateParam) return { from: undefined, to: undefined };
+		try {
+			return JSON.parse(dateParam);
+		} catch (e) {
+			console.error('Failed to parse date filter from URL', e);
+			return { from: undefined, to: undefined };
+		}
+	}, [searchParams]);
 
-	const handleFilterChange = useCallback((key: string, value: string) => {
+	const [filtersOpen, setFiltersOpen] = useState(!!resultNameFilter || !!dateFilter.from);
+
+	const handleFilterChange = useCallback((key: string, value: any) => {
 		setSearchParams(prev => {
 			const newParams = new URLSearchParams(prev);
-			if (key === 'date') {
-				// Ensure date is in the format 'start,end'
-				const [start, end] = value.split(' - ');
-				if (start && end) {
-					if (start === end) {
-						value = start; // If both are the same, just use one date
-					}
-				}
-			}
 			if (value) {
-				newParams.set(key, value);
+				newParams.set(key, typeof value === 'string' ? value : JSON.stringify(value));
 			} else {
 				newParams.delete(key);
 			}
@@ -28,17 +30,11 @@ export function useScanResultFilters() {
 		});
 	}, [setSearchParams]);
 
-	const filters = useMemo(() => [
-		{ name: 'testName', val: resultNameFilter },
-		{ name: 'date', val: dateFilter }
-	].filter(({ val }) => Boolean(val)), [resultNameFilter, dateFilter]);
-
 	return {
 		resultNameFilter,
 		dateFilter,
 		filtersOpen,
 		setFiltersOpen,
 		handleFilterChange,
-		filters,
 	};
 }

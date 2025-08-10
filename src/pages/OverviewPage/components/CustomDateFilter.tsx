@@ -1,31 +1,61 @@
 import { DoesFilterPassParams, FilterDisplayParams } from 'ag-grid-community';
 import { useGridFilter } from 'ag-grid-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface DateRangeModel {
 	from?: string;
 	to?: string;
 }
 
-const CustomDateFilter = ({ onModelChange, getValue, model, api }: FilterDisplayParams<DateRangeModel>) => {
-	// local state for "from" and "to"
-	const [fromDate, setFromDate] = useState(model?.from || '');
-	const [toDate, setToDate] = useState(model?.to || '');
+interface CustomDateFilterProps extends FilterDisplayParams<DateRangeModel> {
+	onFilterChanged: (key: string, value: string | DateRangeModel) => void;
+}
+
+const CustomDateFilter = (props: CustomDateFilterProps) => {
+	const { onModelChange, getValue, model, api, onFilterChanged } = props;
+	const [fromDate, setFromDate] = useState('');
+	const [toDate, setToDate] = useState('');
+
+	useEffect(() => {
+		setFromDate(model?.from || '');
+		setToDate(model?.to || '')
+	}, [model]);
 
 	const applyFilter = useCallback(() => {
+		let filterValue = {};
+		if (fromDate && toDate) {
+			if (fromDate === toDate) {
+				filterValue = { from: fromDate };
+			} else {
+				filterValue = { from: fromDate, to: toDate };
+			}
+		} else if (fromDate) {
+			filterValue = { from: fromDate };
+		} else if (toDate) {
+			filterValue = { to: toDate };
+		}
+
+		if (onFilterChanged) {
+			onFilterChanged('date', filterValue);
+		}
+
 		if (!fromDate && !toDate) {
 			onModelChange(null); // clears filter
 		} else {
 			onModelChange({ from: fromDate || undefined, to: toDate || undefined });
 		}
 		api?.hidePopupMenu();
-	}, [fromDate, toDate, onModelChange, api]);
+	}, [fromDate, toDate, onModelChange, api, onFilterChanged]);
 
 	const resetFilter = useCallback(() => {
 		setFromDate('');
 		setToDate('');
 		onModelChange(null);
-	}, [onModelChange]);
+		if (onFilterChanged) {
+			onFilterChanged('date', '');
+		}
+		api?.hidePopupMenu();
+	}, [onModelChange, onFilterChanged]);
 
 	const doesFilterPass = useCallback(
 		({ node }: DoesFilterPassParams) => {

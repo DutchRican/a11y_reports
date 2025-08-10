@@ -25,6 +25,7 @@ export const fetchScanResults = async (projectID?: string, from?: string, to?: s
 	if (to) {
 		params.append('to', to);
 	}
+
 	const response = await fetch(`${BASE_URL}/scan-results/?${params.toString()}`);
 	if (!response.ok) {
 		const text = await response.json();

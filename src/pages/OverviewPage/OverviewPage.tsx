@@ -1,18 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
-import { colorSchemeDarkBlue, GridApi, themeQuartz } from 'ag-grid-community';
+import { colorSchemeDarkBlue, GridApi, GridReadyEvent, themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { fetchScanResults } from '../../api/results';
 import TrendChart from '../../components/charts/TrendChart';
-import Chip from '../../components/chips/chip';
 import { useProjectContext } from '../../context/projectContext';
 import { useSettings } from '../../context/settingsContext';
 import { useScanResultFilters } from '../../hooks/useScanResultFilters';
 import { ScanResult } from '../../types';
 import CustomDateFilter from './components/CustomDateFilter';
 import { useProjectIdFromUrl } from './hooks/useProjectIdFromUrl';
+import { ScanResultFilter } from './types';
 
 const OverviewPage: React.FC = () => {
   const navigate = useNavigate();
@@ -20,32 +20,20 @@ const OverviewPage: React.FC = () => {
 
   const { setProjectID, projectID, currentProject } = useProjectContext();
   const {
+    resultNameFilter,
     dateFilter,
     handleFilterChange,
-    filters,
   } = useScanResultFilters();
   const { isDarkMode } = useSettings();
 
   const [filteredData, setFilteredData] = useState<ScanResult[]>([]);
-
-  const submittableFilter = useCallback((dateFilter: string) => {
-    if (!dateFilter) return {};
-    const [start, end] = dateFilter.split(' - ');
-    if (start && end) {
-      return { from: start, to: end };
-    } else if (start) {
-      return { from: start };
-    }
-    return {};
-  }, []);
-
   const {
     data: scanResults = [],
     isPending,
     error
   } = useQuery<ScanResult[], Error>({
     queryKey: ['scanResults', projectID, dateFilter],
-    queryFn: () => fetchScanResults(projectID, submittableFilter(dateFilter)?.from, submittableFilter(dateFilter)?.to),
+    queryFn: () => fetchScanResults(projectID, dateFilter.from, dateFilter.to),
   });
 
   useEffect(() => {
@@ -70,9 +58,23 @@ const OverviewPage: React.FC = () => {
     }
   }, [projectID, setProjectID, urlId]);
 
-  const onGridReady = useCallback((params: any) => {
+  const onGridReady = useCallback((params: GridReadyEvent) => {
     gridApiRef.current = params.api;
-  }, []);
+    const newModel: ScanResultFilter = { created: {}, testName: {} };
+    let shouldFilter = false;
+    if (dateFilter.from || dateFilter.to) {
+      shouldFilter = true;
+      newModel.created = { ...dateFilter };
+    }
+    if (resultNameFilter) {
+      shouldFilter = true;
+      newModel.testName = { filter: resultNameFilter, type: 'contains' };
+    }
+
+    if (shouldFilter) {
+      params.api.setFilterModel(newModel);
+    }
+  }, [dateFilter, resultNameFilter]);
 
   const onFilterChanged = useCallback(() => {
     if (!gridApiRef.current) return;
@@ -88,7 +90,14 @@ const OverviewPage: React.FC = () => {
       }
       return filtered;
     });
-  }, []);
+
+    const model = gridApiRef.current.getFilterModel();
+    const testNameInGrid = model.testName?.filter || '';
+    if (testNameInGrid !== resultNameFilter) {
+      handleFilterChange('testName', testNameInGrid);
+    }
+
+  }, [handleFilterChange, resultNameFilter]);
 
   return (
     <div className="max-w-7/8 mx-auto my-8 p-4">
@@ -109,21 +118,21 @@ const OverviewPage: React.FC = () => {
           />
         </div>
 
-        {filters.map((filter) => (
-          <Chip
-            key={filter.name}
-            label={filter.val}
-            onClick={() => { handleFilterChange(filter.name, ''); }}
-          />
-        ))}
-
         <div className='h-96'>
           <AgGridReact
             theme={isDarkMode ? themeQuartz.withPart(colorSchemeDarkBlue) : themeQuartz}
             rowData={scanResults}
             columnDefs={[
-              { headerName: 'Date', field: 'created', filter: CustomDateFilter },
-              { headerName: 'Test Name', field: 'testName', filter: 'agTextColumnFilter' },
+              { headerName: 'Date', field: 'created', filter: CustomDateFilter, filterParams: { onFilterChanged: handleFilterChange } },
+              {
+                headerName: 'Test Name', field: 'testName', filter: 'agTextColumnFilter',
+                filterParams: {
+                  buttons: ['reset', 'apply'],
+                  filterOptions: ['contains'],
+                  maxNumConditions: 1,
+                  closeOnApply: true
+                }
+              },
               { headerName: 'Critical', field: 'impactCounts.critical', cellClass: 'text-right' },
               { headerName: 'Serious', field: 'impactCounts.serious', cellClass: 'text-right' },
               { headerName: 'Moderate', field: 'impactCounts.moderate', cellClass: 'text-right' },
