@@ -1,17 +1,22 @@
+import { DateFilter } from "../../pages/OverviewPage/types";
+
 export default function Chip({
-	label,
+	item,
 	onClick,
 	className = '',
 }: {
-	label: string;
+	item: { name: string, val: string | DateFilter };
 	onClick?: () => void;
 	className?: string;
 }) {
+	const isString = typeof item.val === 'string';
+	const parsedLabel = isString ? item.val as string : JSON.stringify(item.val);
+	if (!parsedLabel || (!isString && !(item.val as DateFilter)?.to && !(item.val as DateFilter)?.from)) return null;
 	return (
 		<span
 			className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 cursor-pointer transition-colors ${className}`}
 		>
-			{label}
+			<span className="pr-2">{item.name}:</span><span>{parsedLabel}</span>
 			<button
 				type="button"
 				className="ml-2 p-0.5 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"

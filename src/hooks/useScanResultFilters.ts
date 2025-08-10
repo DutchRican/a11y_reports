@@ -18,7 +18,7 @@ export function useScanResultFilters() {
 
 	const [filtersOpen, setFiltersOpen] = useState(!!resultNameFilter || !!dateFilter.from);
 
-	const handleFilterChange = useCallback((key: string, value: any) => {
+	const handleFilterChange = useCallback((key: string, value: string | object) => {
 		setSearchParams(prev => {
 			const newParams = new URLSearchParams(prev);
 			if (value) {
@@ -30,10 +30,16 @@ export function useScanResultFilters() {
 		});
 	}, [setSearchParams]);
 
+	const filters = useMemo(() => [
+		{ name: 'testName', val: resultNameFilter },
+		{ name: 'date', val: dateFilter }
+	].filter(({ val }) => Boolean(val)), [resultNameFilter, dateFilter]);
+
 	return {
 		resultNameFilter,
 		dateFilter,
 		filtersOpen,
+		filters,
 		setFiltersOpen,
 		handleFilterChange,
 	};

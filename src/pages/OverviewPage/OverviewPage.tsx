@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { fetchScanResults } from '../../api/results';
 import TrendChart from '../../components/charts/TrendChart';
+import Chip from '../../components/chips/chip';
 import { useProjectContext } from '../../context/projectContext';
 import { useSettings } from '../../context/settingsContext';
 import { useScanResultFilters } from '../../hooks/useScanResultFilters';
@@ -23,6 +24,7 @@ const OverviewPage: React.FC = () => {
     resultNameFilter,
     dateFilter,
     handleFilterChange,
+    filters,
   } = useScanResultFilters();
   const { isDarkMode } = useSettings();
 
@@ -60,21 +62,30 @@ const OverviewPage: React.FC = () => {
 
   const onGridReady = useCallback((params: GridReadyEvent) => {
     gridApiRef.current = params.api;
-    const newModel: ScanResultFilter = { created: {}, testName: {} };
-    let shouldFilter = false;
-    if (dateFilter.from || dateFilter.to) {
-      shouldFilter = true;
-      newModel.created = { ...dateFilter };
-    }
-    if (resultNameFilter) {
-      shouldFilter = true;
-      newModel.testName = { filter: resultNameFilter, type: 'contains' };
-    }
+  }, []);
 
-    if (shouldFilter) {
-      params.api.setFilterModel(newModel);
+  useEffect(() => {
+    if (gridApiRef.current) {
+      const model: ScanResultFilter = { created: {}, testName: {} };
+      let shouldFilter = false;
+
+      if (dateFilter.from || dateFilter.to) {
+        shouldFilter = true;
+        model.created = { ...dateFilter };
+      }
+
+      if (resultNameFilter) {
+        shouldFilter = true;
+        model.testName = { filter: resultNameFilter, type: 'contains' };
+      }
+
+      if (shouldFilter) {
+        gridApiRef.current.setFilterModel(model);
+      } else {
+        gridApiRef.current.setFilterModel(null);
+      }
     }
-  }, [dateFilter, resultNameFilter]);
+  }, [dateFilter, resultNameFilter, scanResults]);
 
   const onFilterChanged = useCallback(() => {
     if (!gridApiRef.current) return;
@@ -98,7 +109,6 @@ const OverviewPage: React.FC = () => {
     }
 
   }, [handleFilterChange, resultNameFilter]);
-
   return (
     <div className="max-w-7/8 mx-auto my-8 p-4">
       {isPending ? <div>Getting project details...</div> : (
@@ -117,7 +127,7 @@ const OverviewPage: React.FC = () => {
             unfilteredCount={scanResults.length}
           />
         </div>
-
+        {filters.map((filter) => <Chip key={filter.name} item={filter} onClick={() => { handleFilterChange(filter.name, ''); }} />)}
         <div className='h-96'>
           <AgGridReact
             theme={isDarkMode ? themeQuartz.withPart(colorSchemeDarkBlue) : themeQuartz}
