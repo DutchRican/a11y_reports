@@ -39,8 +39,8 @@ const OverviewPage: React.FC = () => {
   });
 
   useEffect(() => {
-    if (scanResults) setFilteredData(scanResults);
-  }, [scanResults]);
+    if (scanResults) setFilteredData(() => scanResults.filter(res => res.testName.includes(resultNameFilter)));
+  }, [scanResults, resultNameFilter]);
 
   const handleSelectResult = (result: ScanResult) => {
     navigate(`/detailview/${projectID}/${result._id}`);
@@ -95,20 +95,13 @@ const OverviewPage: React.FC = () => {
       if (node.data) filtered.push(node.data);
     });
 
-    setFilteredData((prev) => {
-      if (prev.length === filtered.length && prev.every((item, i) => item === filtered[i])) {
-        return prev; // no change, don't trigger re-render
-      }
-      return filtered;
-    });
-
     const model = gridApiRef.current.getFilterModel();
     const testNameInGrid = model.testName?.filter || '';
     if (testNameInGrid !== resultNameFilter) {
       handleFilterChange('testName', testNameInGrid);
     }
-
   }, [handleFilterChange, resultNameFilter]);
+
   return (
     <div className="max-w-7/8 mx-auto my-8 p-4">
       {isPending ? <div>Getting project details...</div> : (

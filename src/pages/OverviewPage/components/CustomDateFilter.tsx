@@ -35,9 +35,7 @@ const CustomDateFilter = (props: CustomDateFilterProps) => {
 			filterValue = { to: toDate };
 		}
 
-		if (onFilterChanged) {
-			onFilterChanged('date', filterValue);
-		}
+		onFilterChanged?.('date', filterValue);
 
 		if (!fromDate && !toDate) {
 			onModelChange(null); // clears filter
@@ -51,11 +49,9 @@ const CustomDateFilter = (props: CustomDateFilterProps) => {
 		setFromDate('');
 		setToDate('');
 		onModelChange(null);
-		if (onFilterChanged) {
-			onFilterChanged('date', '');
-		}
+		onFilterChanged?.('date', '');
 		api?.hidePopupMenu();
-	}, [onModelChange, onFilterChanged]);
+	}, [onModelChange, onFilterChanged, api]);
 
 	const doesFilterPass = useCallback(
 		({ node }: DoesFilterPassParams) => {
@@ -112,14 +108,18 @@ const CustomDateFilter = (props: CustomDateFilterProps) => {
 					className="mt-1 w-full border-gray-300 rounded-md shadow-sm p-2 dark:bg-gray-700 dark:text-white dark:border-gray-600"
 				/>
 			</div>
-			<div className="flex gap-2 mt-2">
-				<button type="button" onClick={applyFilter} className="px-4 py-2 bg-blue-600 text-white rounded-md">
+			<div className="flex gap-2 mt-2 ag-filter-apply-panel">
+				<button
+					type="button"
+					onClick={applyFilter}
+					className="ag-standard-button ag-filter-apply-panel-button"
+				>
 					Apply
 				</button>
 				<button
 					type="button"
 					onClick={resetFilter}
-					className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-300 rounded-md"
+					className="ag-standard-button ag-filter-apply-panel-button"
 				>
 					Reset
 				</button>
