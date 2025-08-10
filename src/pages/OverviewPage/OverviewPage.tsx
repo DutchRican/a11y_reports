@@ -4,15 +4,14 @@ import { AgGridReact } from 'ag-grid-react';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { fetchScanResults } from '../api/results';
-import TrendChart from '../components/charts/TrendChart';
-import Chip from '../components/chips/chip';
-import ScanResultFilters from '../components/ScanResultFilters';
-import { useProjectContext } from '../context/projectContext';
-import { useSettings } from '../context/settingsContext';
-import { dateToLocalDateString } from '../helpers/date';
-import { useScanResultFilters } from '../hooks/useScanResultFilters';
-import { ScanResult } from '../types';
+import { fetchScanResults } from '../../api/results';
+import TrendChart from '../../components/charts/TrendChart';
+import Chip from '../../components/chips/chip';
+import ScanResultFilters from '../../components/ScanResultFilters';
+import { useProjectContext } from '../../context/projectContext';
+import { useSettings } from '../../context/settingsContext';
+import { useScanResultFilters } from '../../hooks/useScanResultFilters';
+import { ScanResult } from '../../types';
 
 const OverviewPage: React.FC = () => {
   const navigate = useNavigate();
@@ -118,7 +117,7 @@ const OverviewPage: React.FC = () => {
             theme={isDarkMode ? themeQuartz.withPart(colorSchemeDarkBlue) : themeQuartz}
             rowData={filteredResults}
             columnDefs={[
-              { headerName: 'Date', field: 'created', valueFormatter: ({ value }) => dateToLocalDateString(value) },
+              { headerName: 'Date', field: 'created' },
               { headerName: 'Test Name', field: 'testName' },
               { headerName: 'Critical', field: 'impactCounts.critical', cellClass: 'text-right' },
               { headerName: 'Serious', field: 'impactCounts.serious', cellClass: 'text-right' },

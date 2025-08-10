@@ -10,7 +10,7 @@ import { ProjectProvider } from './context/projectContext';
 import { SettingsProvider } from './context/settingsContext';
 import ADAInfoPage from './pages/ADAInfoPage';
 import DetailViewPage from './pages/DetailViewPage';
-import OverviewPage from './pages/OverviewPage';
+import OverviewPage from './pages/OverviewPage/OverviewPage';
 import ProjectSelectorPage from './pages/ProjectSelectorPage';
 
 // Register all Community features

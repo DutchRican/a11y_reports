@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { BASE_URL } from "../constants";
 import { dateToLocalDateString } from "../helpers/date";
+import { ScanResult } from "../types";
 
 export const fetchScanResults = async (projectID?: string, from?: string, to?: string) => {
 	if (!projectID) {
@@ -29,7 +30,11 @@ export const fetchScanResults = async (projectID?: string, from?: string, to?: s
 		const text = await response.json();
 		throw new Error(text?.message || "Failed to fetch scan results");
 	}
-	return response.json();
+	const shortDateMap = (await response.json()).map((result: ScanResult) => ({
+		...result,
+		created: dateToLocalDateString(result.created),
+	}))
+	return shortDateMap;
 };
 
 export const fetchScanResultById = async (id: string, projectID?: string) => {
