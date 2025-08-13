@@ -102,7 +102,6 @@ router.delete('/:id', async (req, res) => {
  * Example: GET /projects/:id/restore
  */
 router.get('/:id/restore', secureRoute, async (req, res) => {
-	console.log('here!!!', req.params.id)
 	const project = await Project.findById(req.params.id).where({ isActive: false });
 	if (!project) {
 		return res.status(404).json({ message: 'Project not found' });

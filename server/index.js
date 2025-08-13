@@ -8,6 +8,7 @@ const morgan = require('morgan');
 const compression = require('compression');
 const scanResultsRouter = require('./routes/scanResults');
 const projectsRouter = require('./routes/projects');
+const reportsRouter = require('./routes/reports');
 const { handleError } = require('./middlewares/errorHandler');
 
 dotenv.config();
@@ -34,6 +35,7 @@ mongoose.connect(mongoUri)
 // API routes
 app.use('/api/scan-results', scanResultsRouter);
 app.use('/api/projects', projectsRouter);
+app.use('/api/reports', reportsRouter);
 
 // Serve static files from frontend build in production
 if (process.env.NODE_ENV === 'production') {

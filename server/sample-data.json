@@ -13,6 +13,7 @@
         ],
         "description": "Certain ARIA roles must contain particular children",
         "help": "Some ARIA roles must contain specific child roles to perform properly",
+        "url": "https://coretest.int.appomni.com",
         "helpUrl": "https://dequeuniversity.com/rules/axe/4.6/aria-required-children",
         "nodes": [
           {
@@ -199,6 +200,392 @@
               "meta[name='viewport']"
             ]
           }
+        ]
+      }
+    ]
+  },
+  {
+    "testName": "monitored-services-card",
+    "created": "2025-07-25T10:46:02.334Z",
+    "url": "https://coretest.int.appomni.com/dashboard/home",
+    "impactCounts": {
+      "critical": 2,
+      "serious": 3,
+      "moderate": 0,
+      "minor": 2
+    },
+    "projectId": "6884fea2f5a23601459d2295",
+    "totalViolations": 7,
+    "violations": [
+      {
+        "description": "Ensure all ARIA attributes have valid values",
+        "help": "ARIA attributes must conform to valid values",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/aria-valid-attr-value?application=axeAPI",
+        "url": "https://coretest.int.appomni.com/dashboard/home",
+        "impact": "critical",
+        "nodes": [
+          {
+            "html": "<button data-v-4d02cda3=\"\" aria-hidden=\"false\" aria-label=\"Resize Sidebar\" aria-orientation=\"vertical\" aria-valuemax=\"100\" aria-valuemin=\"0\" data-grab-area=\"true\" data-testid=\"ContextualNavigation-grab-area\" role=\"slider\" type=\"button\" aria-valuenow=\"28%\" aria-valuetext=\"Width 28%\" class=\"ai-sidebar-grabber\">",
+            "target": [
+              ".ai-sidebar-grabber"
+            ],
+            "failureSummary": "Fix all of the following:\n  Invalid ARIA attribute value: aria-valuenow=\"28%\"",
+            "impact": "critical",
+            "any": [],
+            "all": [
+              {
+                "data": [
+                  "aria-valuenow=\"28%\""
+                ],
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Invalid ARIA attribute value: aria-valuenow=\"28%\""
+              }
+            ],
+            "none": []
+          }
+        ],
+        "tags": [
+          "cat.aria",
+          "wcag2a",
+          "wcag412",
+          "EN-301-549",
+          "EN-9.4.1.2"
+        ]
+      },
+      {
+        "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeAPI",
+        "url": "https://coretest.int.appomni.com/dashboard/home",
+        "impact": "serious",
+        "nodes": [
+          {
+            "html": "<span data-v-68d6bb00=\"\" class=\"filter-indicator count-badge\"> 99+ </span>",
+            "target": [
+              ".filter-indicator"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.92 (foreground color: #ffffff, background color: #ff004c, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            "impact": "serious",
+            "any": [
+              {
+                "data": {
+                  "fgColor": "#ffffff",
+                  "bgColor": "#ff004c",
+                  "contrastRatio": 3.92,
+                  "fontSize": "9.0pt (12px)",
+                  "fontWeight": "normal",
+                  "messageKey": null,
+                  "expectedContrastRatio": "4.5:1"
+                },
+                "relatedNodes": [
+                  {
+                    "html": "<span data-v-68d6bb00=\"\" class=\"filter-indicator count-badge\"> 99+ </span>",
+                    "target": [
+                      ".filter-indicator"
+                    ]
+                  }
+                ],
+                "impact": "serious",
+                "message": "Element has insufficient color contrast of 3.92 (foreground color: #ffffff, background color: #ff004c, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ],
+            "all": [],
+            "none": []
+          }
+        ],
+        "tags": [
+          "cat.color",
+          "wcag2aa",
+          "wcag143",
+          "TTv5",
+          "TT13.c",
+          "EN-301-549",
+          "EN-9.1.4.3",
+          "ACT"
+        ]
+      },
+      {
+        "description": "Ensure headings have discernible text",
+        "help": "Headings should not be empty",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/empty-heading?application=axeAPI",
+        "url": "https://coretest.int.appomni.com/dashboard/home",
+        "impact": "minor",
+        "nodes": [
+          {
+            "html": "<h4 data-v-7dd0b460=\"\">  </h4>",
+            "target": [
+              ".trend-chart[data-v-e461ff6b=\"\"]:nth-child(3) > div[data-v-e461ff6b=\"\"] > .chart.has-legend.chart--scatter > .chart__stage[data-v-7dd0b460=\"\"] > .chart__title[data-v-7dd0b460=\"\"] > h4"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+            "impact": "minor",
+            "any": [
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "minor",
+                "message": "Element does not have text that is visible to screen readers"
+              },
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "minor",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "minor",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "minor",
+                "message": "Element has no title attribute"
+              }
+            ],
+            "all": [],
+            "none": []
+          }
+        ],
+        "tags": [
+          "cat.name-role-value",
+          "best-practice"
+        ]
+      },
+      {
+        "description": "Ensure all ARIA attributes have valid values",
+        "help": "ARIA attributes must conform to valid values",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/aria-valid-attr-value?application=axeAPI",
+        "url": "https://coretest.int.appomni.com/monitored-services",
+        "impact": "critical",
+        "nodes": [
+          {
+            "html": "<button data-v-4d02cda3=\"\" aria-hidden=\"false\" aria-label=\"Resize Sidebar\" aria-orientation=\"vertical\" aria-valuemax=\"100\" aria-valuemin=\"0\" data-grab-area=\"true\" data-testid=\"ContextualNavigation-grab-area\" role=\"slider\" type=\"button\" aria-valuenow=\"28%\" aria-valuetext=\"Width 28%\" class=\"ai-sidebar-grabber\">",
+            "target": [
+              ".ai-sidebar-grabber"
+            ],
+            "failureSummary": "Fix all of the following:\n  Invalid ARIA attribute value: aria-valuenow=\"28%\"",
+            "impact": "critical",
+            "any": [],
+            "all": [
+              {
+                "data": [
+                  "aria-valuenow=\"28%\""
+                ],
+                "relatedNodes": [],
+                "impact": "critical",
+                "message": "Invalid ARIA attribute value: aria-valuenow=\"28%\""
+              }
+            ],
+            "none": []
+          }
+        ],
+        "tags": [
+          "cat.aria",
+          "wcag2a",
+          "wcag412",
+          "EN-301-549",
+          "EN-9.4.1.2"
+        ]
+      },
+      {
+        "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeAPI",
+        "url": "https://coretest.int.appomni.com/monitored-services",
+        "impact": "serious",
+        "nodes": [
+          {
+            "html": "<span data-v-68d6bb00=\"\" class=\"filter-indicator count-badge\"> 99+ </span>",
+            "target": [
+              ".filter-indicator"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.92 (foreground color: #ffffff, background color: #ff004c, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            "impact": "serious",
+            "any": [
+              {
+                "data": {
+                  "fgColor": "#ffffff",
+                  "bgColor": "#ff004c",
+                  "contrastRatio": 3.92,
+                  "fontSize": "9.0pt (12px)",
+                  "fontWeight": "normal",
+                  "messageKey": null,
+                  "expectedContrastRatio": "4.5:1"
+                },
+                "relatedNodes": [
+                  {
+                    "html": "<span data-v-68d6bb00=\"\" class=\"filter-indicator count-badge\"> 99+ </span>",
+                    "target": [
+                      ".filter-indicator"
+                    ]
+                  }
+                ],
+                "impact": "serious",
+                "message": "Element has insufficient color contrast of 3.92 (foreground color: #ffffff, background color: #ff004c, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ],
+            "all": [],
+            "none": []
+          }
+        ],
+        "tags": [
+          "cat.color",
+          "wcag2aa",
+          "wcag143",
+          "TTv5",
+          "TT13.c",
+          "EN-301-549",
+          "EN-9.1.4.3",
+          "ACT"
+        ]
+      },
+      {
+        "description": "Ensure table headers have discernible text",
+        "help": "Table header text should not be empty",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/empty-table-header?application=axeAPI",
+        "url": "https://coretest.int.appomni.com/monitored-services",
+        "impact": "minor",
+        "nodes": [
+          {
+            "html": "<th data-m=\"item.alert\" scope=\"row\" class=\"datatable__table-cell datatable__table-cell--string datatable__table-cell--center\"><span class=\"datatable__td-alert\"><!----></span></th>",
+            "target": [
+              ".datatable__table-row:nth-child(25) > th[data-m=\"item.alert\"][scope=\"row\"]"
+            ],
+            "failureSummary": "Fix any of the following:\n  Element does not have text that is visible to screen readers",
+            "impact": "minor",
+            "any": [
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "minor",
+                "message": "Element does not have text that is visible to screen readers"
+              }
+            ],
+            "all": [],
+            "none": []
+          }
+        ],
+        "tags": [
+          "cat.name-role-value",
+          "best-practice"
+        ]
+      },
+      {
+        "description": "Ensure links have discernible text",
+        "help": "Links must have discernible text",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.10/link-name?application=axeAPI",
+        "url": "https://coretest.int.appomni.com/monitored-services",
+        "impact": "serious",
+        "nodes": [
+          {
+            "html": "<a data-v-c461d14a=\"\" href=\"/monitored-services/o365/79752\" class=\"celldata-title celldata-title-link\" data-component-name=\"CellMonitoredService__RouterLink\" data-tag=\"RouterLink\"><!----></a>",
+            "target": [
+              "a[href=\"/monitored-services/o365/79752\"]"
+            ],
+            "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+            "impact": "serious",
+            "any": [
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "serious",
+                "message": "Element does not have text that is visible to screen readers"
+              },
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "serious",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "serious",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "serious",
+                "message": "Element has no title attribute"
+              }
+            ],
+            "all": [],
+            "none": [
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "serious",
+                "message": "Element is in tab order and does not have accessible text"
+              }
+            ]
+          },
+          {
+            "html": "<a data-v-c461d14a=\"\" href=\"/monitored-services/o365/79755\" class=\"celldata-title celldata-title-link\" data-component-name=\"CellMonitoredService__RouterLink\" data-tag=\"RouterLink\"><!----></a>",
+            "target": [
+              "a[href=\"/monitored-services/o365/79755\"]"
+            ],
+            "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+            "impact": "serious",
+            "any": [
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "serious",
+                "message": "Element does not have text that is visible to screen readers"
+              },
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "serious",
+                "message": "aria-label attribute does not exist or is empty"
+              },
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "serious",
+                "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+              },
+              {
+                "data": {
+                  "messageKey": "noAttr"
+                },
+                "relatedNodes": [],
+                "impact": "serious",
+                "message": "Element has no title attribute"
+              }
+            ],
+            "all": [],
+            "none": [
+              {
+                "data": null,
+                "relatedNodes": [],
+                "impact": "serious",
+                "message": "Element is in tab order and does not have accessible text"
+              }
+            ]
+          }
+        ],
+        "tags": [
+          "cat.name-role-value",
+          "wcag2a",
+          "wcag244",
+          "wcag412",
+          "section508",
+          "section508.22.a",
+          "TTv5",
+          "TT6.a",
+          "EN-301-549",
+          "EN-9.2.4.4",
+          "EN-9.4.1.2",
+          "ACT"
         ]
       }
     ]
