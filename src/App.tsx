@@ -12,6 +12,7 @@ import ADAInfoPage from './pages/ADAInfoPage';
 import DetailViewPage from './pages/DetailViewPage';
 import OverviewPage from './pages/OverviewPage/OverviewPage';
 import ProjectSelectorPage from './pages/ProjectSelectorPage';
+import ReportsPage from './pages/ReportsPage';
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -39,6 +40,7 @@ function AppContent() {
               <OverviewPage />
             } />
             <Route path="/detailview/:projectID/:id" element={<DetailViewPage />} />
+            <Route path="/project/:id/reports" element={<ReportsPage />} />
             <Route path="/ada-info" element={<ADAInfoPage />} />
           </Routes>
         </main>

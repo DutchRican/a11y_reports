@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchScanResultById } from '../api/results';
 import ImpactChart from '../components/charts/ImpactChart';
@@ -10,13 +10,19 @@ import { ScanResult } from '../types';
 const DetailViewPage: React.FC = () => {
   const { id, projectID: projectIDParam } = useParams<{ id: string, projectID: string }>();
   const navigate = useNavigate();
-  const { projectID } = useProjectContext();
+  const { projectID, setProjectID } = useProjectContext();
   const projectIDToUse = projectIDParam || projectID;
   const { data: result, isLoading: isLoadingResult, error: errorResult } = useQuery<ScanResult, Error>({
     queryKey: ['scanResult', id],
     queryFn: () => fetchScanResultById(id!, projectIDToUse),
-    enabled: !!id,
+    enabled: !!id && !!projectIDToUse,
   });
+
+  useEffect(() => {
+    if (projectIDParam && !projectID) {
+      setProjectID(projectIDParam);
+    }
+  }, [projectID, setProjectID, projectIDParam]);
 
   if (isLoadingResult) {
     return <div className="text-center text-gray-600 dark:text-gray-300">Loading...</div>;
@@ -33,7 +39,7 @@ const DetailViewPage: React.FC = () => {
   return (
     <>
       <div className="px-2 sticky top-35">
-        <button onClick={() => navigate(-1)} title="Back to Overview" className="p-2">
+        <button onClick={() => navigate(`/project/${projectIDToUse}`)} title="Back to Overview" className="p-2">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>

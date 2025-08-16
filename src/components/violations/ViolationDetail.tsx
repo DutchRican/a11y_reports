@@ -1,4 +1,5 @@
 import React from 'react';
+import { impactColors } from '.';
 import { A11yViolation } from '../../types';
 
 interface ViolationDetailProps {
@@ -6,19 +7,12 @@ interface ViolationDetailProps {
 }
 
 const ViolationDetail: React.FC<ViolationDetailProps> = ({ violation }) => {
-  const impactColors: Record<string, string> = {
-    critical: 'text-red-600',
-    serious: 'text-orange-600',
-    moderate: 'text-yellow-600',
-    minor: 'text-blue-600',
-  };
-
   return (
     <div className="mb-4 p-4 bg-white dark:bg-gray-800 shadow-md rounded-lg">
       <p className={`text-lg font-semibold ${impactColors[violation.impact]}`}>
         Impact: {violation.impact}
       </p>
-      <p className="text-gray-800 mb-2">{violation.description}</p>
+      <p className="text-gray-800 dark:text-gray-200 mb-2">{violation.description}</p>
       <p className="text-gray-600 dark:text-gray-300 text-sm mb-2">
         {violation.help}
       </p>

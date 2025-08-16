@@ -62,5 +62,5 @@ export const uploadScanResults = async (formData: FormData, projectID?: string) 
 		const text = await response.text();
 		throw JSON.parse(text).message || 'Failed to upload scan results';
 	}
-	return await response.json();
+	return response.json();
 };

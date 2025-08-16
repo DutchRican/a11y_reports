@@ -14,7 +14,8 @@ const impactLevels = {
  * Get the top 5 violations for a project.
  * @param {string} projectId - The ID of the project.
  * @param {string} impact - The minimum impact level to consider.
- * @returns {Array} - A list of the top 5 violations.
+ * @param {limit} limit - Count of violations to return. default is 5
+ * @returns {Array} - A list of the top x violations.
  */
 router.get('/results-with-issues', projectCheck, async (req, res) => {
   try {
@@ -70,6 +71,7 @@ router.get('/results-with-issues', projectCheck, async (req, res) => {
       {
         $project: {
           _id: 0,
+          description: '$_id.description',
           help: '$_id.help',
           impact: '$_id.impact',
           count: 1,
@@ -79,11 +81,9 @@ router.get('/results-with-issues', projectCheck, async (req, res) => {
     ];
 
     const sortedViolations = await ScanResult.aggregate(aggregation);
-
     res.json(sortedViolations);
   } catch (error) {
-    console.error('Error fetching results with issues:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: error.message });
   }
 });
 

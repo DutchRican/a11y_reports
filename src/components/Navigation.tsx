@@ -19,9 +19,14 @@ export default function Navigation({ onUploadClick, onProjectCreationClick }: Na
           Home
         </Link>
         {projectID ? (
-          <Link to={`/project/${projectID}`} aria-disabled={!projectID} className={`px-3 py-2 rounded-md text-sm font-medium ${isActive(`/project/${projectID}`) ? 'bg-indigo-700 dark:bg-gray-700' : 'hover:bg-indigo-700 dark:hover:bg-gray-700'}`}>
-            Overview
-          </Link>
+          <>
+            <Link to={`/project/${projectID}`} aria-disabled={!projectID} className={`px-3 py-2 rounded-md text-sm font-medium ${isActive(`/project/${projectID}`) ? 'bg-indigo-700 dark:bg-gray-700' : 'hover:bg-indigo-700 dark:hover:bg-gray-700'}`}>
+              Overview
+            </Link>
+            <Link to={`project/${projectID}/reports`} aria-disabled={!projectID} className={`px-3 py-2 rounded-md text-sm font-medium ${isActive(`/project/${projectID}/reports`) ? 'bg-indigo-700 dark:bg-gray-700' : 'hover:bg-indigo-700 dark:hover:bg-gray-700'}`}>
+              Reports
+            </Link>
+          </>
         ) : (
           <span className={`px-3 py-2 rounded-md text-sm font-medium text-gray-400`}>
             Overview

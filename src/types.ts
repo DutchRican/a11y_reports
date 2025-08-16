@@ -5,9 +5,11 @@ export interface subNode {
   impact: string,
   message: string,
 }
+
+type impact = 'critical' | 'serious' | 'moderate' | 'minor';
 export interface A11yViolation {
   _id: string;
-  impact: 'critical' | 'serious' | 'moderate' | 'minor';
+  impact: impact;
   description: string;
   help: string;
   helpUrl: string;
@@ -47,4 +49,11 @@ export interface Project {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
+}
+
+export interface ViolationReport {
+  count: number;
+  url: string;
+  help: string;
+  impact: impact;
 }
