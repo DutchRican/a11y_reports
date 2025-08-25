@@ -22,19 +22,26 @@ const ReportsPage: React.FC = () => {
 	if (!projectIDToUse) { return null; }
 	return (
 		<div>
-			<div className="border-b border-gray-300 mb-4"></div>
-			<div className="flex space-x-2 mb-4">
+			<div className="flex space-x-2 border-b border-gray-300 mb-4">
 				<button
-					className={`px-4 py-2 rounded-t focus:outline-none ${tab === '1' ? 'bg-gray-100 text-gray-800' : 'bg-gray-200 text-gray-500'}`}
+					className={`px-4 py-2 rounded-t font-semibold transition-colors duration-200 focus:outline-none border-b-2
+						${tab === '1'
+							? 'bg-white dark:bg-gray-900 text-blue-600 dark:text-blue-400 border-blue-500 dark:border-blue-400 shadow'
+							: 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-transparent'}
+					`}
 					onClick={() => setSearchParams({ tab: '1' })}
 				>
-					Top Violations
+					Violations by Count
 				</button>
 				<button
-					className={`px-4 py-2 rounded-t focus:outline-none ${tab === '2' ? 'bg-gray-100 text-gray-800' : 'bg-gray-200 text-gray-500'}`}
+					className={`px-4 py-2 rounded-t font-semibold transition-colors duration-200 focus:outline-none border-b-2
+						${tab === '2'
+							? 'bg-white dark:bg-gray-900 text-blue-600 dark:text-blue-400 border-blue-500 dark:border-blue-400 shadow'
+							: 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-transparent'}
+					`}
 					onClick={() => setSearchParams({ tab: '2' })}
 				>
-					Violations by URL
+					URLs with most Violations
 				</button>
 			</div>
 			<div>
