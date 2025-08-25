@@ -106,33 +106,48 @@ router.get('/urls-with-issues', projectCheck, async (req, res) => {
       ? new Date(req.query.from)
       : new Date(Date.now() - THIRTYDAYS);
 
-    // Helper to collapse IDs or hashes in URLs
-    function collapseUrl(url) {
-      // Replace segments that look like IDs or hashes (numbers or hex strings) with :id
-      return url.replace(/\/([a-fA-F0-9]{6,}|\d+)(\b|(?=\/))/g, '/:id');
-    }
+    // Aggregation pipeline to group, count, and sort URLs with issues
+    const aggregation = [
+      { $match: { projectId, created: { $gte: fromDate } } },
+      {
+        $project: {
+          url: 1,
+          violationsCount: { $size: { $ifNull: ["$violations", []] } }
+        }
+      },
+      {
+        $addFields: {
+          collapsedUrl: {
+            $function: {
+              body: function (url) {
+                // Replace segments that look like IDs or hashes (numbers or hex strings) with :id
+                return url.replace(/\/([a-fA-F0-9]{6,}|\d+)(\b|(?=\/))/g, '/:id');
+              },
+              args: ["$url"],
+              lang: "js"
+            }
+          }
+        }
+      },
+      {
+        $group: {
+          _id: "$collapsedUrl",
+          count: { $sum: "$violationsCount" }
+        }
+      },
+      { $sort: { count: -1 } },
+      { $limit: limit },
+      {
+        $project: {
+          _id: 0,
+          url: "$_id",
+          count: 1
+        }
+      }
+    ];
 
-    // Get scan results for project in date range
-    const scanResults = await ScanResult.find({
-      projectId,
-      created: { $gte: fromDate },
-    }).lean();
-
-    // Count issues per collapsed URL
-    const urlCounts = {};
-    scanResults.forEach(result => {
-      const collapsedUrl = collapseUrl(result.url);
-      const count = Array.isArray(result.violations) ? result.violations.length : 0;
-      urlCounts[collapsedUrl] = urlCounts[collapsedUrl] ? urlCounts[collapsedUrl] + count : count;
-    });
-
-    // Sort and limit
-    const sorted = Object.entries(urlCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, limit)
-      .map(([url, count]) => ({ url, count }));
-
-    res.json(sorted);
+    const results = await ScanResult.aggregate(aggregation);
+    res.json(results);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
