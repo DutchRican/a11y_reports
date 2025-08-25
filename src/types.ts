@@ -51,7 +51,7 @@ export interface Project {
   deletedAt?: string;
 }
 
-export interface ViolationReport {
+export interface IViolationReport {
   count: number;
   url: string;
   help: string;

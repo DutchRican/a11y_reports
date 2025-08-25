@@ -1,8 +1,8 @@
 import { impactColors } from ".";
-import { ViolationReport } from "../../types";
+import { IViolationReport } from "../../types";
 
 interface ViolationReportProps {
-	report: ViolationReport;
+	report: IViolationReport;
 }
 
 const ViolationReportDetail: React.FC<ViolationReportProps> = ({ report }) => {

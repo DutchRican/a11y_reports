@@ -1,22 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { getResultWithIssuesReport } from "../api/reports";
-import ViolationReportDetail from "../components/violations/ViolationReportDetail";
+import { useEffect } from "react";
+import ViolationImpactReport from "../components/reports/ViolationImpactReport";
+import ViolationURLReport from "../components/reports/ViolationsURLReport";
 import { useProjectContext } from "../context/projectContext";
-import { ViolationReport } from "../types";
 import { useProjectIdFromUrl } from "./OverviewPage/hooks/useProjectIdFromUrl";
 
+import { useSearchParams } from "react-router-dom";
+
 const ReportsPage: React.FC = () => {
+	const [searchParams, setSearchParams] = useSearchParams();
 	const urlId = useProjectIdFromUrl();
 	const { projectID, setProjectID } = useProjectContext();
 	const projectIDToUse = projectID || urlId;
-	const [limit, setLimit] = useState(5);
-	const [impact, setImpact] = useState('serious');
-	const { data, isLoading, error } = useQuery<ViolationReport[], Error>({
-		queryKey: ['violations', limit, projectIDToUse, impact],
-		queryFn: () => getResultWithIssuesReport({ projectID: projectIDToUse!, limit, impact }),
-		enabled: !!projectIDToUse,
-	});
+	const tab = searchParams.get("tab") || "1";
 
 	useEffect(() => {
 		if (urlId && !projectID) {
@@ -24,48 +19,33 @@ const ReportsPage: React.FC = () => {
 		}
 	}, [projectID, setProjectID, urlId]);
 
-	if (isLoading) {
-		return <div className="text-center text-gray-600 dark:text-gray-300">Loading...</div>;
-	}
-
-	if (error) {
-		return <div className="text-center text-red-600 dark:text-red-400">Error loading scan result.</div>;
-	}
-
-	if (!data) {
-		return <div className="text-center text-gray-600 dark:text-gray-300">No result found.</div>;
-	}
+	if (!projectIDToUse) { return null; }
 	return (
-		<div className="max-w-7/8 mx-auto my-8 p-4">
-			<h1 className="text-3xl font-bold mb-2">
-				{`Top ${limit} Violation`}
-			</h1>
-			<div>
-				<div className="mb-4">
-					<label htmlFor="limit-selector" className="block mb-2 text-gray-700 dark:text-gray-300">limit</label>
-					<select id="limit-selector" value={limit} onChange={(e) => setLimit(parseInt(e.target.value, 10))} className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600">
-						<option value="5">5</option>
-						<option value="10">10</option>
-						<option value="15">15</option>
-					</select>
-				</div>
-				<div className="mb-4">
-					<label htmlFor="impact-selector" className="block mb-2 text-gray-700 dark:text-gray-300">limit</label>
-					<select id="impact-selector" value={impact} onChange={(e) => setImpact(e.target.value)} className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600">
-						<option value="critical">Critical</option>
-						<option value="serious">Serious</option>
-						<option value="moderate">Moderate</option>
-						<option value="minor">Minor</option>
-					</select>
-				</div>
+		<div>
+			<div className="border-b border-gray-300 mb-4"></div>
+			<div className="flex space-x-2 mb-4">
+				<button
+					className={`px-4 py-2 rounded-t focus:outline-none ${tab === '1' ? 'bg-gray-100 text-gray-800' : 'bg-gray-200 text-gray-500'}`}
+					onClick={() => setSearchParams({ tab: '1' })}
+				>
+					Top Violations
+				</button>
+				<button
+					className={`px-4 py-2 rounded-t focus:outline-none ${tab === '2' ? 'bg-gray-100 text-gray-800' : 'bg-gray-200 text-gray-500'}`}
+					onClick={() => setSearchParams({ tab: '2' })}
+				>
+					Violations by URL
+				</button>
 			</div>
-			<div className="col-span-full">
-				{data?.map((violation) => (
-					<ViolationReportDetail key={violation.help} report={violation} />
-				))}
+			<div>
+				{tab === '1' ? (
+					<ViolationImpactReport projectID={projectIDToUse} />
+				) : (
+					<ViolationURLReport projectID={projectIDToUse} />
+				)}
 			</div>
 		</div>
-	);
+	)
 }
 
 export default ReportsPage;
