@@ -8,9 +8,7 @@ A React application for visualizing accessibility scan results from Cypress-axe,
 ├── server/                  # Backend API
 │   ├── models/              # Mongoose schemas
 │   ├── routes/              # Express route handlers
-│   ├── controllers/         # API logic
-│   ├── middleware/          # Express middleware
-│   ├── utils/               # Utility functions
+│   ├── middlewares/         # Express middleware
 │   ├── seed.js              # Database seeding script
 │   ├── index.js             # Express server entry point
 │   └── .env.example         # Environment variable template
@@ -24,7 +22,7 @@ A React application for visualizing accessibility scan results from Cypress-axe,
 │   │   ├── DetailViewPage.tsx
 │   │   └── OverviewPage.tsx
 │   ├── api/                 # API request logic
-│   ├── types/               # Shared type definitions
+│   ├── types.ts             # Shared type definitions
 │   ├── App.tsx              # Main application component
 │   └── main.tsx             # React entry point
 ├── public/                  # Static assets
@@ -78,40 +76,65 @@ A React application for visualizing accessibility scan results from Cypress-axe,
 
 2. The application will be available at: http://localhost:3001
 
-## Usage
-### Scan-results Endpoints
+## API Endpoints
 
-- **GET** `/api/scan-results`  
-  Retrieve all accessibility scan results.
+### Projects API (`/api/projects`)
 
-- **GET** `/api/scan-results/:id`  
-  Retrieve a specific scan result by its ID.
-
-- **POST** `/api/scan-results`  
-  Create a new scan result (expects JSON payload).
-
-- **POST** `/api/scan-results/upload`  
-  Upload a single scan result file (multipart/form-data).
-
-- **POST** `/api/scan-results/upload-multiple`  
-  Upload multiple scan result files (multipart/form-data).
-
-### Project Endpoints
-
-- **GET** `/api/projects`  
+- **GET** `/`  
   Retrieve all projects.
+  - `?includeArchived=true` - Include archived projects in the response.
 
-- **GET** `/api/projects/:id`  
-  Retrieve a specific project by its ID.
+- **POST** `/`  
+  Create a new project.
 
-- **POST** `/api/projects`  
-  Create a new project (expects JSON payload).
-
-- **PUT** `/api/projects/:id`  
+- **PUT** `/:id`  
   Update an existing project by its ID.
 
-- **DELETE** `/api/projects/:id`  
-  Delete a project by its ID.
+- **DELETE** `/:id`  
+  Soft delete (archive) a project by its ID.
+
+- **GET** `/:id/restore`  
+  Restore a soft-deleted project by its ID.
+
+- **DELETE** `/:id/hard-delete`  
+  Permanently delete a project and all its associated scan results. Requires special authentication.
+
+### Scan Results API (`/api/scan-results`)
+
+- **GET** `/`  
+  Retrieve all accessibility scan results, with optional filtering.
+  - `?projectId=<project_id>` - Filter by project ID.
+  - `?dateRange=<start_date>,<end_date>` - Filter by a date range.
+  - `?url=<url>` - Filter by URL.
+  - `?tags=<tag1>,<tag2>` - Filter by tags.
+
+- **GET** `/:id`  
+  Retrieve a specific scan result by its ID.
+
+- **POST** `/upload`  
+  Upload a single scan result file (multipart/form-data).
+
+- **POST** `/upload-multiple`  
+  Upload multiple scan result files (multipart/form-data).
+
+- **GET** `/urls`  
+  Get all unique URLs from scan results for a specific project.
+  - `?projectId=<project_id>` - Required.
+
+- **GET** `/tags`  
+  Get all unique tags from scan results for a specific project.
+  - `?projectId=<project_id>` - Required.
+
+### Reports API (`/api/reports`)
+
+- **GET** `/violations/impact`  
+  Get a report of violations grouped by their impact (e.g., "critical", "serious").
+  - `?projectId=<project_id>` - Required.
+
+- **GET** `/violations/url`  
+  Get a report of violations grouped by URL.
+  - `?projectId=<project_id>` - Required.
+
 
 ## Data Format
 

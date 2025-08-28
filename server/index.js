@@ -11,7 +11,11 @@ const projectsRouter = require('./routes/projects');
 const reportsRouter = require('./routes/reports');
 const { handleError } = require('./middlewares/errorHandler');
 
-dotenv.config();
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (!isProduction) {
+  dotenv.config();
+}
 
 const app = express();
 
@@ -21,8 +25,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan('tiny'));
 
-const port = process.env.PORT || 3001;
-const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/a11y_reports';
+const port = process.env.PORT;
+const mongoUri = process.env.MONGODB_URI;
+
+if (!port || !mongoUri) {
+  console.error('Missing required environment variables');
+  process.exit(1);
+}
 
 mongoose.connect(mongoUri)
   .then(() => console.log('Connected to MongoDB'))
