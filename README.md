@@ -65,8 +65,8 @@ A React application for visualizing accessibility scan results from Cypress-axe,
    npm run dev
    ```
 
-4. The backend API will be available at `http://localhost:3001`
-5. The frontend application will be available at `http://localhost:5173`
+4. The backend API will be available at `http://localhost:8080`
+5. The frontend application will be available at `http://localhost:8088`
 
 ### Docker Setup
 1. Build and run the containers:
@@ -74,7 +74,7 @@ A React application for visualizing accessibility scan results from Cypress-axe,
    docker-compose up --build
    ```
 
-2. The application will be available at: http://localhost:3001
+2. The application will be available at: http://localhost:8080
 
 ## API Endpoints
 
@@ -177,22 +177,22 @@ This may also be an array of items.
 
 Fetch all reports for a specific project:  
 ```bash
-curl "http://localhost:3001/api/scan-results?projectId=YOUR_PROJECT_ID"
+curl "http://localhost:8080/api/scan-results?projectId=YOUR_PROJECT_ID"
 ```
 
 Fetch report by ID for a specific project:  
 ```bash
-curl "http://localhost:3001/api/scan-results/686ae14be3e44e6712e3f4ec?projectId=YOUR_PROJECT_ID"
+curl "http://localhost:8080/api/scan-results/686ae14be3e44e6712e3f4ec?projectId=YOUR_PROJECT_ID"
 ```
 
 Upload a file for a specific project:
 ```bash
-curl "http://localhost:3001/api/scan-results/upload?projectId=YOUR_PROJECT_ID" -F "file=@/public/sample-data_copy.json"
+curl "http://localhost:8080/api/scan-results/upload?projectId=YOUR_PROJECT_ID" -F "file=@/public/sample-data_copy.json"
 ```
 
 Upload multiple files for a specific project:
 ```bash
-curl "http://localhost:3001/api/scan-results/upload-multiple?projectId=YOUR_PROJECT_ID" \
+curl "http://localhost:8080/api/scan-results/upload-multiple?projectId=YOUR_PROJECT_ID" \
   -F "files=@/location/test-result.json" \
   -F "files=@sample-data_copy.json"
 ```

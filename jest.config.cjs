@@ -13,7 +13,7 @@ module.exports = {
           before: [
             {
               path: 'ts-jest-mock-import-meta',
-              options: { metaObjectReplacement: { env: { VITE_API_BASE_URL: 'http://localhost:3001/api' } } },
+              options: { metaObjectReplacement: { env: { VITE_API_BASE_URL: 'http://localhost:8080/api' } } },
             },
           ],
         },

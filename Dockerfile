@@ -24,10 +24,14 @@ COPY --from=frontend-builder /app/dist ./dist
 COPY --from=backend-builder /app/server ./
 
 # Copy required files
-COPY server/.env ./server/.env
+COPY .env ./.env
+
+ARG VITE_PORT=8088
+ARG PORT=8080
+ARG MONGO_PORT=27017
 
 # Expose ports
-EXPOSE 5173 3001 27017
+EXPOSE ${VITE_PORT} ${PORT} ${MONGO_PORT}
 
 # Start application
 CMD ["npm", "run", "start"]
