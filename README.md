@@ -1,6 +1,38 @@
 # Accessibility Reports Dashboard
 
 A React application for visualizing accessibility scan results from Cypress-axe, with a MongoDB backend for data persistence.
+Any results can be handled really as long as the structure is what is expected.
+The basic structure is as follows: 
+
+Example JSON structure for a single scan result (skeleton based on the provided file):
+
+```json
+{
+  "testName": "string",
+  "url": "https://example.com/page",
+  "created": "2025-07-25T19:14:33.428Z",
+  "violations": [
+    {
+      "id": "violation-id",
+      "impact": "critical|serious|minor",
+      "tags": ["cat.color", "wcag2aa", "..."],
+      "description": "Short description of the issue",
+      "help": "Brief help text",
+      "helpUrl": "https://dequeuniversity.com/...",
+      "nodes": [
+        {
+          "impact": "critical|serious|minor",
+          "html": "<element ...>",
+          "target": [".css-selector", "xpath"],
+          "failureSummary": "Failure summary or message"
+        }
+      ],
+      "url": "https://example.com/page"
+    }
+  ]
+}
+```
+Uploads to the server can be done as single files from the UI, or as JSON ( array and single ), file, or tar using the API directly.
 
 ## Project Structure
 
@@ -116,6 +148,9 @@ A React application for visualizing accessibility scan results from Cypress-axe,
 
 - **POST** `/upload-multiple`  
   Upload multiple scan result files (multipart/form-data).
+
+- **POST** `/upload-tar`
+  Upload a tar result file ( multipart/form-data). 
 
 - **GET** `/urls`  
   Get all unique URLs from scan results for a specific project.

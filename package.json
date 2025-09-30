@@ -5,6 +5,15 @@
   "author": "Paul van Woensel",
   "license": "MIT",
   "version": "0.0.1",
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "reports",
+    "react",
+    "typescript",
+    "vite",
+    "tailwindcss"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",
