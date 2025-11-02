@@ -11,7 +11,7 @@ function LayOut() {
 	const [createProjectModalOpen, setCreateProjectModalOpen] = useState(false);
 	return (
 		<>
-			<ToastContainer />
+			<ToastContainer position="bottom-right" />
 			<Navigation
 				onUploadClick={
 					() => setUploadModalOpen(true)
