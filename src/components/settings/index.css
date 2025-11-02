@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+.settings-modal {
+	@apply fixed inset-0 z-50 flex items-center justify-center bg-gray-500/75;
+
+	.settings-label {
+		@apply block mb-2 text-gray-700 dark:text-gray-300;
+	}
+
+	.settings-cancel {
+		@apply mr-2 px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-300 rounded-md;
+	}
+
+	.settings-save {
+		@apply px-4 py-2 bg-blue-600 text-white rounded-md;
+	}
+}
+
+.settings-grouping {
+	@apply bg-white dark:bg-gray-800 p-4 rounded shadow-md w-full max-w-md;
+}

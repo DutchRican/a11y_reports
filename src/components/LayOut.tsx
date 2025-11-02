@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import Navigation from "./Navigation";
+import Navigation from "./navigation/Navigation";
 import ProjectCreationModal from "./ProjectCreationModal";
 import SettingsTrigger from "./SettingsTrigger";
 import UploadScanModal from "./UploadScanModal";

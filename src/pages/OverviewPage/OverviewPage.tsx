@@ -43,7 +43,7 @@ const OverviewPage: React.FC = () => {
   }, [scanResults, resultNameFilter]);
 
   const handleSelectResult = (result: ScanResult) => {
-    navigate(`/detailview/${projectID}/${result._id}`);
+    navigate(`/detailview/${projectID}/${result._id}`, { viewTransition: true });
   };
 
   const urlId = useProjectIdFromUrl();

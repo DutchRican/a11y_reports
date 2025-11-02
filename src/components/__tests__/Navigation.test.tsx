@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { ProjectProvider } from '../../context/projectContext';
 import { SettingsProvider } from '../../context/settingsContext';
-import Navigation from '../Navigation';
+import Navigation from '../navigation/Navigation';
 
 describe('Navigation', () => {
   const queryClient = new QueryClient();
