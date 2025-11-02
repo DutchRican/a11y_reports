@@ -3,7 +3,7 @@
 exports[`ProjectSelectorPage matches snapshot for a typical project list 1`] = `
 <div>
   <div
-    class="max-w-7/8 mx-auto mt-10 p-6 bg-white dark:bg-gray-800 dark:text-white rounded-lg shadow"
+    class="projector-page"
   >
     <h1
       class="text-center text-2xl font-semibold mb-6"
