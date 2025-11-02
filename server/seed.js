@@ -52,6 +52,27 @@ async function seedDatabase(clearOnly = false) {
   }
 }
 
+async function updateScanResultsCreatedDates() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('Connected to MongoDB for updating createdAt dates');
+    // randomDate from 30 to 1 days ago
+    const scanResults = await ScanResult.find({});
+    for (const result of scanResults) {
+      const randomDate = new Date(Date.now() - Math.floor(Math.random() * 15 + 1) * 24 * 60 * 60 * 1000);
+      result.created = randomDate;
+      await result.save();
+    }
+    console.log('Updated createdAt dates for scan results');
+  } catch (error) {
+    console.error('Error updating createdAt dates:', error);
+  } finally {
+    await mongoose.disconnect();
+    console.log('Database connection closed after updating dates');
+  }
+}
+
+// updateScanResultsCreatedDates();
 // You can now call it with true to only clear the database
 const clearOnly = process.argv.includes('--clear-only');
 seedDatabase(clearOnly);
