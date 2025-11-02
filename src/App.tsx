@@ -1,25 +1,27 @@
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import LayOut from './components/LayOut';
+import { lazy, Suspense } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import LoadingSpinner from './components/LoadingSpinner';
 import { ProjectProvider } from './context/projectContext';
 import { SettingsProvider } from './context/settingsContext';
 import ADAInfoPage from './pages/ADAInfoPage';
-import DetailViewPage from './pages/DetailViewPage';
-import OverviewPage from './pages/OverviewPage/OverviewPage';
-import ProjectSelectorPage from './pages/ProjectSelectorPage';
-import ReportsPage from './pages/ReportsPage';
+const LayOut = lazy(() => import('./components/LayOut'));
+const DetailViewPage = lazy(() => import('./pages/DetailViewPage'));
+const ReportsPage = lazy(() => import('./pages/ReportsPage'));
+const OverviewPage = lazy(() => import('./pages/OverviewPage/OverviewPage'));
+const ProjectSelectorPage = lazy(() => import('./pages/ProjectSelectorPage'));
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const router = createBrowserRouter([
   {
-    element: <LayOut />,
+    element: <Suspense fallback={<LoadingSpinner />}><LayOut /></Suspense>,
     children:
       [
         {
           path: '/',
-          element: <ProjectSelectorPage />,
+          element: <Suspense fallback={<LoadingSpinner />}><ProjectSelectorPage /></Suspense>,
         },
         {
           path: '/project/:id',
@@ -27,11 +29,11 @@ const router = createBrowserRouter([
         },
         {
           path: "/detailview/:projectID/:id",
-          element: <DetailViewPage />
+          element: <Suspense fallback={<LoadingSpinner />}><DetailViewPage /></Suspense>
         },
         {
           path: "/project/:id/reports",
-          element: <ReportsPage />
+          element: <Suspense fallback={<LoadingSpinner />}><ReportsPage /></Suspense>
         },
         {
           path: "/ada-info",
