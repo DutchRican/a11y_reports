@@ -48,7 +48,7 @@ export default function ProjectCreationModal({ onClose, projectToUpdate }: Proje
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50">
 			<div className="bg-white dark:bg-gray-800 p-4 rounded shadow-md w-full max-w-md">
-				<h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{projectToUpdate ? "Update Project" : "Create Project"}</h2>
+				<h2 className="sub-header">{projectToUpdate ? "Update Project" : "Create Project"}</h2>
 				<form onSubmit={handleSubmit} id="project-creation-form" data-testid="project-creation-form">
 					<div className="mb-4">
 						<label htmlFor="project-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">

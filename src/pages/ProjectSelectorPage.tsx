@@ -46,7 +46,7 @@ const ProjectSelectorPage: React.FC = () => {
 
 	const menuRef = useClickOutside(() => setOpenMenuId(null));
 	return (
-		<div className="max-w-7/8 mx-auto mt-10 p-6 bg-white dark:bg-gray-800 dark:text-white rounded-lg shadow">
+		<div className="projector-page">
 			{isAdminMode && <p className="text-red-500">Admin Mode</p>}
 			<h1 className="text-center text-2xl font-semibold mb-6">Select a Project</h1>
 			<ul className="list-none p-0">
@@ -98,9 +98,9 @@ const ProjectSelectorPage: React.FC = () => {
 									className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 transition-opacity duration-200"
 									data-test-id={`hover-menu-options-${project._id}`}
 								>
-									<button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => handleUpdateProject(project._id)}>Update</button>
-									<button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => project.isActive ? handleDeleteProject(project._id, true) : handleRestoreProject(project._id)}>{project.isActive ? 'Archive' : 'Restore'}</button>
-									{isAdminMode && <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" onClick={() => handleDeleteProject(project._id)}>Delete</button>}
+									<button className="context-button" onClick={() => handleUpdateProject(project._id)}>Update</button>
+									<button className="context-button" onClick={() => project.isActive ? handleDeleteProject(project._id, true) : handleRestoreProject(project._id)}>{project.isActive ? 'Archive' : 'Restore'}</button>
+									{isAdminMode && <button className="context-button" onClick={() => handleDeleteProject(project._id)}>Delete</button>}
 								</div>
 							)}
 						</div>

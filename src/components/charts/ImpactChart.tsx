@@ -24,8 +24,8 @@ const ImpactChart: React.FC<ImpactChartProps> = ({ scanResults }) => {
 
 
   return (
-    <div className="p-4 bg-white dark:bg-gray-800 shadow-md rounded-lg h-96">
-      <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Issues by Impact Severity</h3>
+    <div className="chart-page">
+      <h3 className="sub-header">Issues by Impact Severity</h3>
       <ResponsiveContainer width="100%" height="85%">
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#4A5568" />

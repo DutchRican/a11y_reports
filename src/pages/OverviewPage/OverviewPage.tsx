@@ -118,6 +118,7 @@ const OverviewPage: React.FC = () => {
           <TrendChart
             scanResults={filteredData}
             unfilteredCount={scanResults.length}
+            isPending={isPending}
           />
         </div>
         {filters.map((filter) => <Chip key={filter.name} item={filter} onClick={() => { handleFilterChange(filter.name, ''); }} />)}

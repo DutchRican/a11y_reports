@@ -6,9 +6,10 @@ import { colorMap } from './colors';
 interface TrendChartProps {
   scanResults: ScanResult[];
   unfilteredCount: number;
+  isPending: boolean;
 }
 
-const TrendChart: React.FC<TrendChartProps> = ({ scanResults, unfilteredCount }) => {
+const TrendChart: React.FC<TrendChartProps> = ({ scanResults, unfilteredCount, isPending }) => {
   const trendData = scanResults
     .map(result => {
       return {
@@ -36,8 +37,8 @@ const TrendChart: React.FC<TrendChartProps> = ({ scanResults, unfilteredCount })
     ...value,
   }));
   return (
-    <div className="p-4 bg-white dark:bg-gray-800 shadow-md rounded-lg h-96">
-      <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Issues Trend Over Time</h3>
+    <div className="chart-page">
+      <h3 className="sub-header">Issues Trend Over Time</h3>
       {!!scanResults.length && <ResponsiveContainer width="100%" height="85%">
         <LineChart data={mapData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#4A5568" />
@@ -51,8 +52,9 @@ const TrendChart: React.FC<TrendChartProps> = ({ scanResults, unfilteredCount })
           <Line type="monotone" dataKey="critical" stroke={colorMap.critical} name="Critical" />
         </LineChart>
       </ResponsiveContainer>}
-      {!scanResults.length && !!unfilteredCount && <div className="text-center text-gray-500 dark:text-gray-400">No scan results match the current filters</div>}
-      {!unfilteredCount && <div className="text-center text-gray-500 dark:text-gray-400">There are no scan results available, have you uploaded scans yet?</div>}
+      {!scanResults.length && !!unfilteredCount && <div className="loading-placeholder-message">No scan results match the current filters</div>}
+      {isPending && <div className="loading-placeholder-message">Fetching data...</div>}
+      {!unfilteredCount && !isPending && <div className="loading-placeholder-message">There are no scan results available, have you uploaded scans yet?</div>}
     </div>
   );
 };

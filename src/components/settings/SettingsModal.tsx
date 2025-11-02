@@ -44,7 +44,7 @@ export default function SettingsModal({ onClose, isOpen }: SettingsModalProps) {
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50">
 			<div className="bg-white dark:bg-gray-800 p-4 rounded shadow-md w-full max-w-md">
-				<h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Settings</h2>
+				<h2 className="sub-header">Settings</h2>
 				<div className="mb-4">
 					<label htmlFor="theme-selector" className="block mb-2 text-gray-700 dark:text-gray-300">Theme</label>
 					<select id="theme-selector" value={theme} onChange={(e) => setTheme(e.target.value)} className="w-full p-2 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600">
