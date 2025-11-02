@@ -2,7 +2,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-
 .settings-modal {
 	@apply fixed inset-0 z-50 flex items-center justify-center bg-gray-500/75;
 
